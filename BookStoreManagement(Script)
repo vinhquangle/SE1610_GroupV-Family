@@ -1,0 +1,173 @@
+CREATE DATABASE BookStoreManagement
+Go
+
+USE BookStoreManagement
+GO
+
+CREATE TABLE [tblCustomer]
+(
+	customerID VARCHAR(50) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	[Password] VARCHAR(30) NOT NULL,
+	Email VARCHAR(50) NOT NULL,
+	[Address] NVARCHAR(200),
+	Phone VARCHAR(20) NOT NULL,
+	Point INT NOT NULL,
+	[Status] BIT,
+	[Delete] BIT NOT NULL,
+	PRIMARY KEY (customerID),
+);
+
+CREATE TABLE [tblStaff]
+(
+	staffID VARCHAR(10) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	[Password] VARCHAR(30) NOT NULL,
+	[Role] NVARCHAR(30) NOT NULL,
+	Phone VARCHAR(20),
+	[Date-of-birth] DATE,
+	[Status] BIT,
+	[Delete] BIT NOT NULL,
+	PRIMARY KEY (staffID),
+);
+
+CREATE TABLE [tblDeliverer]
+(
+	deliverID VARCHAR(10) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	[Password] VARCHAR(30) NOT NULL,
+	Phone VARCHAR(20) NOT NULL,
+	[Date-of-birth] DATE NOT NULL,
+	[Status] BIT,
+	[Delete] BIT NOT NULL,
+	PRIMARY KEY (deliverID),
+);
+
+CREATE TABLE [tblOrder]
+(
+	orderID INT IDENTITY(1,1) NOT NULL,
+	customerID VARCHAR(50),
+	staffID VARCHAR(10),
+	[Date] DATE NOT NULL,
+	deliverID VARCHAR(10),
+	[Delivery-cost] DECIMAL(10,2),
+	Total DECIMAL(10,2) NOT NULL,
+	[Status] BIT,
+	PRIMARY KEY (orderID),
+	FOREIGN KEY (customerID) REFERENCES [tblCustomer](customerID),
+	FOREIGN KEY (staffID) REFERENCES [tblStaff](staffID),
+	FOREIGN KEY (deliverID) REFERENCES [tblDeliverer](deliverID),
+);
+
+CREATE TABLE [tblCategory]
+(
+  categoryID VARCHAR(10) NOT NULL,
+  Name NVARCHAR(50) NOT NULL,
+  PRIMARY KEY (categoryID),
+);
+
+CREATE TABLE [tblPublisher]
+(
+	publisherID VARCHAR(10) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	PRIMARY KEY (publisherID),
+);
+
+CREATE TABLE [tblBook]
+(
+	ISBN VARCHAR(17) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	publisherID VARCHAR(10) NOT NULL,
+	categoryID VARCHAR(10) NOT NULL,	
+	[Author-name] NVARCHAR(50),
+	Price DECIMAL(10,2),
+	[Image] VARCHAR(500) NOT NULL,
+	Quantity INT NOT NULL,
+	PRIMARY KEY (ISBN),
+	FOREIGN KEY (publisherID) REFERENCES [tblPublisher](publisherID),
+	FOREIGN KEY (categoryID) REFERENCES [tblCategory](categoryID),
+);
+
+CREATE TABLE [tblOrderDetail]
+(
+	detailID INT IDENTITY(1,1) NOT NULL,
+	orderID INT NOT NULL,
+	ISBN VARCHAR(17) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	publisherID VARCHAR(10) NOT NULL,
+	categoryID VARCHAR(10) NOT NULL,	
+	[Author-name] NVARCHAR(50),
+	Price DECIMAL(10,2),
+	Quantity INT NOT NULL,
+	Total DECIMAL(10,2) NOT NULL,
+	PRIMARY KEY (detailID),
+	FOREIGN KEY (orderID) REFERENCES [tblOrder](orderID),
+	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
+);
+
+CREATE TABLE [tblBookRequest]
+(
+	requestID INT IDENTITY(1,1) NOT NULL,
+	staffID VARCHAR(10) NOT NULL,
+	[Date] DATE NOT NULL,
+	[Status] BIT NOT NULL,
+	PRIMARY KEY (requestID),
+	FOREIGN KEY (staffID) REFERENCES [tblStaff](staffID),
+);
+
+CREATE TABLE [tblBRequestDetail]
+(
+	requestDetailID INT IDENTITY(1,1) NOT NULL,
+	requestID INT NOT NULL,
+	ISBN VARCHAR(17) NOT NULL,
+	publisherID VARCHAR(10) NOT NULL,
+	categoryID VARCHAR(10) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	[Author-name] NVARCHAR(50),
+	Quantity INT NOT NULL,
+	PRIMARY KEY (requestDetailID),
+	FOREIGN KEY (requestID) REFERENCES [tblBookRequest](requestID),
+	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
+);
+
+--Insert data for tblUser
+INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete]) 
+VALUES ('cus1',N'Phạm Quốc Thịnh','1','thinhphamquoc9999@gmail.com',N'Hiệp Thành, Quận 12,TP HCM','0938081927',0,0,0)
+
+--Insert data for tblStaff
+INSERT INTO [tblStaff](staffID,Name,[Password],[Role],Phone,[Date-of-birth],[Status],[Delete]) 
+VALUES ('st1',N'Tui là Admin','1',N'Admin','093696969','2002-10-12',0,0)
+
+INSERT INTO [tblStaff](staffID,Name,[Password],[Role],Phone,[Date-of-birth],[Status],[Delete]) 
+VALUES ('st2',N'Tui là nhân viên','1',N'Staff','093696969','2003-10-12',0,0)
+
+--Insert data for tblDeliverer
+INSERT INTO [tblDeliverer](deliverID,Name,[Password],Phone,[Date-of-birth],[Status],[Delete])
+VALUES ('del1',N'Tui là deliverer','1','0123456789','2003-05-03',0,0)
+
+--Insert data for tblOrder
+INSERT INTO [tblOrder](customerID,staffID,[Date],deliverID,[Delivery-cost],Total,[Status])
+VALUES ('cus1','st2','2022-05-03','del1',20000,255000,0)
+
+--Insert data for tblCategory
+INSERT INTO [tblCategory](categoryID,Name) VALUES ('C1',N'Văn học')
+
+--Insert data for tblPublisher
+INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P1',N'Nhà Xuất Bản Văn Học')
+
+--Insert data for tblBook
+INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
+VALUES ('9786049549090',N'Lục Vân Tiên','P1','C1',N'Nguyễn Đình Chiểu',235000,'https://salt.tikicdn.com/cache/w1200/media/catalog/product/5/_/5.u5552.d20170929.t183543.444888.jpg',3)
+
+--Insert data for tblOrderDetail
+INSERT INTO [tblOrderDetail](orderID,ISBN,Name,publisherID,categoryID,Price,Quantity,Total)
+VALUES ('1','9786049549090',N'Lục Vân Tiên','P1','C1',235000,1,235000)
+
+--Insert data for tblBookRequest
+INSERT INTO [tblBookRequest](staffID,[Date],[Status])
+VALUES ('st2','2022-09-14',1)
+
+--Insert data for tblBRequestDetail
+INSERT INTO tblBRequestDetail(ISBN,requestID,publisherID,categoryID,Name,[Author-name],Quantity)
+VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10)
+
