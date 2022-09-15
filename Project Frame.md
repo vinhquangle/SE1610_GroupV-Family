@@ -14,5 +14,13 @@
 > - utilities (Package)
 > - dto (Package)
 >> - CustomerDTO
+>> - StaffDTO
+>> - BookDTO
+>> - OrderDTO
+>> - OrderDetailDTO
+>> - CategoryDTO
+>> - PublisherDTO
+>> - BookRequestDTO
+>> - BRequestDetailDTO
 > - dao (Package)
 > - controller (Package)
