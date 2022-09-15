@@ -31,18 +31,6 @@ CREATE TABLE [tblStaff]
 	PRIMARY KEY (staffID),
 );
 
-CREATE TABLE [tblDeliverer]
-(
-	deliverID VARCHAR(10) NOT NULL,
-	Name NVARCHAR(50) NOT NULL,
-	[Password] VARCHAR(30) NOT NULL,
-	Phone VARCHAR(20) NOT NULL,
-	[Date-of-birth] DATE NOT NULL,
-	[Status] BIT,
-	[Delete] BIT NOT NULL,
-	PRIMARY KEY (deliverID),
-);
-
 CREATE TABLE [tblOrder]
 (
 	orderID INT IDENTITY(1,1) NOT NULL,
@@ -56,7 +44,6 @@ CREATE TABLE [tblOrder]
 	PRIMARY KEY (orderID),
 	FOREIGN KEY (customerID) REFERENCES [tblCustomer](customerID),
 	FOREIGN KEY (staffID) REFERENCES [tblStaff](staffID),
-	FOREIGN KEY (deliverID) REFERENCES [tblDeliverer](deliverID),
 );
 
 CREATE TABLE [tblCategory]
@@ -136,18 +123,17 @@ VALUES ('cus1',N'Phạm Quốc Thịnh','1','thinhphamquoc9999@gmail.com',N'Hi�
 
 --Insert data for tblStaff
 INSERT INTO [tblStaff](staffID,Name,[Password],[Role],Phone,[Date-of-birth],[Status],[Delete]) 
-VALUES ('st1',N'Tui là Admin','1',N'Admin','093696969','2002-10-12',0,0)
+VALUES ('ad1',N'Tui là Admin','1',N'Admin','093696969','2002-10-12',0,0)
 
 INSERT INTO [tblStaff](staffID,Name,[Password],[Role],Phone,[Date-of-birth],[Status],[Delete]) 
-VALUES ('st2',N'Tui là nhân viên','1',N'Staff','093696969','2003-10-12',0,0)
+VALUES ('st1',N'Tui là nhân viên','1',N'Staff','093696969','2003-10-12',0,0)
 
---Insert data for tblDeliverer
-INSERT INTO [tblDeliverer](deliverID,Name,[Password],Phone,[Date-of-birth],[Status],[Delete])
-VALUES ('del1',N'Tui là deliverer','1','0123456789','2003-05-03',0,0)
+INSERT INTO [tblStaff](staffID,Name,[Password],[Role],Phone,[Date-of-birth],[Status],[Delete])
+VALUES ('del1',N'Tui là deliverer','1',N'Deliverer','0123456789','2003-05-03',0,0)
 
 --Insert data for tblOrder
 INSERT INTO [tblOrder](customerID,staffID,[Date],deliverID,[Delivery-cost],Total,[Status])
-VALUES ('cus1','st2','2022-05-03','del1',20000,255000,0)
+VALUES ('cus1','st1','2022-05-03','del1',20000,255000,0)
 
 --Insert data for tblCategory
 INSERT INTO [tblCategory](categoryID,Name) VALUES ('C1',N'Văn học')
@@ -165,9 +151,8 @@ VALUES ('1','9786049549090',N'Lục Vân Tiên','P1','C1',235000,1,235000)
 
 --Insert data for tblBookRequest
 INSERT INTO [tblBookRequest](staffID,[Date],[Status])
-VALUES ('st2','2022-09-14',1)
+VALUES ('st1','2022-09-14',1)
 
 --Insert data for tblBRequestDetail
 INSERT INTO tblBRequestDetail(ISBN,requestID,publisherID,categoryID,Name,[Author-name],Quantity)
 VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10)
-
