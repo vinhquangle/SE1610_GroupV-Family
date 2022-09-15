@@ -117,7 +117,7 @@ CREATE TABLE [tblBRequestDetail]
 	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
 );
 
---Insert data for tblUser
+--Insert data for tblCustomer
 INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete]) 
 VALUES ('cus1',N'Phạm Quốc Thịnh','1','thinhphamquoc9999@gmail.com',N'Hiệp Thành, Quận 12,TP HCM','0938081927',0,0,0)
 
