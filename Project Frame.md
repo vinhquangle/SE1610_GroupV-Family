@@ -1,5 +1,14 @@
 > # Web Pages
-> - CSS
-> - IMG
-> - JSP
->> - Home
+> - CSS (File)
+> - IMG (File)
+> - JSP (File)
+>> - HomePage (File)
+>> - LoginPage (File)
+>> - ProfilePage (File)
+>> - ProductPage (File)
+>> - CartPage (File)
+>> - Requesting Page (File)
+>> - OrderManagePage (File)
+>> - AccountManagePage (File)
+> # Source Packages
+> - 
