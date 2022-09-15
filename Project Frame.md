@@ -11,7 +11,11 @@
 >> - OrderManagePage (File)
 >> - AccountManagePage (File)
 > # Source Packages
+> - recaptcha (Package)
+> - log4j (Package)
+> - email (Package)
 > - utilities (Package)
+>> - DBUtils (Java Class)
 > - dto (Package)
 >> - CustomerDTO (Java Class)
 >> - StaffDTO (Java Class)
@@ -33,3 +37,12 @@
 >> - BookRequestDAO (Java Class)
 >> - BRequestDetailDAO (Java Class)
 > - controller (Package)
+>> - main
+>> - login
+>> - search
+>> - add
+>> - modify
+>> - delete
+>> - checkout
+>> - load
+
