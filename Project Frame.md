@@ -13,14 +13,23 @@
 > # Source Packages
 > - utilities (Package)
 > - dto (Package)
->> - CustomerDTO
->> - StaffDTO
->> - BookDTO
->> - OrderDTO
->> - OrderDetailDTO
->> - CategoryDTO
->> - PublisherDTO
->> - BookRequestDTO
->> - BRequestDetailDTO
+>> - CustomerDTO (Java Class)
+>> - StaffDTO (Java Class)
+>> - BookDTO (Java Class)
+>> - OrderDTO (Java Class)
+>> - OrderDetailDTO (Java Class)
+>> - CategoryDTO (Java Class)
+>> - PublisherDTO (Java Class)
+>> - BookRequestDTO (Java Class)
+>> - BRequestDetailDTO (Java Class)
 > - dao (Package)
+>> - CustomerDAO (Java Class)
+>> - StaffDAO (Java Class)
+>> - BookDAO (Java Class)
+>> - OrderDAO (Java Class)
+>> - OrderDetailDAO (Java Class)
+>> - CategoryDAO (Java Class)
+>> - PublisherDAO (Java Class)
+>> - BookRequestDAO (Java Class)
+>> - BRequestDetailDAO (Java Class)
 > - controller (Package)
