@@ -12,6 +12,7 @@
 >> - AccountManagePage (File)
 > # Source Packages
 > - utilities (Package)
-> - dto
-> - dao
-> - controller
+> - dto (Package)
+>> - CustomerDTO
+> - dao (Package)
+> - controller (Package)
