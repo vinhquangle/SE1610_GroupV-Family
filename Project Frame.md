@@ -7,7 +7,7 @@
 >> - ProfilePage (File)
 >> - ProductPage (File)
 >> - CartPage (File)
->> - Requesting Page (File)
+>> - RequestingPage (File)
 >> - OrderManagePage (File)
 >> - AccountManagePage (File)
 > # Source Packages
