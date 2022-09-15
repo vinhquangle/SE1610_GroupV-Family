@@ -11,6 +11,7 @@
 >> - OrderManagePage (File)
 >> - AccountManagePage (File)
 > # Source Packages
+> - logingoogle (Package)
 > - recaptcha (Package)
 > - log4j (Package)
 > - email (Package)
