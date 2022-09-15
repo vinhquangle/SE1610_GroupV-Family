@@ -37,12 +37,12 @@
 >> - BookRequestDAO (Java Class)
 >> - BRequestDetailDAO (Java Class)
 > - controller (Package)
->> - main
->> - login
->> - search
->> - add
->> - modify
->> - delete
->> - checkout
->> - load
+>> - main (Package)
+>> - login (Package)
+>> - search (Package)
+>> - add (Package)
+>> - modify (Package)
+>> - delete (Package) 
+>> - checkout (Package)
+>> - load (Package)
 
