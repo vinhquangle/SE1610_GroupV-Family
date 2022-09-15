@@ -14,6 +14,7 @@
 > - recaptcha (Package)
 > - log4j (Package)
 > - email (Package)
+> - payment (Package)
 > - utilities (Package)
 >> - DBUtils (Java Class)
 > - dto (Package)
@@ -45,4 +46,3 @@
 >> - delete (Package) 
 >> - checkout (Package)
 >> - load (Package)
-
