@@ -67,7 +67,7 @@ CREATE TABLE [tblBook]
 	publisherID VARCHAR(10) NOT NULL,
 	categoryID VARCHAR(10) NOT NULL,	
 	[Author-name] NVARCHAR(50),
-	Price DECIMAL(10,2),
+	Price DECIMAL(10,2) NOT NULL,
 	[Image] VARCHAR(500) NOT NULL,
 	Quantity INT NOT NULL,
 	PRIMARY KEY (ISBN),
@@ -117,6 +117,33 @@ CREATE TABLE [tblBRequestDetail]
 	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
 );
 
+CREATE TABLE [tblBookRespone]
+(
+	responeID INT IDENTITY(1,1) NOT NULL,
+	requestID INT NOT NULL,
+	staffID VARCHAR(10) NOT NULL,
+	[Date] DATE NOT NULL,
+	[Status] BIT NOT NULL,
+	PRIMARY KEY (responeID),
+	FOREIGN KEY (requestID) REFERENCES [tblBookRequest](requestID),
+);
+
+CREATE TABLE [tblBResponeDetail]
+(
+	responeDetailID INT IDENTITY(1,1) NOT NULL,
+	responeID INT NOT NULL,
+	ISBN VARCHAR(17) NOT NULL,
+	publisherID VARCHAR(10) NOT NULL,
+	categoryID VARCHAR(10) NOT NULL,
+	Name NVARCHAR(50) NOT NULL,
+	[Author-name] NVARCHAR(50),
+	Quantity INT NOT NULL,
+	Price DECIMAL(10,2) NOT NULL,
+	PRIMARY KEY (responeDetailID),
+	FOREIGN KEY (responeID) REFERENCES [tblBookRespone](responeID),
+	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
+);
+
 --Insert data for tblCustomer
 INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete]) 
 VALUES ('cus1',N'Phạm Quốc Thịnh','1','thinhphamquoc9999@gmail.com',N'Hiệp Thành, Quận 12,TP HCM','0938081927',0,0,0)
@@ -156,3 +183,11 @@ VALUES ('st1','2022-09-14',1)
 --Insert data for tblBRequestDetail
 INSERT INTO tblBRequestDetail(ISBN,requestID,publisherID,categoryID,Name,[Author-name],Quantity)
 VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10)
+
+--Insert data for tblBookRespone
+INSERT INTO tblBookRespone(requestID,staffID,[Date],[Status])
+VALUES ('1','st1','2022-09-14',1)
+
+--Insert data for tblBResponeDetail
+INSERT INTO tblBResponeDetail(ISBN,responeID,publisherID,categoryID,Name,[Author-name],Quantity,Price)
+VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10,200000)
