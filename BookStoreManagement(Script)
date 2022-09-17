@@ -37,7 +37,6 @@ CREATE TABLE [tblOrder]
 	customerID VARCHAR(50),
 	staffID VARCHAR(10),
 	[Date] DATE NOT NULL,
-	deliverID VARCHAR(10),
 	[Delivery-cost] DECIMAL(10,2),
 	Total DECIMAL(10,2) NOT NULL,
 	[Status] BIT,
