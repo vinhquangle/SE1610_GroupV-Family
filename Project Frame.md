@@ -9,6 +9,7 @@
 >> - ProductPage (File)
 >> - CartPage (File)
 >> - RequestingPage (File)
+>> - RespondingPage (File)
 >> - OrderManagePage (File)
 >> - AccountManagePage (File)
 > # Source Packages
