@@ -1,5 +1,6 @@
 > # Web Pages
 > - CSS (File)
+> - JS (File)
 > - IMG (File)
 > - JSP (File)
 >> - HomePage (File)
