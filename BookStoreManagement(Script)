@@ -116,21 +116,21 @@ CREATE TABLE [tblBRequestDetail]
 	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
 );
 
-CREATE TABLE [tblBookRespone]
+CREATE TABLE [tblBookResponse]
 (
-	responeID INT IDENTITY(1,1) NOT NULL,
+	responseID INT IDENTITY(1,1) NOT NULL,
 	requestID INT NOT NULL,
 	staffID VARCHAR(10) NOT NULL,
 	[Date] DATE NOT NULL,
 	[Status] BIT NOT NULL,
-	PRIMARY KEY (responeID),
+	PRIMARY KEY (responseID),
 	FOREIGN KEY (requestID) REFERENCES [tblBookRequest](requestID),
 );
 
-CREATE TABLE [tblBResponeDetail]
+CREATE TABLE [tblBResponseDetail]
 (
-	responeDetailID INT IDENTITY(1,1) NOT NULL,
-	responeID INT NOT NULL,
+	responseDetailID INT IDENTITY(1,1) NOT NULL,
+	responseID INT NOT NULL,
 	ISBN VARCHAR(17) NOT NULL,
 	publisherID VARCHAR(10) NOT NULL,
 	categoryID VARCHAR(10) NOT NULL,
@@ -138,8 +138,8 @@ CREATE TABLE [tblBResponeDetail]
 	[Author-name] NVARCHAR(50),
 	Quantity INT NOT NULL,
 	Price DECIMAL(10,2) NOT NULL,
-	PRIMARY KEY (responeDetailID),
-	FOREIGN KEY (responeID) REFERENCES [tblBookRespone](responeID),
+	PRIMARY KEY (responseDetailID),
+	FOREIGN KEY (responseID) REFERENCES [tblBookResponse](responseID),
 	FOREIGN KEY (ISBN) REFERENCES [tblBook](ISBN),
 );
 
@@ -158,8 +158,8 @@ INSERT INTO [tblStaff](staffID,Name,[Password],[Role],Phone,[Date-of-birth],[Sta
 VALUES ('del1',N'Tui là deliverer','1',N'Deliverer','0123456789','2003-05-03',0,0)
 
 --Insert data for tblOrder
-INSERT INTO [tblOrder](customerID,staffID,[Date],deliverID,[Delivery-cost],Total,[Status])
-VALUES ('cus1','st1','2022-05-03','del1',20000,255000,0)
+INSERT INTO [tblOrder](customerID,staffID,[Date],[Delivery-cost],Total,[Status])
+VALUES ('cus1','del1','2022-05-03',20000,255000,0)
 
 --Insert data for tblCategory
 INSERT INTO [tblCategory](categoryID,Name) VALUES ('C1',N'Văn học')
@@ -183,10 +183,10 @@ VALUES ('st1','2022-09-14',1)
 INSERT INTO tblBRequestDetail(ISBN,requestID,publisherID,categoryID,Name,[Author-name],Quantity)
 VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10)
 
---Insert data for tblBookRespone
-INSERT INTO tblBookRespone(requestID,staffID,[Date],[Status])
+--Insert data for tblBookResponse
+INSERT INTO tblBookResponse(requestID,staffID,[Date],[Status])
 VALUES ('1','st1','2022-09-14',1)
 
 --Insert data for tblBResponeDetail
-INSERT INTO tblBResponeDetail(ISBN,responeID,publisherID,categoryID,Name,[Author-name],Quantity,Price)
+INSERT INTO tblBResponseDetail(ISBN,responseID,publisherID,categoryID,Name,[Author-name],Quantity,Price)
 VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10,200000)
