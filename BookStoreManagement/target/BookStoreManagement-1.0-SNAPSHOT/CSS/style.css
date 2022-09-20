@@ -475,7 +475,6 @@ textarea.input {
 }
 
 .header-search form .input {
-  width: 380px;
   margin-right: -4px;  
   border: 2px solid #b1154a;
   color: red;
@@ -1468,6 +1467,7 @@ textarea.input {
 /*----------------------------*\
 	Product details
 \*----------------------------*/
+
 
 .product-details .product-name {
   text-transform: uppercase;

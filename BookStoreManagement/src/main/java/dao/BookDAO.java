@@ -23,7 +23,7 @@ import utilities.DBUtils;
 public class BookDAO {
 
     private static final String BOOK = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook";
-
+    private static final String FILTERBYCATE = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook WHERE categoryID=?";
     public List<BookDTO> getListBook(List<CategoryDTO> listCate, List<PublisherDTO> listPub) throws SQLException {
         List<BookDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -52,6 +52,56 @@ public class BookDAO {
                     String tmp2 = rs.getString("categoryID");
                     for (CategoryDTO category : listCate) {
                         if (category.getCategoryID().equals(tmp2)) {
+                            categoryID = category.getName();
+                        }
+                    }
+                    list.add(new BookDTO(isbn, publisherID, categoryID, name, author, price, img, quantity));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    // method này để filter book by category nhưng bằng categoryID
+    public List<BookDTO> filterbyCate(String cateID, List<CategoryDTO> listCatebyID, List<PublisherDTO> listPub) throws SQLException {
+        List<BookDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(FILTERBYCATE);
+                ptm.setString(1, cateID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String isbn = rs.getString("isbn");
+                    String name = rs.getString("name");
+                    String author = rs.getString("author-name");
+                    String img = rs.getString("image");
+                    double price = rs.getDouble("price");
+                    int quantity = rs.getInt("quantity");
+                    String publisherID = "";
+                    String categoryID = "";
+                    String tmp1 = rs.getString("publisherID");
+                    for (PublisherDTO publisher : listPub) {
+                        if (publisher.getPublisherID().equals(tmp1)) {
+                            publisherID = publisher.getName();
+                        }
+                    }
+                    for (CategoryDTO category : listCatebyID) {
+                        if (category.getCategoryID().equals(cateID)){
                             categoryID = category.getName();
                         }
                     }

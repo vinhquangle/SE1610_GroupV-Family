@@ -20,6 +20,8 @@ public class MainController extends HttpServlet {
     private static final String ERROR = "error.jsp";
     private static final String GET = "Get";
     private static final String GET_CONTROLLER = "GetController";
+    private static final String CATEGORY = "Category";
+    private static final String CATEGORY_CONTROLLER = "CategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,6 +31,8 @@ public class MainController extends HttpServlet {
             String action = request.getParameter("action");
             if (action.equals(GET)) {
                 url = GET_CONTROLLER;
+            }else if(action.equals(CATEGORY)){
+                url = CATEGORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("ERROR at MainController: " + e.toString());
