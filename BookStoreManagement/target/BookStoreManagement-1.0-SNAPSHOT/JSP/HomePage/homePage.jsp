@@ -4,6 +4,7 @@
     Author     : PC
 --%>
 
+<%@page import="dto.CategoryDTO"%>
 <%@page import="dto.BookDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -153,8 +154,10 @@
         <!-- /BREADCRUMB -->
         <%
             List<BookDTO> list = new ArrayList<>();
+            List<CategoryDTO> listCate = new ArrayList<>();
             try {
                 list = (List<BookDTO>) session.getAttribute("LIST_BOOK");
+                listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
             } catch (Exception e) {
 
             }
@@ -170,50 +173,20 @@
                         <!-- aside Widget -->
                         <div class="aside">
                             <h3 class="aside-title">Categories</h3>
+                        <%
+                            for(int j=0; j < listCate.size(); j++){
+                        %>  
                             <div class="checkbox-filter">
-
                                 <div class="input-checkbox">
                                     <label for="category-6">
                                         <span></span>
-                                        <%=list.get(0).getCategoryID()%>
-                                    </label>
-                                </div>
-
-                                <div class="input-checkbox">
-                                    <label for="category-6">
-                                        <span></span>
-                                        Smartphones
-                                    </label>
-                                </div>
-
-                                <div class="input-checkbox">
-                                    <label for="category-6">
-                                        <span></span>
-                                        Smartphones
-                                    </label>
-                                </div>
-
-                                <div class="input-checkbox">
-                                    <label for="category-6">
-                                        <span></span>
-                                        Smartphones
-                                    </label>
-                                </div>
-
-                                <div class="input-checkbox">
-                                    <label for="category-6">
-                                        <span></span>
-                                        Smartphones
-                                    </label>
-                                </div>
-
-                                <div class="input-checkbox">
-                                    <label for="category-6">
-                                        <span></span>
-                                        Smartphones
+                                        <%= listCate.get(j).getName() %>
                                     </label>
                                 </div>
                             </div>
+                        <%
+                            }
+                        %>
                         </div>
                         <!-- /aside Widget -->
 
@@ -303,7 +276,7 @@
                                     <div class="product-body">
                                         <p class="product-category"><%= list.get(i).getCategoryID() %></p>
                                         <h3 class="product-name"><a href="#"><%= list.get(i).getName() %></a></h3>
-                                        <h4 class="product-price"><%= list.get(i).getPrice() %></h4>
+                                        <h4 class="product-price"><%= list.get(i).getPrice() %>đ</h4>
                                         <div class="product-btns">
                                             <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick
                                                     view</span></button>

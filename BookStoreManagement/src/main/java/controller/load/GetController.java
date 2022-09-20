@@ -41,9 +41,10 @@ public class GetController extends HttpServlet {
             List<PublisherDTO> listPub = pubDao.getListPublisher();
             List<BookDTO> listBook = bookDao.getListBook(listCate, listPub);
             url = SUCCESS;
-            if (listBook.size() > 0) {
+            if (listBook.size() > 0 && listCate.size()>0) {
                 HttpSession session = request.getSession();
                 session.setAttribute("LIST_BOOK", listBook);
+                session.setAttribute("LIST_CATE", listCate);
                 url = SUCCESS;
             }
         } catch (Exception e) {
