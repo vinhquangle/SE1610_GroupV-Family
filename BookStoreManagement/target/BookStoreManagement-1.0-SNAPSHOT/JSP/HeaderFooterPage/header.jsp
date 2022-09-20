@@ -10,6 +10,38 @@
     <head>
         <title>Header Page</title>
         <meta charset="utf-8">
+        <!-- Google font -->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+        <!-- Bootstrap -->
+        <link type="text/css" rel="stylesheet" href="CSS/bootstrap.min.css" />
+
+        <!-- Slick -->
+        <link type="text/css" rel="stylesheet" href="CSS/slick.css" />
+        <link type="text/css" rel="stylesheet" href="CSS/slick-theme.css" />
+
+        <!-- nouislider -->
+        <link type="text/css" rel="stylesheet" href="CSS/nouislider.min.css" />
+
+        <!-- Font Awesome Icon -->
+        <link rel="stylesheet" href="CSS/font-awesome.min.css" />
+
+        <!-- Custom stlylesheet -->
+        <link type="text/css" rel="stylesheet" href="CSS/style.css" />
+
+        <link rel="stylesheet" type="text/css" href="STYLES/bootstrap4/bootstrap.min.css" />
+        <link href="PLUGINS/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" type="text/css" href="STYLES/main_styles.css" />
+        <link rel="stylesheet" type="text/css" href="STYLES/responsive.css" />
+        
+        <!-- jQuery Plugins -->
+        <script src="JS/jquery.min.js"></script>
+        <script src="JS/bootstrap.min.js"></script>
+        <script src="JS/slick.min.js"></script>
+        <script src="JS/nouislider.min.js"></script>
+        <script src="JS/jquery.zoom.min.js"></script>
+        <script src="JS/main.js"></script>
     </head>
     <body>
         <!-- Header -->
@@ -49,7 +81,7 @@
                                         </a>
                                         <ul class="account_selection">
                                             <li><a href="JSP/LoginPage/login.jsp"><i class="fa fa-sign-in" aria-hidden="true"></i>Sign In</a></li>
-                                            <li><a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a>
+                                            <li><a href="JSP/LoginPage/register.jsp"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a>
                                             </li>
                                         </ul>
                                     </li>
@@ -121,8 +153,8 @@
                                                 <h5>SUBTOTAL: $2940.00</h5>
                                             </div>
                                             <div class="cart-btns">
-                                                <a href="#">View Cart</a>
-                                                <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                                <a href="JSP/CartPage/viewCart.jsp">View Cart</a>
+                                                <a href="JSP/CheckOutPage/checkout.jsp">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
                                             </div>
                                         </div>
                                     </div>

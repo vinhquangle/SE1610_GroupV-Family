@@ -20,7 +20,7 @@
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel="stylesheet" href="../../CSS/styleLogin.css" type="text/css">
     </head>
-    <body>
+    <body style="background-image: url(https://wallpapers.com/images/high/old-library-books-drawing-ulme7n8ce4bsuabu-ulme7n8ce4bsuabu.jpg?fbclid=IwAR3FNktVvVOQ0QSmixptb1_rRJoVgNbsPPdTla4IednSiXTPeTFPrfLY8w4)">
         <div class="container"> 
             <div class="row">
                 <div class="col-md-5 mx-auto">
@@ -43,9 +43,8 @@
 
                                 </div>
                                 <select class="roleID" style="width: 150px; height: 40px; margin-left: 130px; border-radius: 40px 40px 40px 40px; text-align: center">
-                                    <option value>Select Role</option>
-                                    <option value="1">Customer</option>
-                                    <option value="2">Staff</option>                
+                                    <option value>Customer</option>
+                                    <option value="1">Staff</option>               
                                 </select>
                                 <div class="form-group">
                                     <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
@@ -76,7 +75,7 @@
                                     <p class="text-center">Don't have account? <a href="createUser.jsp" id="signup">Sign up here</a></p>
                                 </div>                   
                                 <button type="reset" class=" btn btn-block mybtn btn-primary tx-tfm" value="Reset">Reset</button>
-                                <button class=" btn btn-block mybtn btn-primary tx-tfm"><a style="color: white" href="welcome.jsp">Return Home</a> </button>
+                                <button class=" btn btn-block mybtn btn-primary tx-tfm"><a style="color: white" href="../HomePage/homePage.jsp">Return Home</a> </button>
                             </form>
 
                         </div>
