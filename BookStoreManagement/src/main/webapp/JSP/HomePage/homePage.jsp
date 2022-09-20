@@ -276,7 +276,7 @@
                                     <div class="product-body">
                                         <p class="product-category"><%= list.get(i).getCategoryID() %></p>
                                         <h3 class="product-name"><a href="#"><%= list.get(i).getName() %></a></h3>
-                                        <h4 class="product-price"><%= list.get(i).getPrice() %>đ</h4>
+                                        <h4 class="product-price"><%=(int) list.get(i).getPrice() %>đ</h4>
                                         <div class="product-btns">
                                             <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick
                                                     view</span></button>
