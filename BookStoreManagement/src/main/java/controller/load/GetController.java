@@ -44,6 +44,7 @@ public class GetController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("LIST_BOOK", listBook);
                 session.setAttribute("LIST_CATE", listCate);
+                session.setAttribute("LIST_PUB", listPub);
                 url = SUCCESS;
             }
         } catch (Exception e) {

@@ -6,12 +6,10 @@ package controller.load;
 
 import dao.BookDAO;
 import dao.CategoryDAO;
-import dao.PublisherDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
 import dto.PublisherDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,13 +33,11 @@ public class CategoryController extends HttpServlet {
             String cateID = request.getParameter("cateID");
             BookDAO bookDao = new BookDAO();
             CategoryDAO cateDao = new CategoryDAO();
-            PublisherDAO pubDao = new PublisherDAO();
-
+            HttpSession session = request.getSession();
             List<CategoryDTO> listCatebyID = cateDao.getListCategorybyID(cateID);
-            List<PublisherDTO> listPub = pubDao.getListPublisher();
+            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
             List<BookDTO> listbookbyCate = bookDao.filterbyCate(cateID,listCatebyID, listPub);
             if(listbookbyCate.size() > 0){
-                HttpSession session = request.getSession();
                 session.setAttribute("LIST_BOOK", listbookbyCate);
                 url = SUCCESS;
             }
