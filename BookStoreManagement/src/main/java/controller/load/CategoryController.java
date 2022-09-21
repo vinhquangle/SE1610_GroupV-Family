@@ -33,12 +33,13 @@ public class CategoryController extends HttpServlet {
             String cateID = request.getParameter("cateID");
             BookDAO bookDao = new BookDAO();
             CategoryDAO cateDao = new CategoryDAO();
+
             HttpSession session = request.getSession();
-            List<CategoryDTO> listCatebyID = cateDao.getListCategorybyID(cateID);
-            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
-            List<BookDTO> listbookbyCate = bookDao.filterbyCate(cateID,listCatebyID, listPub);
-            if(listbookbyCate.size() > 0){
-                session.setAttribute("LIST_BOOK", listbookbyCate);
+            List<CategoryDTO> listCatebyID = cateDao.getListCategoryID(cateID);
+            List<BookDTO> listBookbyCate = bookDao.filterbyCate(cateID,listCatebyID);
+
+            if(listBookbyCate.size() > 0 && listCatebyID.size() >0){
+                session.setAttribute("LIST_BOOK", listBookbyCate);
                 url = SUCCESS;
             }
         } catch (Exception e) {

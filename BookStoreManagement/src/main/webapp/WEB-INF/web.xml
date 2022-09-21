@@ -12,6 +12,10 @@
         <servlet-name>CategoryController</servlet-name>
         <servlet-class>controller.load.CategoryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PublisherController</servlet-name>
+        <servlet-class>controller.load.PublisherController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>CategoryController</servlet-name>
         <url-pattern>/CategoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PublisherController</servlet-name>
+        <url-pattern>/PublisherController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

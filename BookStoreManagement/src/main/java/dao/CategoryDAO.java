@@ -54,7 +54,7 @@ public class CategoryDAO {
         }
         return list;
     }
-    public List<CategoryDTO> getListCategorybyID(String cateID) throws SQLException {
+    public List<CategoryDTO> getListCategoryID(String cateID) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;

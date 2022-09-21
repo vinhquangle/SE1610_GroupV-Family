@@ -44,9 +44,11 @@
         <%
             List<BookDTO> list = new ArrayList<>();
             List<CategoryDTO> listCate = new ArrayList<>();
+            List<PublisherDTO> listPub = new ArrayList<>();
             try {
                 list = (List<BookDTO>) session.getAttribute("LIST_BOOK");
                 listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
+                listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
             } catch (Exception e) {
 
             }
@@ -84,39 +86,24 @@
 
                         <!-- aside Widget -->
                         <div class="aside">
-                            <h3 class="aside-title">Top selling</h3>
-                            <div class="product-widget">
-                                <div class="product-img">
-                                    <img src="IMG/product01.png" alt="">
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category">Category</p>
-                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-                                </div>
-                            </div>
-
-                            <div class="product-widget">
-                                <div class="product-img">
-                                    <img src="<%= list.get(0).getImg()%>" alt="">
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category"><%= list.get(0).getCategoryID()%></p>
-                                    <h3 class="product-name"><a href="#"><%= list.get(0).getPublisherID()%></a></h3>
-                                    <h4 class="product-price"><%= list.get(0).getPrice()%> <del class="product-old-price">$990.00</del></h4>
+                            <h3 class="aside-title">Publishers</h3>
+                       <%
+                            for(int i=0; i < listPub.size(); i++){
+                        %>  
+                            <div class="checkbox-filter">
+                                <div class="input-checkbox">
+                                    <label for="category-6">
+                                        <span></span>
+                                        <a style="font-size:17px; text-transform: uppercase" href="MainController?action=Publisher&pubID=<%= listPub.get(i).getPublisherID() %>"> <%= listPub.get(i).getName() %> </a>
+                                        <form action="MainController">
+                                            <input type="submit" name="action" value="Publisher" style="display:none" />
+                                        </form>
+                                    </label>
                                 </div>
                             </div>
-
-                            <div class="product-widget">
-                                <div class="product-img">
-                                    <img src="IMG/product03.png" alt="">
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category">Category</p>
-                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-                                </div>
-                            </div>
+                        <%
+                            }
+                        %>
                         </div>
                         <!-- /aside Widget -->
                     </div>

@@ -1,48 +1,51 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.main;
+package controller.load;
 
+import dao.BookDAO;
+import dao.PublisherDAO;
+import dto.BookDTO;
+import dto.CategoryDTO;
+import dto.PublisherDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Administrator
+ * @author ownhi
  */
-public class MainController extends HttpServlet {
-
+public class PublisherController extends HttpServlet {
     private static final String ERROR = "error.jsp";
-    private static final String GET = "Get";
-    private static final String GET_CONTROLLER = "GetController";
-    private static final String CATEGORY = "Category";
-    private static final String CATEGORY_CONTROLLER = "CategoryController";
-    private static final String PUBLISHER = "Publisher";
-    private static final String PUBLISHER_CONTROLLER = "PublisherController";
+    private static final String SUCCESS = "JSP/HomePage/homePage.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if (action.equals(GET)) {
-                url = GET_CONTROLLER;
-            }else if(action.equals(CATEGORY)){
-                url = CATEGORY_CONTROLLER;
-            }else if(action.equals(PUBLISHER)){
-                url = PUBLISHER_CONTROLLER;
+            String pubID = request.getParameter("pubID");
+            HttpSession session = request.getSession();
+            BookDAO bookDAO = new BookDAO();
+        
+            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
+            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID, listCate);
+            if(listBookbyPub.size() > 0 && listCate.size() > 0){
+                session.setAttribute("LIST_BOOK", listBookbyPub);
+                url = SUCCESS;
             }
         } catch (Exception e) {
-            log("ERROR at MainController: " + e.toString());
+            log("Error at PublisherController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
-        };
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
