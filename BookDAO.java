@@ -25,7 +25,8 @@ public class BookDAO {
     private static final String BOOK = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook";
     private static final String FILTERBYCATE = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook WHERE categoryID=?";
     private static final String FILTERBYPUB = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook WHERE publisherID=?";
-    private static final String FILTERPRICEUNDER = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook WHERE price<60000";
+    private static final String FILTERPRICEUNDER = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook WHERE price BETWEEN ? AND ?";
+    private static final String FILTERPRICEMID = "SELECT isbn, name, [author-name], publisherID, categoryID, price, quantity, image FROM tblBook WHERE price BETWEEN 60000 AND 150000";
     public List<BookDTO> getListBook(List<CategoryDTO> listCate, List<PublisherDTO> listPub) throws SQLException {
         List<BookDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -165,5 +166,50 @@ public class BookDAO {
         }
         return list;
     }
+    public List<BookDTO> getListBookPrice(String min,String max,List<CategoryDTO> listCate) throws SQLException {
+        List<BookDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(FILTERPRICEUNDER);
+                ptm.setString(1, min);
+                ptm.setString(2, max);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String isbn = rs.getString("isbn");
+                    String name = rs.getString("name");
+                    String author = rs.getString("author-name");
+                    String img = rs.getString("image");
+                    String publisherID = "publisherID";
+                    String categoryID = "";
+                    String tmp1 = rs.getString("categoryID");
+                    for (CategoryDTO category : listCate) {
+                        if (category.getCategoryID().equals(tmp1)) {
+                            categoryID = category.getName();
+                        }
+                    }
+                    double price = rs.getDouble("price");
+                    int quantity = rs.getInt("quantity");
 
+                    list.add(new BookDTO(isbn, publisherID, categoryID, name, author, price, img, quantity));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
 }
