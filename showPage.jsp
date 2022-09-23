@@ -4,7 +4,6 @@
     Author     : PC
 --%>
 
-<%@page import="dto.CategoryDTO"%>
 <%@page import="dto.BookDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -29,7 +28,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="breadcrumb-tree" style="font-weight: bold">
-                            <li><a href="GetController">Home</a></li>
+                            <li><a href="#">Home</a></li>
                             <li><a href="#">All Categories</a></li>
                             <li><a href="#">Accessories</a></li>
                             <li class="active"><a href="#">Headphones (227,490 Results)</a></li>
@@ -43,12 +42,8 @@
         <!-- /BREADCRUMB -->
         <%
             List<BookDTO> list = new ArrayList<>();
-            List<CategoryDTO> listCate = new ArrayList<>();
-            List<PublisherDTO> listPub = new ArrayList<>();
             try {
                 list = (List<BookDTO>) session.getAttribute("LIST_BOOK");
-                listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
-                listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
             } catch (Exception e) {
 
             }
@@ -61,54 +56,93 @@
                 <div class="row">
                     <!-- ASIDE -->
                     <div id="aside" class="col-md-3">
-                        <!-- aside Widget  CATEGORIES-->
+                        <!-- aside Widget -->
                         <div class="aside">
                             <h3 class="aside-title">Categories</h3>
-                        <%
-                            for(int i=0; i < listCate.size(); i++){
-                        %>  
                             <div class="checkbox-filter">
-                                <div class="input-checkbox active">
-                                    <label for="category-6">
-                                        <span></span>
-                                        <a style="font-size:13px; text-transform: uppercase" href="MainController?action=Category&cateID=<%= listCate.get(i).getCategoryID() %>"> <%= listCate.get(i).getName() %> </a>
-                                        <form action="MainController">
-                                            <input type="submit" name="action" value="Category" style="display:none"  />
-                                        </form>
-                                    </label>
-                                </div>
-                            </div>
-                        <%
-                            }
-                        %>
-                        </div>
-                        <!-- /aside Widget -->
 
-                        <!-- aside Widget PUBLISHERS -->
-                        <div class="aside">
-                            <h3 class="aside-title">Publishers</h3>
-                       <%
-                            for(int i=0; i < listPub.size(); i++){
-                        %>  
-                            <div class="checkbox-filter">
                                 <div class="input-checkbox">
                                     <label for="category-6">
                                         <span></span>
-                                        <a style="font-size:13px; text-transform: uppercase" href="MainController?action=Publisher&pubID=<%= listPub.get(i).getPublisherID() %>"> <%= listPub.get(i).getName() %> </a>
-                                        <form action="MainController">
-                                            <input type="submit" name="action" value="Publisher" style="display:none" />
-                                        </form>
+                                        <%=list.get(0).getCategoryID()%>
+                                    </label>
+                                </div>
+
+                                <div class="input-checkbox">
+                                    <label for="category-6">
+                                        <span></span>
+                                        Smartphones
+                                    </label>
+                                </div>
+
+                                <div class="input-checkbox">
+                                    <label for="category-6">
+                                        <span></span>
+                                        Smartphones
+                                    </label>
+                                </div>
+
+                                <div class="input-checkbox">
+                                    <label for="category-6">
+                                        <span></span>
+                                        Smartphones
+                                    </label>
+                                </div>
+
+                                <div class="input-checkbox">
+                                    <label for="category-6">
+                                        <span></span>
+                                        Smartphones
+                                    </label>
+                                </div>
+
+                                <div class="input-checkbox">
+                                    <label for="category-6">
+                                        <span></span>
+                                        Smartphones
                                     </label>
                                 </div>
                             </div>
-                        <%
-                            }
-                        %>
                         </div>
                         <!-- /aside Widget -->
-                        
- 
-                             <!-- /aside Widget -->
+
+                        <!-- aside Widget -->
+                        <div class="aside">
+                            <h3 class="aside-title">Top selling</h3>
+                            <div class="product-widget">
+                                <div class="product-img">
+                                    <img src="IMG/product01.png" alt="">
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-category">Category</p>
+                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                </div>
+                            </div>
+
+                            <div class="product-widget">
+                                <div class="product-img">
+                                    <img src="<%= list.get(0).getImg()%>" alt="">
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-category"><%= list.get(0).getCategoryID()%></p>
+                                    <h3 class="product-name"><a href="#"><%= list.get(0).getPublisherID()%></a></h3>
+                                    <h4 class="product-price"><%= list.get(0).getPrice()%> <del class="product-old-price">$990.00</del></h4>
+                                </div>
+                            </div>
+
+                            <div class="product-widget">
+                                <div class="product-img">
+                                    <img src="IMG/product03.png" alt="">
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-category">Category</p>
+                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /aside Widget -->
                     </div>
                     <!-- /ASIDE -->
 
