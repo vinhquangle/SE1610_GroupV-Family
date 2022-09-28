@@ -1,5 +1,5 @@
-CREATE DATABASE BookStoreManagement
-Go
+﻿CREATE DATABASE BookStoreManagement
+GO
 
 USE BookStoreManagement
 GO
@@ -180,7 +180,7 @@ INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P2',N'NXB Hội Nhà Văn'
 INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P3',N'NXB Trẻ')
 INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P4',N'NXB Thế Giới')
 INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P5',N'NXB Dân Trí')
-INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P6',N'NXB Lao Động')
+INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P6',N'NXB Phụ Nữ Việt Nam')
 INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P7',N'NXB Công Thương')
 INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P8',N'NXB Lao Động')
 INSERT INTO [tblPublisher](publisherID,Name) VALUES ('P9',N'NXB Kim Đồng')
@@ -218,7 +218,7 @@ INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Imag
 VALUES ('9786047740796',N'Homo Deus - Lược Sử Tương Lai','P4','C6',N'Yuval Noah Harari',179000,'https://cdn0.fahasa.com/media/catalog/product/i/m/image_176929.jpg',100)
 --11
 INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
-VALUES ('8936071674913',N'Danh Tướng','P5','C6',N'Yuval Noah Harari',475000,'https://cdn0.fahasa.com/media/catalog/product/i/m/image_176929.jpg',100)
+VALUES ('8936071674913',N'Danh Tướng','P5','C6',N'Yuval Noah Harari',475000,'https://cdn0.fahasa.com/media/catalog/product/b/i/bia-danh-tuong-web.jpg',100)
 --12
 INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
 VALUES ('8934974180944',N'Sinh Vào Ngày Xanh (Tái bản năm 2022)','P3','C7',N'Daniel Tammet',140000,'https://nhasachphuongnam.com/images/thumbnails/900/900/detailed/235/sinh-vao-ngay-xanh-tb-2022.jpg',100)
@@ -257,7 +257,7 @@ INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Imag
 VALUES ('9786045364888',N'Totto-chan Bên Cửa Sổ','P2','C1',N'Kuroyanagi Tetsuko',98000,'https://salt.tikicdn.com/cache/750x750/ts/product/24/39/01/1718d16b33315c03026cee717adad4b3.jpg.webp',100)
 --24
 INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
-VALUES ('9786047747313',N'Seth M. Siegel','P4','C8',N'Seth M Siegel',169000,'https://salt.tikicdn.com/cache/w1200/media/catalog/product/c/o/con%20duong%20thoat%20han%20ban%20tieng%20viet.u2469.d20160823.t105118.805071.jpg',100)
+VALUES ('9786047747313',N'Con Đường Thoát Hạn','P4','C8',N'Seth M Siegel',169000,'https://salt.tikicdn.com/cache/w1200/media/catalog/product/c/o/con%20duong%20thoat%20han%20ban%20tieng%20viet.u2469.d20160823.t105118.805071.jpg',100)
 --25
 INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
 VALUES ('9786043206258',N'Sao Chúng Ta Lại Ngủ','P8','C8',N'Matthew Walker',249000,'https://salt.tikicdn.com/cache/750x750/ts/product/5b/9b/72/693e8880ba84cf2c4a85dfc8081b4a5b.jpg.webp',100)
@@ -336,6 +336,9 @@ VALUES ('9786042272049',N'Đoàn Binh Tây Tiến','P9','C1',N'Quang Dũng',4500
 --50
 INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
 VALUES ('9786042272704',N'Ngọn Cờ Lau','P9','C1',N'Tô Hoài và Nguyễn Hồng Anh',90000,'https://cdn0.fahasa.com/media/catalog/product/8/9/8935244873771.jpg',100)
+--51
+INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,[Author-name],Price,[Image],Quantity)
+VALUES ('8935212352895',N'Thượng Dương','P6','C3',N'Hoàng Yến',108000,'https://cdn0.fahasa.com/media/catalog/product/i/m/image_216250.jpg',100)
 
 --Insert data for tblOrderDetail
 INSERT INTO [tblOrderDetail](orderID,ISBN,Name,publisherID,categoryID,Price,Quantity,Total)
@@ -356,3 +359,29 @@ VALUES ('1','st1','2022-09-14',1)
 --Insert data for tblBResponseDetail
 INSERT INTO tblBResponseDetail(ISBN,responseID,publisherID,categoryID,Name,[Author-name],Quantity,Price)
 VALUES ('9786049549090','1','P1','C1',N'Lục Vân Tiên',N'Nguyễn Đình Chiểu',10,200000)
+
+CREATE FUNCTION [dbo].[ufn_removeMark] (@text nvarchar(max))
+RETURNS nvarchar(max)
+AS
+BEGIN
+    SET @text = LOWER(@text)
+    DECLARE @textLen int = LEN(@text)
+    IF @textLen > 0
+    BEGIN
+        DECLARE @index int = 1
+        DECLARE @lPos int
+        DECLARE @SIGN_CHARS nvarchar(100) = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệếìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵýđð'
+        DECLARE @UNSIGN_CHARS varchar(100) = 'aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyydd'
+ 
+        WHILE @index <= @textLen
+        BEGIN
+            SET @lPos = CHARINDEX(SUBSTRING(@text,@index,1),@SIGN_CHARS)
+            IF @lPos > 0
+            BEGIN
+                SET @text = STUFF(@text,@index,1,SUBSTRING(@UNSIGN_CHARS,@lPos,1))
+            END
+            SET @index = @index + 1
+        END
+    END
+    RETURN @text
+END
