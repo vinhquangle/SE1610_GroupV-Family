@@ -20,6 +20,7 @@ public class StaffDAO {
 
     private static final String LOGIN = "SELECT name, [role], [Date-of-birth], phone, [status], [delete] FROM tblStaff WHERE staffID LIKE ? AND [password] LIKE ?";
     private static final String UPDATE_STATUS = "UPDATE tblStaff SET [status] = ? WHERE staffID LIKE ?";
+    private static final String CHECK_CUSTOMER_IDinSTAFF = "SELECT staffID FROM tblStaff WHERE staffID LIKE ?";
 
     public StaffDTO checkLogin(String userID, String password) throws SQLException {
         StaffDTO staff = null;
@@ -107,6 +108,30 @@ public class StaffDAO {
             if (conn != null) {
                 conn.close();
             }
+        }
+        return check;
+    }
+    public boolean checkCusIDinStaff(String customerID) throws SQLException{
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try{
+            conn = DBUtils.getConnection();
+            if(conn!=null){
+                ptm = conn.prepareStatement(CHECK_CUSTOMER_IDinSTAFF);
+                ptm.setString(1, customerID);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    check=true;
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            if(rs!=null) rs.close();
+            if(ptm!=null) ptm.close();
+            if(conn!=null) conn.close();
         }
         return check;
     }

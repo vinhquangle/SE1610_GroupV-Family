@@ -52,6 +52,22 @@
         <servlet-name>FilterPriceController</servlet-name>
         <servlet-class>controller.search.FilterPriceController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SortController</servlet-name>
+        <servlet-class>controller.search.SortController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadManageController</servlet-name>
+        <servlet-class>controller.load.LoadManageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageBookController</servlet-name>
+        <servlet-class>controller.manage.ManageBookController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageCustomerController</servlet-name>
+        <servlet-class>controller.manage.ManageCustomerController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetController</servlet-name>
         <url-pattern>/GetController</url-pattern>
@@ -103,6 +119,22 @@
     <servlet-mapping>
         <servlet-name>FilterPriceController</servlet-name>
         <url-pattern>/FilterPriceController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SortController</servlet-name>
+        <url-pattern>/SortController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadManageController</servlet-name>
+        <url-pattern>/LoadManageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageBookController</servlet-name>
+        <url-pattern>/ManageBookController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageCustomerController</servlet-name>
+        <url-pattern>/ManageCustomerController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

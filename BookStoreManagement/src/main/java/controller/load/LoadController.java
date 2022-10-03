@@ -6,8 +6,6 @@ package controller.load;
 
 import dao.BookDAO;
 import dto.BookDTO;
-import dto.CategoryDTO;
-import dto.PublisherDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +34,8 @@ public class LoadController extends HttpServlet {
             BookDAO bookDao = new BookDAO();
             HttpSession session = request.getSession();
             String isbn = request.getParameter("isbn");
-            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");//Load tất cả thể loại
-            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB"); //Load tất cả NXB
-            List<BookDTO> listBook = (List<BookDTO>) session.getAttribute("LIST_BOOK"); //Load tất cả sách
-            BookDTO book = bookDao.loadBook(listCate, listPub, isbn); //Load thông tin sách
+            List<BookDTO> listBook = bookDao.getListBook(); 
+            BookDTO book = bookDao.loadBook(isbn); //Load thông tin sách
             List<BookDTO> sameCate = new ArrayList<>();
             int count = 0;
             for (BookDTO bookDTO : listBook) {

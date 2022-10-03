@@ -23,7 +23,6 @@
     </head>
 
     <body>
-
         <%@include file="../HeaderFooterPage/header.jsp" %>
         <div style="margin-top: 180px; background-color: white;" id="breadcrumb" class="section" >
             <!-- container -->
@@ -37,7 +36,12 @@
                         <ul class="breadcrumb-tree" style="font-weight: bold">
                             <li><a href="GetController?">Home</a></li>
                             <li><a href="GetController?">All Categories</a></li>
-                            <li><a href="FilterCategoryController?cateID=<%= cate.getCategoryID()%>&cateName=<%= cate.getName()%>"><%= cate.getName()%></a></li>
+                            <li>
+                                <form style="display: inline-block;" method="POST" action="FilterCategoryController">
+                                    <input type="hidden" name="cateID" value="<%= cate.getCategoryID()%>" /> 
+                                    <a style="cursor: pointer;" onclick="this.parentNode.submit();"><%= cate.getName()%></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -51,7 +55,12 @@
                         <ul class="breadcrumb-tree" style="font-weight: bold">
                             <li><a href="GetController?">Home</a></li>
                             <li><a href="GetController?">All Publisher</a></li>
-                            <li><a href="FilterPublisherController?pubID=<%= pub.getPublisherID()%>&pubName=<%= pub.getName()%>"><%= pub.getName()%></a></li>
+                            <li>
+                                <form style="display: inline-block;" method="POST" action="FilterPublisherController">
+                                    <input type="hidden" name="pubID" value="<%= pub.getPublisherID()%>" /> 
+                                    <a style="cursor: pointer;" onclick="this.parentNode.submit();"><%= pub.getName()%></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -67,7 +76,14 @@
                         <ul class="breadcrumb-tree" style="font-weight: bold">
                             <li><a href="GetController?">Home</a></li>
                             <li><a href="GetController?">Price</a></li>
-                            <li><a href="FilterPriceController?min=<%= min%>&max=<%= max%>&mess=<%= me%>"><%= me%></a></li>
+                            <li>
+                                <form style="display: inline-block;" method="POST" action="FilterPriceController">
+                                    <input type="hidden" name="min" value="<%= min%>" /> 
+                                    <input type="hidden" name="max" value="<%= max%>" /> 
+                                    <input type="hidden" name="mess" value="<%= me%>" /> 
+                                    <a style="cursor: pointer;" onclick="this.parentNode.submit();"><%= me%></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -92,15 +108,13 @@
                 <%        } else {
                 %>
                 <div class="col-md-9">
-                    <p style="margin-top:400px; font-size: 100px; text-align: center;"><%= mess%></p>
+                    <p style="margin-top:100px; font-size: 100px; text-align: center;"><%= mess%></p>
                 </div>
                 <%
                     }
                 %>
             </div>
         </div>
-
-
         <%@include file="../HeaderFooterPage/footer.jsp" %>
 
     </body>

@@ -50,16 +50,18 @@
                                     pass="";
                                 }
                             %>
+                            <script>
+                                function resetInput(){
+                                    document.getElementById("a").value = "";
+                                    document.getElementById("b").value = "";                 
+                                }
+                            </script>
                             <form action="LoginController" method="POST">
-                                <select name="role" class="roleID" style="display: block; width: 150px; height: 40px; margin-bottom: 10px; margin-right: auto; margin-left: auto; border-radius: 40px 40px 40px 40px; text-align: center ">
-                                    <option value="0">Customer</option>
-                                    <option value="1">Staff</option>               
-                                </select>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Enter Account" type="text" name="userID" value="<%= userID%>" required=""/>
+                                    <input id="a" class="form-control" placeholder="Enter Account" type="text" name="userID" value="<%= userID%>" required=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Enter Password" type="password" name="password" value="<%= pass%>" required=""/>
+                                    <input id="b" class="form-control" placeholder="Enter Password" type="password" name="password" value="<%= pass%>" required=""/>
                                 </div>
                                 <div style="display: block; width: 300px;" class="g-recaptcha" data-sitekey="6LfxTU4gAAAAANL7i9yWhE0_BtD9TgxTRtdY06Vc"></div></br>
                                 <p style="
@@ -71,11 +73,11 @@
                                    border-radius: 100px;
                                    margin-bottom: 5px;
                                    text-align: center;
-                                   " id="error"><%=error%></p>  
-                                <button type="reset" style="width: 380px; margin: auto;" class="btn btn-block mybtn btn-primary tx-tfm" value="Reset">Reset</button>
-                                <div style="margin-top: 10px;" class="col-md-12 text-center ">
+                                   " id="error"><%=error%></p>                  
+                                <div style="margin-bottom: 10px;" class="col-md-12 text-center ">
                                     <button class="btn btn-block mybtn btn-primary tx-tfm" type="submit" name="action">Login</button>                                           
                                 </div>
+                                <button onclick="resetInput()" style="width: 380px; margin: auto;" class="btn btn-block mybtn btn-primary tx-tfm" value="Reset">Reset</button>
                             </form>
                             <div class="col-md-12 ">
                                 <div class="login-or">
@@ -95,13 +97,11 @@
                             <div class="form-group">
                                 <p class="text-center">Don't have account? <a href="RegisterController?action=Register" id="signup">Sign up here</a></p>
                             </div>                   
-                            <button class=" btn btn-block mybtn btn-primary tx-tfm"><a style="color: white" href="GetController?">Return Home</a> </button>
+                                <button class=" btn btn-block mybtn btn-primary tx-tfm"><a style="color: white" href="GetController?">Return Home</a> </button>
                         </div>
                     </div>
-
                 </div>
             </div>
-        </div>  
-
+        </div>                                
     </body>
 </html>

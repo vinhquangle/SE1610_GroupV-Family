@@ -24,6 +24,17 @@
         <%@include file="../HeaderFooterPage/header.jsp" %>
         <%            BookDTO book = (BookDTO) session.getAttribute("BOOK_DETAIL");
             List<BookDTO> sameCate = (List<BookDTO>) session.getAttribute("SAME_CATE");
+            Locale localeVN = new Locale("vi", "VN");
+            NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+            String price = currencyVN.format(book.getPrice());
+            String messAdd = (String) request.getAttribute("MESSAG_ADD");
+            if (messAdd == null) {
+                messAdd = "";
+            }
+            String messFail = (String) request.getAttribute("MESSAG_FAIL");
+            if (messFail == null) {
+                messFail = "";
+            }
         %>
         <!-- BREADCRUMB -->
         <div id="breadcrumb" class="section" style="margin-top: 180px; ">
@@ -35,8 +46,12 @@
                         <ul class="breadcrumb-tree" style="font-weight: bold">
                             <li><a href="GetController?">Home</a></li>
                             <li><a href="GetController?">All Categories</a></li>
-                            <li><a href="FilterCategoryController?cateID=<%= book.getCategory().getCategoryID()%>&cateName=<%= book.getCategory().getName()%>"><%= book.getCategory().getName()%></a></li>
-                            <li class="active"><a href="LoadController?&isbn=<%=book.getIsbn()%>"><%= book.getName()%></a></li>
+                            <li>
+                                <form style="display: inline-block;" method="POST" action="FilterCategoryController">
+                                    <input type="hidden" name="cateID" value="<%= book.getCategory().getCategoryID()%>" /> 
+                                    <a style="cursor: pointer;" onclick="this.parentNode.submit();"><%= book.getCategory().getName()%></a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -44,7 +59,14 @@
             </div>
             <!-- /container -->
         </div>
-        <!-- /BREADCRUMB -->
+        <!-- /BREADCRUMB -->     
+        <div style="background-color: #009933;">
+            <p style="color: white; font-size: 20px; text-align: center;"><%= messAdd%></p>
+        </div>
+        <div style="background-color: #cc0000;">
+            <p style="color: white; font-size: 20px; text-align: center;"><%= messFail%></p>
+        </div>
+        <!-- Button trigger modal -->
         <!-- SECTION -->
         <div class="section">
             <!-- container -->
@@ -60,14 +82,14 @@
                         </div>
                     </div>
                     <!-- /Product main img -->
-
                     <!-- Product details -->
                     <div class="col-md-5">
                         <div class="product-details" style="margin-top: 30px">
                             <h2 class="product-name"><%= book.getName()%></h2>                           
                             <div>
-                                <h3 class="product-price"><%= book.getPrice()%>đ</h3>
-                                <span class="product-available">In Stock</span>
+                                <h3 class="product-price"><%= price%></h3>
+                                <span class="product-available"><%= book.getQuantity()%> In Stock</span>
+                                <input id="stock" type="hidden" value="<%= book.getQuantity()%>"/>
                             </div>
                             <ul class="product-links">
                                 <li>ISBN:   <b><%= book.getIsbn()%></b></li>                               
@@ -76,60 +98,83 @@
                                 <li>Author:   <b><%= book.getAuthorName()%></b></li>                               
                             </ul>
                             <ul class="product-links">
-                                <li>Publisher:   <b><%= book.getPublisher().getName()%></b></li>                               
+                                <li>Publisher:
+                                    <form style="display: inline-block;" method="POST" action="FilterPublisherController">
+                                        <input type="hidden" name="pubID" value="<%= book.getPublisher().getPublisherID() %>" /> 
+                                        <a style="cursor: pointer;" onclick="this.parentNode.submit();"><b><%= book.getPublisher().getName() %></b></a>
+                                    </form>
+                                </li>                               
                             </ul>
 
                             <ul class="product-links">
-                                <li>Category:   <b><%= book.getCategory().getName()%></b></li>
+                                <li>Category:
+                                    <form style="display: inline-block;" method="POST" action="FilterCategoryController">
+                                        <input type="hidden" name="cateID" value="<%= book.getCategory().getCategoryID()%>" /> 
+                                        <a style="cursor: pointer;" onclick="this.parentNode.submit();"><b><%= book.getCategory().getName()%></b></a>
+                                    </form>
+                                </li>
                             </ul>
-
+                                    <style>
+                                        b:hover{
+                                            color: red;
+                                        }
+                                    </style>
                             <div class="add-to-cart" style="margin-top: 10px">
                                 <div class="qty-label">
                                     Quantity
                                     <div class="input-number">
-                                        <input name="quantity" type="number" id="quantity1" value="1">
+                                        <input onkeyup="check()" name="quantity" type="number" id="quantity1" value="1">
                                         <span class="qty-up" onclick="add()">+</span>
                                         <span class="qty-down" onclick="subtract()">-</span>
                                     </div>
                                 </div>
                             </div>
                             <script>
+                                var stock = Number(document.getElementById("stock").value);
                                 function add() {
-                                    var quantity = (Number(document.getElementById("quantity").value) + 1);
-                                    document.getElementById("quantity").value = quantity;
-                                    quantity = (Number(document.getElementById("quantity1").value) + 1);
-                                    document.getElementById("quantity1").value = quantity;
+                                    var cur = document.getElementById("quantity1").value;
+                                    if (cur < stock) {
+                                        var quantity = (Number(document.getElementById("quantity").value) + 1);
+                                        document.getElementById("quantity").value = quantity;
+                                        quantity = (Number(document.getElementById("quantity1").value) + 1);
+                                        document.getElementById("quantity1").value = quantity;
+                                    }
                                 }
                                 function subtract() {
                                     var quantity = (Number(document.getElementById("quantity").value));
-                                    if (quantity == 1) {
-
-                                    } else {
+                                    if (quantity > 1) {
                                         quantity -= 1
                                         document.getElementById("quantity").value = quantity;
                                     }
                                     quantity = (Number(document.getElementById("quantity1").value));
-                                    if (quantity == 1) {
-
-                                    } else {
+                                    if (quantity > 1) {
                                         quantity -= 1
                                         document.getElementById("quantity1").value = quantity;
+                                    }
+                                }
+                                function cart() {
+                                    var quantity = document.getElementById("quantity1").value;
+                                    document.getElementById("quantity").value = quantity;
+                                }
+                                function check() {
+                                    var cur = document.getElementById("quantity1").value;
+                                    if (cur > stock) {
+                                        cur = Math.floor(cur / 10);
+                                        document.getElementById("quantity1").value = cur;
+                                    } else if (cur < 0) {
+                                        document.getElementById("quantity1").value = 1;
                                     }
                                 }
                             </script>
                             <div  class="add-to-cart" style="margin-top: 10px">  
                                 <form action="AddBookCartController" method="POST" style="display: inline-block">
-                                    <input name="quantity" id="quantity" value="1" type="hidden">
-                                    <input name="isbn" id="quantity" value="<%= book.getIsbn()%>" type="hidden">
-                                    <button name="action" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </form>
-                                <form action="MainController" method="POST" style="display: inline-block">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Buy Now</button>
-                                </form>  
+                                    <input name="quantity" id="quantity" type="hidden" value="1">
+                                    <input name="isbn" value="<%= book.getIsbn()%>" type="hidden">
+                                    <input name="quantityCheck" value="<%= book.getQuantity()%>" type="hidden">
+                                    <button onclick="cart()" name="action" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                </form>                               
+                                <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Buy Now</button>                              
                             </div>
-                            <style>
-
-                            </style>
                         </div>
                     </div>
                     <!-- /Product details -->
@@ -139,7 +184,6 @@
             <!-- /container -->
         </div>
         <!-- /SECTION -->
-
         <!-- Section -->
         <div class="section">
             <!-- container -->
@@ -155,27 +199,38 @@
                         </div>
                     </div>
                     <%
-                        Locale localeVN = new Locale("vi", "VN");
-                        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
                         for (BookDTO bookDTO : sameCate) {
-                             String price = currencyVN.format(bookDTO.getPrice());
+                            price = currencyVN.format(bookDTO.getPrice());
                     %>
                     <!-- product -->
                     <div class="col-md-3 col-xs-6">
                         <div class="product">
                             <div class="product-img">
-                                <a class="product-img" href="LoadController?&isbn=<%= bookDTO.getIsbn()%>"><img style="height: 250px;" src="<%= bookDTO.getImg()%>" alt=""></a>
+                                <form style="width: 100%; display: inline-block;" method="POST" action="LoadController">
+                                    <input type="hidden" name="isbn" value="<%= bookDTO.getIsbn()%>" /> 
+                                    <a class="product-img" style="cursor: pointer;" onclick="this.parentNode.submit();"><img style="height: 250px;" src="<%= bookDTO.getImg()%>" alt=""></a>
+                                </form>
                             </div>
                             <div class="product-body">
                                 <p class="product-category"><%= bookDTO.getCategory().getName()%></p>
-                                <h3 style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 230px;" class="hover product-name"><a style="color: black;" href="LoadController?&isbn=<%=bookDTO.getIsbn()%>"></a><%= bookDTO.getName()%></h3>
-                                <h4 class="product-price"><%= price %></h4>                                
-                                <div class="product-btns">                                   
-                                    <button class="quick-view"><a style="color: black;" href="LoadController?&isbn=<%= bookDTO.getIsbn()%>"><i class="fa fa-eye"></i><span class="tooltipp">view details</span></button>
-                                </div>
+                                <h3 style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 230px;" class="product-name" >
+                                    <form style="display: inline-block;" method="POST" action="LoadController">
+                                        <input type="hidden" name="isbn" value="<%=bookDTO.getIsbn()%>" /> 
+                                        <a style="cursor: pointer; color: black; font-weight: bold;" onclick="this.parentNode.submit();"><%= bookDTO.getName()%></a>
+                                    </form>
+                                </h3>                                <h4 class="product-price"><%= price%></h4>                                
+                                <form style="display: inline-block;" method="POST" action="LoadController">
+                                    <input type="hidden" name="isbn" value="<%=bookDTO.getIsbn()%>" /> 
+                                    <div class="product-btns">
+                                        <button class="quick-view"><a style="cursor: pointer; color: black;" onclick="this.parentNode.submit();"><i class="fa fa-eye"></i><span class="tooltipp">view details</span></button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="add-to-cart">
-                                <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                <form style="display: inline-block;" method="POST" action="LoadController">
+                                    <input type="hidden" name="isbn" value="<%= bookDTO.getIsbn()%>" /> 
+                                    <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>add to cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -190,11 +245,8 @@
             <!-- /container -->
         </div>
         <!-- /Section -->
-
         <%@include file="../HeaderFooterPage/footer.jsp" %>
-
         <!-- jQuery Plugins -->
         <script src="../../JS/main.js"></script>
-
     </body>
 </html>

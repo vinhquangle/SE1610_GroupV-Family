@@ -5,6 +5,7 @@
 package controller.modify;
 
 import cart.Cart;
+import dao.BookDAO;
 import dto.BookDTO;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -28,7 +29,17 @@ public class EditBookCartController extends HttpServlet {
         String url = ERROR;
         try {
             String isbn = request.getParameter("isbn");
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int quantity = 0;
+            BookDAO dao = new BookDAO();
+            int quantityCheck = dao.quantityCheck(isbn);
+            quantity = Integer.parseInt(request.getParameter("quantity"));
+            if (quantity < 1) {
+                request.setAttribute("MESSAG_FAIL", "Failed - Quantity must be greater than 0 or be a number!");
+                throw new Exception();
+            } else if (quantity > quantityCheck) {
+                request.setAttribute("MESSAG_FAIL", "Failed - The requested quantity for " + quantity + " is not available!(Only " + quantityCheck + " in stock)");
+                throw new Exception();
+            }
             HttpSession session = request.getSession();
             if (session != null) {
                 Cart cart = (Cart) session.getAttribute("CART");
@@ -40,11 +51,13 @@ public class EditBookCartController extends HttpServlet {
                         cart.edit(isbn, book);
                         session.setAttribute("CART", cart);
                         url = SUCCESS;
+                        request.setAttribute("MESSAG_ADD", "Modified quantity! - " + book.getName() + " - " + "Quantity: " + quantity);
                     }
                 }
             }
         } catch (Exception e) {
             log("Error at EditBookCartController: " + e.toString());
+            url = SUCCESS;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

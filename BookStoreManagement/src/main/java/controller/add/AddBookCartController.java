@@ -8,10 +8,7 @@ package controller.add;
 import cart.Cart;
 import dao.BookDAO;
 import dto.BookDTO;
-import dto.CategoryDTO;
-import dto.PublisherDTO;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +25,7 @@ import javax.servlet.http.HttpSession;
 public class AddBookCartController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/CartPage/viewCart.jsp";
-    private static final String SUCCESS = "GetController";
+    private static final String SUCCESS = "WEB-INF/JSP/ProductPage/productDetails.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,28 +33,53 @@ public class AddBookCartController extends HttpServlet {
         String url = ERROR;
         try {
             String action = request.getParameter("action");
+            int quantityCheck = Integer.parseInt(request.getParameter("quantityCheck"));          
             if (action.equals("View")) {
                 throw new Exception();
             }
             HttpSession session = request.getSession();
             String isbn = request.getParameter("isbn");
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int quantity = 0;
+            try {
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+            } catch (Exception e) {
+                request.setAttribute("MESSAG_FAIL", "Failed - Quantity must be greater than 0 or be a number!");
+                url = SUCCESS;
+                throw new Exception();
+            }
+            if (quantity < 1) {
+                request.setAttribute("MESSAG_FAIL", "Failed - Quantity must be greater than 0 or be a number!");
+                url = SUCCESS;
+                throw new Exception();
+            }
             BookDAO dao = new BookDAO();
-            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");//Load tất cả thể loại
-            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB"); //Load tất cả NXB
-            BookDTO book = dao.loadBook(listCate, listPub, isbn);
-            book.setQuantity(quantity);
+            BookDTO book = new BookDTO();
             if (session != null) {
                 Cart cart = (Cart) session.getAttribute("CART");
                 if (cart == null) {
                     cart = new Cart();
+                    int select = 0;
+                    session.setAttribute("SELECT", select);
+                }else if (cart.getCart().containsKey(isbn)) {
+                    book = cart.getCart().get(isbn);
+                    int quan = book.getQuantity() + quantity;
+                    if (quan > quantityCheck) {
+                        request.setAttribute("MESSAG_FAIL", "Failed - Quantity greater than the quantity in stock !(Only " + quantityCheck + " in stock)");
+                        url = SUCCESS;
+                        throw new Exception();
+                    }
                 }
+                book = dao.loadBook(isbn);
+                book.setQuantity(quantity);
                 cart.add(book);
                 //Cap nhat lai so luong
                 Map<String, BookDTO> listSize = cart.getCart();
+                int select = (int) session.getAttribute("SELECT");
+                select+=quantity;
+                session.setAttribute("SELECT", select);
                 session.setAttribute("SIZE", listSize.size());
                 session.setAttribute("CART", cart);
-                request.setAttribute("MESSAGE1", "Add " + book.getName() + " - " + "Quantity: " + book.getCategory().getName() + " success");
+                request.setAttribute("MESSAG_ADD", "Added to your cart! - " + book.getName() + " - " + "Quantity: " + quantity);
                 url = SUCCESS;
             }
         } catch (Exception e) {

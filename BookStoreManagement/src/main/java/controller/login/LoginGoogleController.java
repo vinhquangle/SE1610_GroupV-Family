@@ -8,7 +8,6 @@ package controller.login;
 import dao.CustomerDAO;
 import dto.CustomerDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +66,13 @@ public class LoginGoogleController extends HttpServlet {
             CustomerDAO dao = new CustomerDAO();
             CustomerDTO cus = new CustomerDTO(userId, fullname, password, email, address, phone, 0, "1", "0");
             try {
-                dao.addAccount(cus);
+                if (dao.checkCustomerEmail(email) && !dao.checkCustomerID(userId)) {
+                    request.setAttribute("ERROR", "Email already in use");
+                    RequestDispatcher dis = request.getRequestDispatcher("WEB-INF/JSP/LoginPage/login.jsp");
+                    dis.forward(request, response);
+                } else if (!dao.createAccount(cus)) {
+                    cus = dao.checkLogin(userId, password);
+                }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(LoginGoogleController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {

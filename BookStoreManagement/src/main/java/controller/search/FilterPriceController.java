@@ -38,9 +38,7 @@ public class FilterPriceController extends HttpServlet {
             request.setAttribute("MESS", request.getParameter("mess"));
             BookDAO bookDao = new BookDAO();
             HttpSession session = request.getSession();
-            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
-            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
-            List<BookDTO> listBook = bookDao.filterByPrice(min,max,listCate,listPub);
+            List<BookDTO> listBook = bookDao.filterByPrice(min,max);
             if(listBook.size() > 0){
                 session.setAttribute("LIST_BOOK", listBook);
                 url = SUCCESS;

@@ -7,10 +7,8 @@ package controller.search;
 
 import dao.BookDAO;
 import dto.BookDTO;
-import dto.CategoryDTO;
 import dto.PublisherDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,15 +31,12 @@ public class FilterPublisherController extends HttpServlet {
         String url = ERROR;
         try {
             String pubID = request.getParameter("pubID");
-            String pubName = request.getParameter("pubName");
             HttpSession session = request.getSession();
-            PublisherDTO pub = new PublisherDTO(pubID, pubName);
-            request.setAttribute("PUBLISHER", pub);
             BookDAO bookDAO = new BookDAO();
-            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
-            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID, pubName, listCate);
+            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID);
             if (listBookbyPub.size() > 0) {
                 session.setAttribute("LIST_BOOK", listBookbyPub);
+                request.setAttribute("PUBLISHER", new PublisherDTO(pubID, listBookbyPub.get(0).getPublisher().getName()));
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");

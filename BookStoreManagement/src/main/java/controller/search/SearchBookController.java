@@ -7,10 +7,10 @@ package controller.search;
 
 import dao.BookDAO;
 import dto.BookDTO;
-import dto.CategoryDTO;
-import dto.PublisherDTO;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,12 +33,12 @@ public class SearchBookController extends HttpServlet {
         String url = ERROR;
         try {
             request.setCharacterEncoding("UTF-8");
-            String txtSearch = request.getParameter("searchBook");
+            String temp = Normalizer.normalize(request.getParameter("searchBook"), Normalizer.Form.NFD);
+            Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+            String txtSearch = pattern.matcher(temp).replaceAll("");
             HttpSession session = request.getSession();
             BookDAO dao = new BookDAO();
-            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");//Load tất cả thể loại
-            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB"); //Load tất cả NXB
-            List<BookDTO> list = dao.searchBook(txtSearch, listCate, listPub);
+            List<BookDTO> list = dao.searchBook(txtSearch);
             if (list.size() > 0) {
                 session.setAttribute("LIST_BOOK", list);//ATTRIBUTE CHU HOA 
                 url = SUCCESS;

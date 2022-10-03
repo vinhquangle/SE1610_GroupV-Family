@@ -26,9 +26,8 @@
                 %>
                 <div class="input-checkbox">
                     <label for="category-6">
-                        <form action="FilterCategoryController" method="GET">
+                        <form action="FilterCategoryController" method="POST">
                             <input type="hidden" name="cateID" value="<%= cateDTO.getCategoryID()%>"/>
-                            <input type="hidden" name="cateName" value="<%= cateDTO.getName()%>"/>
                             <button class="hover" style="border: none; background: none;"><%= cateDTO.getName()%></button>
                         </form>
                     </label>
@@ -49,9 +48,8 @@
                 %>
                 <div class="input-checkbox">                              
                     <label for="category-6">
-                        <form action="FilterPublisherController" method="GET">
+                        <form action="FilterPublisherController" method="POST">
                             <input type="hidden" name="pubID" value="<%= publisherDTO.getPublisherID()%>"/>
-                            <input type="hidden" name="pubName" value="<%= publisherDTO.getName()%>"/>
                             <button class="hover" style="border: none; background: none;"><%= publisherDTO.getName()%></button>
                         </form>
                     </label>

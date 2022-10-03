@@ -7,7 +7,6 @@ package controller.delete;
 import cart.Cart;
 import dto.BookDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

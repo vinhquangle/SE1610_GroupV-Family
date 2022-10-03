@@ -40,7 +40,7 @@ public class GetController extends HttpServlet {
             PublisherDAO pubDao = new PublisherDAO();
             List<CategoryDTO> listCate = cateDao.getListCategory(); //Load tất cả thể loại
             List<PublisherDTO> listPub = pubDao.getListPublisher(); //Load tất cả NXB
-            List<BookDTO> listBook = bookDao.getListBook(listCate, listPub); //Load tất cả sách
+            List<BookDTO> listBook = bookDao.getListBook(); //Load tất cả sách
             url = SUCCESS;
             if (listBook.size() > 0) {
                 HttpSession session = request.getSession();

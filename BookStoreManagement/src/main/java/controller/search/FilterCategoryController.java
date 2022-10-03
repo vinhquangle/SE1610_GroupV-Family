@@ -8,9 +8,7 @@ package controller.search;
 import dao.BookDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
-import dto.PublisherDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,14 +31,11 @@ public class FilterCategoryController extends HttpServlet {
         String url = ERROR;
         try {
             String cateID = request.getParameter("cateID");
-            String cateName = request.getParameter("cateName");
             HttpSession session = request.getSession();
-            CategoryDTO cate = new CategoryDTO(cateID, cateName);
-            request.setAttribute("CATEGORY", cate);
             BookDAO bookDAO = new BookDAO();
-            List<PublisherDTO> listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
-            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID, cateName, listPub);
+            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID);
             if (listBookbyCate.size() > 0) {
+                request.setAttribute("CATEGORY", new CategoryDTO(cateID, listBookbyCate.get(0).getCategory().getName()));
                 session.setAttribute("LIST_BOOK", listBookbyCate);
                 url = SUCCESS;
             } else {

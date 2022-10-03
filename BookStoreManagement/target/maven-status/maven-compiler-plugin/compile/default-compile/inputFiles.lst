@@ -3,6 +3,7 @@ C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\CategoryDAO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\BookResponseDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\utilities\DBUtils.java
+C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\CustomerErrorDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\login\RegisterController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\StaffDAO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\CustomerDAO.java
@@ -19,10 +20,12 @@ C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\cont
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\delete\RemoveBookCartController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\search\FilterCategoryController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\BResponseDetailDAO.java
+C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\manage\ManageCustomerController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\cart\Cart.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\login\LogoutController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\BookRequestDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\CategoryDTO.java
+C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\load\LoadManageController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\BRequestDetailDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\BookResponseDAO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\CustomerDTO.java
@@ -32,9 +35,11 @@ C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\login\LoginGoogleController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\StaffDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dao\PublisherDAO.java
+C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\search\SortController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\BookDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\BResponseDetailDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\OrderDetailDTO.java
+C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\controller\manage\ManageBookController.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\dto\PublisherDTO.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\logingoogle\Constants.java
 C:\Users\Admin\Documents\NetBeansProjects\BookStoreManagement\src\main\java\logingoogle\GoogleUtils.java
