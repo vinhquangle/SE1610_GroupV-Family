@@ -1,16 +1,14 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package controller.load;
+package controller.search;
 
 import dao.BookDAO;
-import dao.PublisherDAO;
 import dto.BookDTO;
-import dto.CategoryDTO;
 import dto.PublisherDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,11 +18,12 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ownhi
+ * @author Admin
  */
-public class PublisherController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "JSP/HomePage/homePage.jsp";
+public class FilterPublisherController extends HttpServlet {
+
+    private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
+    private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,11 +33,13 @@ public class PublisherController extends HttpServlet {
             String pubID = request.getParameter("pubID");
             HttpSession session = request.getSession();
             BookDAO bookDAO = new BookDAO();
-        
-            List<CategoryDTO> listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
-            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID, listCate);
-            if(listBookbyPub.size() > 0 && listCate.size() > 0){
+            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID);
+            if (listBookbyPub.size() > 0) {
                 session.setAttribute("LIST_BOOK", listBookbyPub);
+                request.setAttribute("PUBLISHER", new PublisherDTO(pubID, listBookbyPub.get(0).getPublisher().getName()));
+                url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "NOT FOUND!");
                 url = SUCCESS;
             }
         } catch (Exception e) {

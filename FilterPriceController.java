@@ -1,15 +1,15 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package controller.load;
+package controller.search;
 
 import dao.BookDAO;
-import dao.CategoryDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
+import dto.PublisherDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,11 +19,13 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ownhi
+ * @author Admin
  */
-public class PriceController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "JSP/HomePage/homePage.jsp";
+public class FilterPriceController extends HttpServlet {
+
+    private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
+    private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -31,14 +33,17 @@ public class PriceController extends HttpServlet {
         try {
             String min = request.getParameter("min");
             String max = request.getParameter("max");
+            request.setAttribute("MAX", max);
+            request.setAttribute("MIN", min);
+            request.setAttribute("MESS", request.getParameter("mess"));
             BookDAO bookDao = new BookDAO();
-            CategoryDAO cateDao = new CategoryDAO();
-
             HttpSession session = request.getSession();
-            List<CategoryDTO> listCate = cateDao.getListCategory();
-            List<BookDTO> listBookUnder = bookDao.getListBookPrice(min,max,listCate);
-            if(listBookUnder.size() > 0 && listCate.size() >0){
-                session.setAttribute("LIST_BOOK", listBookUnder);
+            List<BookDTO> listBook = bookDao.filterByPrice(min,max);
+            if(listBook.size() > 0){
+                session.setAttribute("LIST_BOOK", listBook);
+                url = SUCCESS;
+            }else {
+                request.setAttribute("MESSAGE", "NOT FOUND!");
                 url = SUCCESS;
             }
         } catch (Exception e) {

@@ -1,14 +1,13 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package controller.load;
+package controller.search;
 
 import dao.BookDAO;
-import dao.CategoryDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
-import dto.PublisherDTO;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -19,11 +18,12 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ownhi
+ * @author Admin
  */
-public class CategoryController extends HttpServlet {
-    private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "JSP/HomePage/homePage.jsp";
+public class FilterCategoryController extends HttpServlet {
+
+    private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
+    private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,19 +31,19 @@ public class CategoryController extends HttpServlet {
         String url = ERROR;
         try {
             String cateID = request.getParameter("cateID");
-            BookDAO bookDao = new BookDAO();
-            CategoryDAO cateDao = new CategoryDAO();
-
             HttpSession session = request.getSession();
-            List<CategoryDTO> listCatebyID = cateDao.getListCategoryID(cateID);
-            List<BookDTO> listBookbyCate = bookDao.filterbyCate(cateID,listCatebyID);
-
-            if(listBookbyCate.size() > 0 && listCatebyID.size() >0){
+            BookDAO bookDAO = new BookDAO();
+            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID);
+            if (listBookbyCate.size() > 0) {
+                request.setAttribute("CATEGORY", new CategoryDTO(cateID, listBookbyCate.get(0).getCategory().getName()));
                 session.setAttribute("LIST_BOOK", listBookbyCate);
+                url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "NOT FOUND!");
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at CategoryController: " + e.toString());
+            log("Error at PublisherController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -76,6 +76,7 @@ public class CategoryController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
     }
 
     /**
