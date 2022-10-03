@@ -4,6 +4,7 @@
  */
 package controller.login;
 
+import aes.MyAES;
 import dao.CustomerDAO;
 import dao.StaffDAO;
 import dto.CustomerDTO;
@@ -34,31 +35,32 @@ public class LoginController extends HttpServlet {
             if (action.equals("Login")) {
                 throw new Exception();
             }
-            String role = request.getParameter("role");
             String userID = request.getParameter("userID");
             String password = request.getParameter("password");
             CustomerDAO cusDao = new CustomerDAO();
             StaffDAO staffDao = new StaffDAO();
             HttpSession session = request.getSession();
             boolean valid = false;
+            //Ma hoa AES
+            MyAES myCipher = new MyAES(password, MyAES.AES_192);
+            String AES_ecryptedStr = myCipher.AES_encrypt(password);//Mã hóa AES
+            String AES_decryptedStr = myCipher.AES_decrypt(AES_ecryptedStr);//Giải mã AES
+            password = AES_ecryptedStr;
+            //Ma hoa AES
             String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
             valid = VerifyUtils.verify(gRecaptchaResponse);
             if (!valid) {
                 request.setAttribute("ERROR", "Captcha Invalid!");
                 throw new Exception();
             }
-            if (role.equals("0")) {
-                CustomerDTO loginUser = cusDao.checkLogin(userID, password);
-                if (loginUser != null && cusDao.updateStatusOnline(userID)) {
-                    session.setAttribute("LOGIN_CUS", loginUser);
-                    url = SUCCESS;
-                } else {
-                    request.setAttribute("ERROR", "Incorrect Account Or Password ");
-                }
-            } else if (role.equals("1")) {
-                StaffDTO loginUser = staffDao.checkLogin(userID, password);
-                if (loginUser != null && staffDao.updateStatusOnline(userID)) {
-                    session.setAttribute("LOGIN_STAFF", loginUser);
+            CustomerDTO loginCus = cusDao.checkLogin(userID, password);
+            if (loginCus != null && cusDao.updateStatusOnline(userID)) {
+                session.setAttribute("LOGIN_CUS", loginCus);
+                url = SUCCESS;
+            } else {
+                StaffDTO loginStaff = staffDao.checkLogin(userID, password);
+                if (loginStaff != null && staffDao.updateStatusOnline(userID)) {
+                    session.setAttribute("LOGIN_STAFF", loginStaff);
                     url = SUCCESS;
                 } else {
                     request.setAttribute("ERROR", "Incorrect Account Or Password ");
