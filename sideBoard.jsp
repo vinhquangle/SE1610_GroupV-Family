@@ -75,6 +75,14 @@
                                     <li><a title="Revenue" href="#"><i class="fa fa-money sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Revenue</span></a></li>                                                                    
                                 </ul>
                             </li>
+                            <li>
+                                <a class="has-arrow" href="#" aria-expanded="false" style="padding-right: 32px">
+                                    <i class="fa big-icon fa-bullhorn icon-wrap"></i>
+                                    <span style="font-size: 14px;" class="mini-click-non">Promotion Management</span></a>
+                                <ul class="submenu-angle" aria-expanded="false">
+                                    <li><a title="Promotion" href="#"><i class="fa fa-bullhorn sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Promotion</span></a></li>                                                                    
+                                </ul>
+                            </li>
                         </ul>
                     </nav>
                 </div>
