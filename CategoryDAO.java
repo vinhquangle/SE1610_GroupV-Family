@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import javax.naming.NamingException;
 import utilities.DBUtils;
 
 /**
@@ -36,6 +38,11 @@ public class CategoryDAO {
             + "OR dbo.ufn_removeMark(name) LIKE ?"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String COUNT = "SELECT COUNT(*) AS 'number' FROM tblCategory";
+    private static final String CREATE="INSERT INTO tblCategory(categoryID, name, [status]) VALUES(?,?,?)";
+    private static final String DUPLICATE_ID="SELECT categoryID FROM tblCategory WHERE categoryID = ?";
+    private static final String DUPLICATE_NAME="SELECT name FROM tblCategory WHERE name = ?";
+    private Pattern pattern; 
+    private static final String CATE_ID_PATTERN = "^C[0-9]{1,10}$";;
     //Hàm này để lấy 9 category cho 1 trang
     public List<CategoryDTO> getList9Category(int page) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
@@ -106,7 +113,7 @@ public class CategoryDAO {
         }
         return list;
     }
-    //method nay de load category đang đc update.
+    //method nay de load category đang đc update. - Hữu Hiếu
        public CategoryDTO loadCate(String cateIDN) throws SQLException {
         CategoryDTO cate = new CategoryDTO();
         Connection conn = null;
@@ -174,6 +181,7 @@ public class CategoryDAO {
         }
         return cate;
     }
+    //method này dùng để search Category - Hữu Hiếu
     public List<CategoryDTO> searchCate(String txtSearch) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -209,6 +217,7 @@ public class CategoryDAO {
         }
         return list;
     }
+    // hàm này dùng để search theo phân trang - Hữu Hiếu
     public List<CategoryDTO> searchCate_9(String txtSearch, int page) throws SQLException {
         List<CategoryDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -248,6 +257,7 @@ public class CategoryDAO {
         }
         return list;
     }
+    //hàm này để update category - Hữu Hiếu
        public boolean updateCate(CategoryDTO cate, String cateIDN) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -274,6 +284,7 @@ public class CategoryDAO {
         }
         return check;
     }
+       //method này dùng để đúng số lượng category có trong database - Hữu Hiếu
     public int countCate() throws SQLException {
         int count = 0;
         Connection conn = null;
@@ -303,4 +314,87 @@ public class CategoryDAO {
         }
         return count;
     }
+    //method này dùng tạo category - Hữu Hiếu
+    public boolean createCate(CategoryDTO cate) throws SQLException, ClassNotFoundException{
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try{
+            conn = DBUtils.getConnection();
+            if(conn!= null){
+                ptm= conn.prepareStatement(CREATE);
+                ptm.setString(1, cate.getCategoryID());
+                ptm.setString(2, cate.getName());
+                ptm.setString(3, cate.getStatus());
+                check = ptm.executeUpdate() > 0 ? true: false;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            if(ptm!=null) ptm.close();
+            if(conn!=null) ptm.close();
+        }
+        return check;
+    }
+    //method này dùng để check trùng ID - Hữu Hiếu
+    public boolean checkDuplicateID(String cateID) throws SQLException{
+        boolean check= false;
+        Connection conn= null;
+        PreparedStatement ptm= null;
+        ResultSet rs= null;
+        try{
+            conn= DBUtils.getConnection();
+            if(conn!=null){
+                ptm= conn.prepareStatement(DUPLICATE_ID);
+                ptm.setString(1, cateID);
+                rs= ptm.executeQuery();
+                if(rs.next()){
+                    check=true;
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            if(rs!=null) rs.close();
+            if(ptm!=null) ptm.close();
+            if(conn!=null) conn.close();
+            
+        }
+        return check;
+    } 
+    //method này dùng để check trùng name - Hữu Hiếu
+   public boolean checkDuplicateName(String name) throws SQLException{
+        boolean check= false;
+        Connection conn= null;
+        PreparedStatement ptm= null;
+        ResultSet rs= null;
+        try{
+            conn= DBUtils.getConnection();
+            if(conn!=null){
+                ptm= conn.prepareStatement(DUPLICATE_NAME);
+                ptm.setString(1, name);
+                rs= ptm.executeQuery();
+                if(rs.next()){
+                    check=true;
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            if(rs!=null) rs.close();
+            if(ptm!=null) ptm.close();
+            if(conn!=null) conn.close();
+            
+        }
+        return check;
+    }      
+    //mehod này để check pattern
+    public CategoryDAO() { 
+        pattern = Pattern.compile(CATE_ID_PATTERN); 
+    } 
+    
+    public boolean validate(String cateID) { 
+        return pattern.matcher(cateID).matches(); 
+    } 
 }
