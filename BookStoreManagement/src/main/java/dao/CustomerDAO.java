@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
 import utilities.DBUtils;
 
@@ -26,6 +28,7 @@ public class CustomerDAO {
     private static final String CHECK_CUSTOMER_ID = "SELECT customerID FROM tblCustomer WHERE customerID LIKE ?";
     private static final String CHECK_CUSTOMER_EMAIL = "SELECT [Email] FROM tblCustomer WHERE [Email] LIKE ?";
     private static final String CUSTOMER = "SELECT customerID, password, name, email, [address], phone, point, [status], [delete] FROM tblCustomer WHERE [Email] LIKE ?";
+    private static final String GET_CUSTOMER = "SELECT customerID, password, name, email, [address], phone, point, [status], [delete] FROM tblCustomer";
 
     public CustomerDTO checkLogin(String userID, String password) throws SQLException {
         CustomerDTO cus = null;
@@ -248,4 +251,43 @@ public class CustomerDAO {
         }
         return check;
     }
+     public List<CustomerDTO> getlistCustomer() throws SQLException {
+        List<CustomerDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CUSTOMER);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String customerID = rs.getString("customerID");
+                    String password = rs.getString("password");
+                    String name = rs.getString("name");
+                    String email = rs.getString("email");
+                    String addr = rs.getString("address");
+                    String phone = rs.getString("phone");
+                    int point = rs.getInt("point");
+                    String status = rs.getString("status");
+                    String delete = rs.getString("delete");
+                    list.add(new CustomerDTO(customerID, name, password, email, addr, phone, point, status, delete));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
 }

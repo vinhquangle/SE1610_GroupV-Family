@@ -5,8 +5,11 @@
  */
 package controller.manage;
 
+import dao.CustomerDAO;
+import dto.CustomerDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +25,10 @@ public class ManageCustomerController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        try{
         PrintWriter out = response.getWriter();
+        CustomerDAO cusDAO = new CustomerDAO();
+        List<CustomerDTO> listCus = cusDAO.getlistCustomer();
         out.println("<html class=\"no-js\" lang=\"en\">\n"
                 + "\n"
                 + "    <head>\n"
@@ -78,57 +84,31 @@ public class ManageCustomerController extends HttpServlet {
                 + "                                    <th>Address</th>\n"
                 + "                                    <th>Point</th>\n"
                 + "                                    <th>Status</th>\n"
+                + "                                    <th>Delete</th>\n"
                 + "                                    <th>Setting</th>\n"
-                + "                                </tr>\n"
-                + "                                <tr>\n"
-                + "                                    <td>123</td>                                   \n"
-                + "                                    <td>Jewelery Title 1</td>\n"
-                + "                                    <td>Name</td>\n"
-                + "                                    <td>Name</td>\n"
-                + "                                    <td>C1</td>\n"
-                + "                                    <td>100</td>\n"
-                + "                                    <td>$15</td>\n"
+                + "                                </tr>\n");
+                for (int i = 0; i<listCus.size(); i++){
+                    
+                
+                out.println( "                                <tr>\n"
+                + "                                    <td>"+ listCus.get(i).getCustomerID() + "</td>                                   \n"
+                + "                                    <td>"+ listCus.get(i).getName()+ "</td>\n"
+                + "                                    <td>"+ listCus.get(i).getPassword()+ "</td>\n"
+                + "                                    <td>"+ listCus.get(i).getEmail()+ "</td>\n"
+                + "                                    <td>"+ listCus.get(i).getPhone()+ "</td>\n"
+                + "                                    <td>"+ listCus.get(i).getAddress()+ "</td>\n"
+                + "                                    <td>"+ listCus.get(i).getPoint()+ "</td>\n"
                 + "                                    <td>\n"
-                + "                                        <button class=\"pd-setting\">Online</button>\n"
+                + "                                        <button class=\"pd-setting\">"+ listCus.get(i).getStatus()+ "</button>\n"
                 + "                                    </td>\n"
-                + "                                    <td>\n"
-                + "                                        <button data-toggle=\"tooltip\" title=\"Edit\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
-                + "                                        <button data-toggle=\"tooltip\" title=\"Trash\" class=\"pd-setting-ed\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></button>\n"
-                + "                                    </td>\n"
-                + "                                </tr>\n"
-                + "                                <tr>\n"
-                + "                                    <td>123</td>                                   \n"
-                + "                                    <td>Jewelery Title 1</td>\n"
-                + "                                    <td>Name</td>\n"
-                + "                                    <td>Name</td>\n"
-                + "                                    <td>C1</td>\n"
-                + "                                    <td>100</td>\n"
-                + "                                    <td>$15</td>\n"
-                + "                                    <td>\n"
-                + "                                        <button class=\"pd-setting\">Offline</button>\n"
-                + "                                    </td>\n"
+                + "                                    <td>"+ listCus.get(i).getDelete()+ "</td>\n"
                 + "                                    <td>\n"
                 + "                                        <button data-toggle=\"tooltip\" title=\"Edit\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
                 + "                                        <button data-toggle=\"tooltip\" title=\"Trash\" class=\"pd-setting-ed\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></button>\n"
                 + "                                    </td>\n"
-                + "                                </tr>\n"
-                + "                                <tr>\n"
-                + "                                    <td>123</td>                                   \n"
-                + "                                    <td>Jewelery Title 1</td>\n"
-                + "                                    <td>Name</td>\n"
-                + "                                    <td>Name</td>\n"
-                + "                                    <td>C1</td>\n"
-                + "                                    <td>100</td>\n"
-                + "                                    <td>$15</td>\n"
-                + "                                    <td>\n"
-                + "                                        <button class=\"pd-setting\">Online</button>\n"
-                + "                                    </td>\n"
-                + "                                    <td>\n"
-                + "                                        <button data-toggle=\"tooltip\" title=\"Edit\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
-                + "                                        <button data-toggle=\"tooltip\" title=\"Trash\" class=\"pd-setting-ed\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></button>\n"
-                + "                                    </td>\n"
-                + "                                </tr>\n"
-                + "\n"
+                + "                                </tr>\n");
+                        }
+                out.println( "\n"
                 + "                            </table>\n"
                 + "                            <div class=\"custom-pagination\">\n"
                 + "                                <nav aria-label=\"Page navigation example\">\n"
@@ -149,6 +129,8 @@ public class ManageCustomerController extends HttpServlet {
                 + "    </body>\n"
                 + "\n"
                 + "</html>");
+        }catch(Exception e){
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

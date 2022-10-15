@@ -92,6 +92,14 @@
         <servlet-name>MoMoResponse</servlet-name>
         <servlet-class>momo.MoMoResponse</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageCategoryController</servlet-name>
+        <servlet-class>controller.manage.ManageCategoryController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateCategoryController</servlet-name>
+        <servlet-class>controller.manage.CreateCategoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetController</servlet-name>
         <url-pattern>/GetController</url-pattern>
@@ -183,6 +191,14 @@
     <servlet-mapping>
         <servlet-name>MoMoResponse</servlet-name>
         <url-pattern>/MoMoResponse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageCategoryController</servlet-name>
+        <url-pattern>/ManageCategoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateCategoryController</servlet-name>
+        <url-pattern>/CreateCategoryController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

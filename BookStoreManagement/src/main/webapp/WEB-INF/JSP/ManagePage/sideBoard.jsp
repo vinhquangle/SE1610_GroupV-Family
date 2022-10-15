@@ -64,7 +64,7 @@
                                     <i class="fa big-icon fa-list-alt icon-wrap"></i>
                                     <span style="font-size: 14px;" class="mini-click-non">Category Management</span></a>
                                 <ul class="submenu-angle" aria-expanded="false">
-                                    <li><a onclick="load('ManageCustomerController')" title="Category" href="#"><i class="fa fa-list-ol sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">List Category</span></a></li>                                                                    
+                                    <li><a onclick="load('ManageCategoryController')" title="Category" href="#"><i class="fa fa-list-ol sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">List Category</span></a></li>                                                                    
                                 </ul>
                             </li>
                             <li>

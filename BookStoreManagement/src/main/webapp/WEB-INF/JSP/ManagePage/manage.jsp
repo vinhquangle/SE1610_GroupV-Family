@@ -49,6 +49,39 @@
                     }
                 });
             }
+            function loadCate(a, b, categoryID, categoryIDN, name, status, use) {
+                document.getElementById("content").innerHTML = "";
+                $.ajax({
+                    url: "/BookStoreManagement/" + a,
+                    type: "get", //send it through get method
+                    data: {
+                        use: use,
+                        searchCategory: b,
+                        categoryID: categoryID,
+                        categoryIDN: categoryIDN,
+                        name: name,
+                        status: status
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML += data;
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            function cate(a, c, use) {
+                var option = confirm('Are you sure to ' + use + " ?");
+                if (option === true) {
+                    var b = document.getElementById("searchCategory").value;
+                    var categoryID = document.getElementsByClassName(c)[0].value;
+                    var categoryIDN = document.getElementsByClassName(c)[1].value;
+                    var name = document.getElementsByClassName(c)[2].value;
+                    var status = document.getElementsByClassName(c)[3].value; 
+                    loadCate(a, b, categoryID, categoryIDN, name, status, use);
+                }
+            }
             function book(a, c, use) {
                 var option = confirm('Are you sure to ' + use + " ?");
                 if (option === true) {
@@ -65,7 +98,7 @@
                     var status = document.getElementsByClassName(c)[9].value;
                     load(a, b, isbn, isbnN, title, author, pub, cate, quan, price, img, status, use);
                 }
-            }
+            }            
             function add(a, b, c, use) {
                 document.getElementById("form-add").addEventListener("click", function (event) {
                     event.preventDefault();
