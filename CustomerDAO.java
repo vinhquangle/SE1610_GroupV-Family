@@ -23,8 +23,8 @@ public class CustomerDAO {
 
     private static final String LOGIN = "SELECT name, email, [address], phone, point, [status], [delete] FROM tblCustomer WHERE customerID LIKE ? AND [password] LIKE ?";
     private static final String UPDATE_STATUS = "UPDATE tblCustomer SET [status] = ? WHERE customerID LIKE ?";
-    private static final String CREATE = "INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete]) \n"
-            + "VALUES (?,?,?,?,?,?,0,0,0)";
+    private static final String CREATE = "INSERT INTO [tblCustomer](customerID, name, password , email, address, phone, point, [status], [delete]) \n"
+            + "VALUES (?,?,?,?,?,?,0,1,0)";
     private static final String CHECK_CUSTOMER_ID = "SELECT customerID FROM tblCustomer WHERE customerID LIKE ?";
     private static final String CHECK_CUSTOMER_EMAIL = "SELECT [Email] FROM tblCustomer WHERE [Email] LIKE ?";
     private static final String CUSTOMER = "SELECT customerID, password, name, email, [address], phone, point, [status], [delete] FROM tblCustomer WHERE [Email] LIKE ?";
@@ -289,7 +289,8 @@ public class CustomerDAO {
         }
         return list;
     }
-     
+     //method này dùng để add Customer của admin
+
      //method này dùng để update Customer trong viewprofilePage - Huu Hieu
      public boolean updateCustomer(CustomerDTO cus) throws SQLException{
          boolean check = false;
@@ -308,7 +309,7 @@ public class CustomerDAO {
                  ptm.setInt(7, cus.getPoint());
                  ptm.setString(8, cus.getStatus());
                  ptm.setString(9, cus.getDelete());
-       
+                 check= ptm.executeUpdate()>0?true:false;
              }
          }catch(Exception e){
              e.printStackTrace();
