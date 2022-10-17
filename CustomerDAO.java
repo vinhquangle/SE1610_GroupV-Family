@@ -29,7 +29,7 @@ public class CustomerDAO {
     private static final String CHECK_CUSTOMER_EMAIL = "SELECT [Email] FROM tblCustomer WHERE [Email] LIKE ?";
     private static final String CUSTOMER = "SELECT customerID, password, name, email, [address], phone, point, [status], [delete] FROM tblCustomer WHERE [Email] LIKE ?";
     private static final String GET_CUSTOMER = "SELECT customerID, password, name, email, [address], phone, point, [status], [delete] FROM tblCustomer";
-    private static final String UPDATE = "UPDATE tblCustomer SET customerID = ?, name = ?, password = ?, email = ?, [address] = ?, phone = ?, point = ?, [status] = ?, [delete] = ? WHERE customerID = ?";
+    private static final String UPDATE = "UPDATE tblCustomer SET name=?, password=?, email=?, [address]=?, phone=?, point=?, [status]=?, [delete]=? WHERE customerID=?";
     public CustomerDTO checkLogin(String userID, String password) throws SQLException {
         CustomerDTO cus = null;
         Connection conn = null;
@@ -289,7 +289,7 @@ public class CustomerDAO {
         }
         return list;
     }
-     //method này dùng để add Customer của admin
+
 
      //method này dùng để update Customer trong viewprofilePage - Huu Hieu
      public boolean updateCustomer(CustomerDTO cus) throws SQLException{
@@ -299,17 +299,17 @@ public class CustomerDAO {
          try{
              conn = DBUtils.getConnection();
              if(conn!=null){
-                 ptm = conn.prepareCall(UPDATE);
-                 ptm.setString(1, cus.getCustomerID());
-                 ptm.setString(2, cus.getName());
-                 ptm.setString(3, cus.getPassword());
-                 ptm.setString(4, cus.getEmail());
-                 ptm.setString(5, cus.getAddress());
-                 ptm.setString(6, cus.getPhone());
-                 ptm.setInt(7, cus.getPoint());
-                 ptm.setString(8, cus.getStatus());
-                 ptm.setString(9, cus.getDelete());
-                 check= ptm.executeUpdate()>0?true:false;
+                 ptm = conn.prepareStatement(UPDATE);
+                 ptm.setString(1, cus.getName());
+                 ptm.setString(2, cus.getPassword());
+                 ptm.setString(3, cus.getEmail());
+                 ptm.setString(4, cus.getAddress());
+                 ptm.setString(5, cus.getPhone());
+                 ptm.setInt(6, cus.getPoint());
+                 ptm.setString(7, cus.getStatus());
+                 ptm.setString(8, cus.getDelete());
+                 ptm.setString(9, cus.getCustomerID());
+                 check= ptm.executeUpdate()>0 ? true : false;
              }
          }catch(Exception e){
              e.printStackTrace();
