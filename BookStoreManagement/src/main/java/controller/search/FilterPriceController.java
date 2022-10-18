@@ -43,12 +43,12 @@ public class FilterPriceController extends HttpServlet {
             }
             BookDAO bookDao = new BookDAO();
             HttpSession session = request.getSession();
-            session.setAttribute("COUNT_BOOK", bookDao.filterByPrice(min, max).size());//Lấy sản phẩm theo giá cả
-            session.setAttribute("LIST_BOOK_SORT", bookDao.filterByPrice(min, max));
-            List<BookDTO> listBook = bookDao.filterByPrice_9(min, max, index);//Lấy sản phẩm theo giá cả và phân trang
+            session.setAttribute("COUNT_BOOK", bookDao.filterByPrice(min, max, "1").size());//Lấy sản phẩm theo giá cả
+            session.setAttribute("LIST_BOOK_SORT", bookDao.filterByPrice(min, max, "1"));
+            List<BookDTO> listBook = bookDao.filterByPrice9(min, max, index, "1");//Lấy sản phẩm theo giá cả và phân trang
             if (listBook.size() > 0) {
                 session.setAttribute("LIST_BOOK", listBook);
-                request.setAttribute("CONTROLLER", "FilterPriceController?min=" + min + "&max="+max+"&mess="+request.getParameter("mess")+"&");
+                request.setAttribute("CONTROLLER", "FilterPriceController?min=" + min + "&max=" + max + "&mess=" + request.getParameter("mess") + "&");
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");

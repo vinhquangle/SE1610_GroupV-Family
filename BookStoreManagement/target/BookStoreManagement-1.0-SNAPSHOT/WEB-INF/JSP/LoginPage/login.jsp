@@ -22,8 +22,9 @@
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel="stylesheet" href="CSS/styleLogin.css" type="text/css">
     </head>
-    <body style="background-image: url(https://wallpapers.com/images/high/old-library-books-drawing-ulme7n8ce4bsuabu-ulme7n8ce4bsuabu.jpg?fbclid=IwAR3FNktVvVOQ0QSmixptb1_rRJoVgNbsPPdTla4IednSiXTPeTFPrfLY8w4)">
-        <%            String messModal = (String) request.getAttribute("MODAL");
+    <body style="background-image: url(https://www.unleash.ai/wp-content/uploads/2021/12/1412-read.jpg);">
+        <%
+            String messModal = (String) request.getAttribute("MODAL");
             if (messModal == null) {
                 messModal = "";
             } else {
@@ -55,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div class="container"> 
+        <div style="margin-top: 120px;" class="container"> 
             <div class="row">
                 <div class="col-md-5 mx-auto">
                     <div id="first">
@@ -91,10 +92,10 @@
                             </script>
                             <form action="LoginController" method="POST">
                                 <div class="form-group">
-                                    <input id="a" class="form-control" placeholder="Enter Account" type="text" name="userID" value="<%= userID%>"/>
+                                    <input id="a" class="form-control" placeholder="Tài khoản" type="text" name="userID" value="<%= userID%>"/>
                                 </div>
                                 <div class="form-group">
-                                    <input id="b" class="form-control" placeholder="Enter Password" type="password" name="password" value="<%= pass%>"/>
+                                    <input id="b" class="form-control" placeholder="Mật khẩu" type="password" name="password" value="<%= pass%>"/>
                                 </div>
                                 <div style="display: block; width: 300px;" class="g-recaptcha" data-sitekey="6LfxTU4gAAAAANL7i9yWhE0_BtD9TgxTRtdY06Vc"></div></br>
                                 <p style="
@@ -127,6 +128,9 @@
                                     </a>
                                 </p>
                             </div>
+                            <div class="form-group">
+                                <p class="text-center"><a href="LoginController?action=Forgot" id="signup">Quên mật khẩu?</a></p>
+                            </div>                   
                             <div class="form-group">
                                 <p class="text-center">Bạn chưa có tài khoản? <a href="RegisterController?action=Register" id="signup">Đăng kí tại đây</a></p>
                             </div>                   

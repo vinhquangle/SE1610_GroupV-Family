@@ -9,8 +9,6 @@ import cart.Cart;
 import dao.BookDAO;
 import dto.BookDTO;
 import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,29 +46,20 @@ public class AddBookCartController extends HttpServlet {
             String isbn = request.getParameter("isbn");
             int quantity = 0;
             BookDAO dao = new BookDAO();
-            BookDTO book = dao.loadBook(isbn);//Lấy chi tiết sản phẩm theo ISBN
+            BookDTO book = dao.loadBook(isbn, "1");//Lấy chi tiết sản phẩm theo ISBN
             try {
                 quantity = Integer.parseInt(request.getParameter("quantity"));
             } catch (Exception e) {
-                request.setAttribute("MODAL", "<div class=\"row\">"
-                        + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
-                        + "                             <p style=\"color: red;\"><b>Thêm vào giỏ hàng thất bại</b></p>\n"
-                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
-                        + "                         </div>\n"
-                        + "                     </div>\n"
-                        + "                     <div class=\"row\">\n"
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
                         + "                         <div class=\"col-md-3\">\n"
                         + "                                <div class=\"product-preview\">\n"
                         + "                                    <img src=\"" + book.getImg() + "\"/>\n"
                         + "                                </div>\n"
                         + "                            </div>\n"
                         + "                         <div class=\"col-md-9\">\n"
-                        + "                                <div class=\"product-details\">\n"
-                        + "                                    <h4 class=\"product-name\">" + book.getName() + "</h4>\n"
-                        + "                                 </div>"
-                        + "                                   <div>\n"
-                        + "                                        <p class=\"product-price\">Số lượng: " + quantity + "</p>\n"
-                        + "                                   </div>\n"
+                        + "                             <p style=\"color: red;\"><b>Thêm \""+ book.getName() +"\" - số lượng "+ quantity +"  vào giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+
                         + "                                </div>\n"
                         + "                            </div>");
                 if (action.equals("Home")) {
@@ -81,25 +70,16 @@ public class AddBookCartController extends HttpServlet {
                 throw new Exception();
             }
             if (quantity < 1) {
-                request.setAttribute("MODAL", "<div class=\"row\">"
-                        + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
-                        + "                             <p style=\"color: red;\"><b>Thêm vào giỏ hàng thất bại</b></p>\n"
-                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
-                        + "                         </div>\n"
-                        + "                     </div>\n"
-                        + "                     <div class=\"row\">\n"
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
                         + "                         <div class=\"col-md-3\">\n"
                         + "                                <div class=\"product-preview\">\n"
                         + "                                    <img src=\"" + book.getImg() + "\"/>\n"
                         + "                                </div>\n"
                         + "                            </div>\n"
                         + "                         <div class=\"col-md-9\">\n"
-                        + "                                <div class=\"product-details\">\n"
-                        + "                                    <h4 class=\"product-name\">" + book.getName() + "</h4>\n"
-                        + "                                 </div>"
-                        + "                                   <div>\n"
-                        + "                                        <p class=\"product-price\">Số lượng: " + quantity + "</p>\n"
-                        + "                                   </div>\n"
+                        + "                             <p style=\"color: red;\"><b>Thêm \""+ book.getName() +"\" - số lượng "+ quantity +"  vào giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+
                         + "                                </div>\n"
                         + "                            </div>");
                 if (action.equals("Home")) {
@@ -119,27 +99,18 @@ public class AddBookCartController extends HttpServlet {
                     book = cart.getCart().get(isbn);//Lấy sản phẩm trong giỏ hàng theo ISBN
                     int quan = book.getQuantity() + quantity;
                     if (quan > quantityCheck) {
-                        request.setAttribute("MODAL", "<div class=\"row\">"
-                                + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
-                                + "                             <p style=\"color: red;\"><b>Thêm vào giỏ hàng thất bại</b></p>\n"
-                                + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
-                                + "                         </div>\n"
-                                + "                     </div>\n"
-                                + "                     <div class=\"row\">\n"
-                                + "                         <div class=\"col-md-3\">\n"
-                                + "                                <div class=\"product-preview\">\n"
-                                + "                                    <img src=\"" + book.getImg() + "\"/>\n"
-                                + "                                </div>\n"
-                                + "                            </div>\n"
-                                + "                         <div class=\"col-md-9\">\n"
-                                + "                                <div class=\"product-details\">\n"
-                                + "                                    <h4 class=\"product-name\">" + book.getName() + "</h4>\n"
-                                + "                                 </div>"
-                                + "                                   <div>\n"
-                                + "                                        <p class=\"product-price\">Số lượng: " + quantity + "</p>\n"
-                                + "                                   </div>\n"
-                                + "                                </div>\n"
-                                + "                            </div>");
+                        request.setAttribute("MODAL", "<div class=\"row\">\n"
+                        + "                         <div class=\"col-md-3\">\n"
+                        + "                                <div class=\"product-preview\">\n"
+                        + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                        + "                                </div>\n"
+                        + "                            </div>\n"
+                        + "                         <div class=\"col-md-9\">\n"
+                        + "                             <p style=\"color: red;\"><b>Thêm \""+ book.getName() +"\" - số lượng "+ quantity +"  vào giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
+
+                        + "                                </div>\n"
+                        + "                            </div>");
                         if (action.equals("Home")) {
                             url = HOME;
                         } else {
@@ -148,7 +119,7 @@ public class AddBookCartController extends HttpServlet {
                         throw new Exception();
                     }
                 }
-                book = dao.loadBook(isbn);//Lấy chi tiết sản phẩm theo ISBN
+                book = dao.loadBook(isbn, "1");//Lấy chi tiết sản phẩm theo ISBN
                 book.setQuantity(quantity);//Thay đổi số lượng sản phẩm
                 cart.add(book);//Thêm vào giỏ hàng
                 Map<String, BookDTO> listSize = cart.getCart();

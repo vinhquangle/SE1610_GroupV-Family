@@ -7,14 +7,13 @@
 <%@page import="dto.CustomerErrorDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html style="background-image: url(https://cdn.pixabay.com/photo/2016/02/16/21/07/books-1204029_960_720.jpg)">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Register Page</title>
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <!-- Google font -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/core.min.css">
         <link rel='stylesheet' id='roboto-subset.css-css'  href='https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/mdb5/fonts/roboto-subset.css?ver=3.9.0-update.5' type='text/css' media='all' />
@@ -35,7 +34,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
-    <body style="background-image: url(https://cdn.pixabay.com/photo/2016/02/16/21/07/books-1204029_960_720.jpg)">
+    <body style="background-image: url(https://cdn.pixabay.com/photo/2016/02/16/21/07/books-1204029_960_720.jpg);">
         <!-- TOP HEADER -->
         <%
             String error = (String) request.getAttribute("ERROR");
@@ -46,7 +45,50 @@
             if (cusError == null) {
                 cusError = new CustomerErrorDTO();
             }
+            String messModal = (String) request.getAttribute("MODAL");
+            if (messModal == null) {
+                messModal = "";
+            } else {
         %>
+        <script type="text/javascript">
+            $(window).on('load', function () {
+                $('#exampleModal').modal('show');
+            });
+        </script>
+        <%
+            }
+        %>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Xác nhận Email</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="RegisterController" method="POST">
+                        <div class="modal-body">
+                            <p><%= messModal%></p>
+                            <input name="verify" placeholder="Nhập mã xác minh">
+                            <input name="action" value="" style="display: none;">
+                            <input name="email" value="<%= request.getParameter("email")%>" style="display: none;">
+                            <input name="customerID" value="<%= request.getParameter("customerID")%>" style="display: none;">
+                            <input name="fullName" value="<%= request.getParameter("fullName")%>" style="display: none;">
+                            <input name="phone" value="<%= request.getParameter("phone")%>" style="display: none;">
+                            <input name="address" value="<%=  request.getParameter("address")%>" style="display: none;">
+                            <input name="passwordr" value="<%= request.getParameter("passwordr")%>" style="display: none;">
+                            <input name="confirm" value="<%= request.getParameter("confirm")%>" style="display: none;">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Xác minh</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <style>
             .bt{
                 border-radius: 100px; 
@@ -65,30 +107,11 @@
             #verify:first-child:hover{
                 color: green;
             }              
+            h1, h2, h3 {
+                font-family: 'Kaushan Script', cursive;
+            }
         </style>
         <script>
-            function load(a, b) {
-                document.getElementById("content").innerHTML = "<p style=\"color: green;\">Mã xác minh đã được gửi qua gmail của bạn!</p>\n<button type=\"button\" onclick=\"load('Verify',document.getElementById('e').value)\" id=\"verify\" style=\"margin-bottom: 5px; margin-left: 5px; display: inline-block; width: 120px; height: 37px; border: 1px solid black; text-align: center; padding-top: 6px;\">Xác minh lại</button>";
-                $.ajax({
-                    url: "/BookStoreManagement/RegisterController",
-                    type: "get", //send it through get method
-                    data: {
-                        action: a,
-                        email: b
-                    },
-                    success: function (data) {
-                        if (data !== "") {
-                            alert(data);
-                        } else {
-                            var row = document.getElementById("content");
-                            row.innerHTML += "<input name=\"verify\" style=\"border: 1px solid black; width: 22rem;\" placeholder=\"  Nhập mã xác minh Email\"/>";
-                        }
-                    },
-                    error: function (xhr) {
-                        alert("Error with AJAX callback");
-                    }
-                });
-            }
             function change(a, b) {
                 document.getElementById(a).style.backgroundColor = "white";
                 document.getElementById(b).style.display = "none";
@@ -186,67 +209,69 @@
         </style>
         <% }
         %>
-        <form style="border-radius: 30px; text-align: center; background-color: white; height: 850px; width: 500px; margin: auto;" action="RegisterController" method="GET">
-            <h3 style="color: red; font-size: 40px; margin-top: 20px">Đăng kí</h3>
-            <div class="form-outline" style="text-align: center; display: inline-block; width: 22rem;">
-                <i id="b" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="e" onfocus="change('email', 'b')" onblur="change1('email', 'e', 'b')" style="border: 1px solid black; margin: auto;" class="form-control" type="text" name="email" maxlength="50" value="<%= email%>">
-                <label id="email" style="color: #666666;" class="form-label" for="form12" >Địa chỉ Email</label>
-                <div id="content" style="margin-top: 10px; display: inline-block;"><button type="button" onclick="load('Verify', document.getElementById('e').value)" id="verify" style=" margin-left: 5px; display: inline-block; width: 90px; height: 37px; border: 1px solid black; text-align: center; padding-top: 6px;">Xác minh</button></div>
-                <p style="color: #cc0000;"><%=cusError.getEmailError()%></p>
-            </div>
-            <div id="content"></div>
-            <div class="form-outline" style="display: inline-block; width: 22rem;">
-                <i id="c" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="a" onfocus="change('acc', 'c')" onblur="change1('acc', 'a', 'c')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="customerID" value="<%= customerID%>">
-                <label id="acc" style="color: #666666;" class="form-label" for="form11" >Tài khoản</label>
-                <p style="color: #cc0000;"><%=cusError.getCustomerIDError()%></p>
-            </div>
-            <div class="form-outline" style="display: inline-block; width: 22rem;">
-                <i id="f" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="n" onfocus="change('name', 'f')" onblur="change1('name', 'n', 'f')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="fullName"value="<%= fullName%>">
-                <label id="name" style="color: #666666;" class="form-label" for="form11" >Họ và tên</label>
-                <p style="color: #cc0000;"><%=cusError.getNameError()%></p>
-            </div>
-            <div class="form-outline" style="display: inline-block; width: 22rem;">
-                <i id="z" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="p" onfocus="change('phone', 'z')" onblur="change1('phone', 'p', 'z')" style="border: 1px solid black;" class="form-control" id="form11" type="tel" name="phone" value="<%= phone%>">
-                <label id="phone" style="color: #666666;" class="form-label" for="form11" >Số điện thoại</label>
-                <p style="color: #cc0000;"><%=cusError.getPhoneError()%></p>
-            </div>
-            <div class="form-outline" style="display: inline-block; width: 22rem;">
-                <i id="j" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="d" onfocus="change('add', 'j')" onblur="change1('add', 'd', 'j')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="address" value="<%= address%>">
-                <label id="add" style="color: #666666;" class="form-label" for="form11" >Địa chỉ</label>
-                <p style="color: #cc0000;"><%=cusError.getAddressError()%></p>
-            </div>
-            <div class="form-outline" style="display: inline-block; width: 22rem;">
-                <i id="k" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="s" onfocus="change('password', 'k')" onblur="change1('password', 's', 'k')" style="border: 1px solid black;" class="form-control" id="form11" type="password" name="passwordr" value="<%= password%>">
-                <label id="password" style="color: #666666;" class="form-label" for="form11" >Mật khẩu</label>
-                <p style="color: #cc0000;"><%=cusError.getPasswordError()%></p>
-            </div>
-            <div class="form-outline" style="display: inline-block; width: 22rem;">
-                <i id="u" style="display: none; width: 1px; height: 1px;"></i>
-                <input id="r" onfocus="change('rpassword', 'u')" onblur="change1('rpassword', 'r', 'u')" style="border: 1px solid black;" class="form-control" id="form11" type="password" name="confirm" value="<%= confirm%>">
-                <p style="color: #cc0000;"><%=cusError.getConfirmError()%></p>
-                <label id="rpassword" style="color: #666666;" class="form-label" for="form11" >Nhập lại mật khẩu</label>
-            </div>
-            <div style="display: block; width: 300px; margin-left: auto; margin-right: auto;" class="g-recaptcha" data-sitekey="6LfxTU4gAAAAANL7i9yWhE0_BtD9TgxTRtdY06Vc"></div></br>
-            <p style="
-               color: white;
-               background-color: red;
-               font-weight: bold;
-               width: 350px;
-               margin: auto;
-               border-radius: 100px;
-               margin-bottom: 5px;
-               text-align: center;
-               " id="error"><%=error%></p>
-            <div style="border-radius: 30px; background-color: white; height: 100px; width: 500px;" class="container mt-3">
-                <button class="bt btn btn-block mybtn btn-primary tx-tfm" type="submit" name="action">Create Account</button>
-                <button onclick="resetInput()" class="bt btn btn-block mybtn btn-primary tx-tfm">Reset</button>
-            </div>
-            <p style="border-radius: 30px; background-color: white; display: block; width: 150px;  font-size: 15px; margin-top: 20px; margin-left: auto; margin-right: auto; text-align: center"><a style="text-decoration: none;" href="GetController?">RETURN HOME</p></form>          
+        <div style="margin-top: 30px;" class="container">
+            <form style="border-radius: 30px; text-align: center; background-color: white; height: 850px; width: 500px; margin: auto;" action="RegisterController" method="POST">
+                </br>
+                <h1>Đăng kí</h1>
+                <div class="form-outline" style="text-align: center; display: inline-block; width: 22rem;">
+                    <i id="b" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="e" onfocus="change('email', 'b')" onblur="change1('email', 'e', 'b')" style="border: 1px solid black; margin: auto;" class="form-control" type="text" name="email" maxlength="50" value="<%= email%>">
+                    <label id="email" style="color: #666666;" class="form-label" for="form12" >Địa chỉ Email</label>
+                    <p style="color: #cc0000;"><%=cusError.getEmailError()%></p>
+                </div>
+                <div id="content"></div>
+                <div class="form-outline" style="display: inline-block; width: 22rem;">
+                    <i id="c" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="a" onfocus="change('acc', 'c')" onblur="change1('acc', 'a', 'c')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="customerID" value="<%= customerID%>">
+                    <label id="acc" style="color: #666666;" class="form-label" for="form11" >Tài khoản</label>
+                    <p style="color: #cc0000;"><%=cusError.getCustomerIDError()%></p>
+                </div>
+                <div class="form-outline" style="display: inline-block; width: 22rem;">
+                    <i id="f" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="n" onfocus="change('name', 'f')" onblur="change1('name', 'n', 'f')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="fullName"value="<%= fullName%>">
+                    <label id="name" style="color: #666666;" class="form-label" for="form11" >Họ và tên</label>
+                    <p style="color: #cc0000;"><%=cusError.getNameError()%></p>
+                </div>
+                <div class="form-outline" style="display: inline-block; width: 22rem;">
+                    <i id="z" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="p" onfocus="change('phone', 'z')" onblur="change1('phone', 'p', 'z')" style="border: 1px solid black;" class="form-control" id="form11" type="tel" name="phone" value="<%= phone%>">
+                    <label id="phone" style="color: #666666;" class="form-label" for="form11" >Số điện thoại</label>
+                    <p style="color: #cc0000;"><%=cusError.getPhoneError()%></p>
+                </div>
+                <div class="form-outline" style="display: inline-block; width: 22rem;">
+                    <i id="j" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="d" onfocus="change('add', 'j')" onblur="change1('add', 'd', 'j')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="address" value="<%= address%>">
+                    <label id="add" style="color: #666666;" class="form-label" for="form11" >Địa chỉ</label>
+                    <p style="color: #cc0000;"><%=cusError.getAddressError()%></p>
+                </div>
+                <div class="form-outline" style="display: inline-block; width: 22rem;">
+                    <i id="k" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="s" onfocus="change('password', 'k')" onblur="change1('password', 's', 'k')" style="border: 1px solid black;" class="form-control" id="form11" type="password" name="passwordr" value="<%= password%>">
+                    <label id="password" style="color: #666666;" class="form-label" for="form11" >Mật khẩu</label>
+                    <p style="color: #cc0000;"><%=cusError.getPasswordError()%></p>
+                </div>
+                <div class="form-outline" style="display: inline-block; width: 22rem;">
+                    <i id="u" style="display: none; width: 1px; height: 1px;"></i>
+                    <input id="r" onfocus="change('rpassword', 'u')" onblur="change1('rpassword', 'r', 'u')" style="border: 1px solid black;" class="form-control" id="form11" type="password" name="confirm" value="<%= confirm%>">
+                    <p style="color: #cc0000;"><%=cusError.getConfirmError()%></p>
+                    <label id="rpassword" style="color: #666666;" class="form-label" for="form11" >Nhập lại mật khẩu</label>
+                </div>
+                <div style="display: block; width: 300px; margin-left: auto; margin-right: auto;" class="g-recaptcha" data-sitekey="6LfxTU4gAAAAANL7i9yWhE0_BtD9TgxTRtdY06Vc"></div></br>
+                <p style="
+                   color: white;
+                   background-color: red;
+                   font-weight: bold;
+                   width: 350px;
+                   margin: auto;
+                   border-radius: 100px;
+                   margin-bottom: 5px;
+                   text-align: center;
+                   " id="error"><%=error%></p>
+                <div style="border-radius: 30px; background-color: white; height: 100px; width: 500px;" class="container mt-3">
+                    <button class="bt btn btn-block mybtn btn-primary tx-tfm" type="submit" name="action">Create Account</button>
+                    <button onclick="resetInput()" class="bt btn btn-block mybtn btn-primary tx-tfm">Reset</button>
+                </div>
+                <p style="border-radius: 30px; background-color: white; display: block; width: 150px;  font-size: 15px; margin-top: 20px; margin-left: auto; margin-right: auto; text-align: center"><a style="text-decoration: none;" href="GetController?">RETURN HOME</p></form>          
+        </div>
     </body>
 </html>

@@ -47,9 +47,9 @@ public class SearchBookController extends HttpServlet {
             } catch (Exception e) {
                 index = 1;
             }
-            session.setAttribute("COUNT_BOOK", dao.searchBook(txtSearch).size());//Lấy sản phẩm theo tìm kiếm
-            session.setAttribute("LIST_BOOK_SORT", dao.searchBook(txtSearch));
-            List<BookDTO> list = dao.searchBook_9(txtSearch, index);//Lấy sản phẩm theo tìm kiếm và phân trang
+            session.setAttribute("COUNT_BOOK", dao.searchBook(txtSearch,"1").size());//Lấy sản phẩm theo tìm kiếm
+            session.setAttribute("LIST_BOOK_SORT", dao.searchBook(txtSearch,"1"));
+            List<BookDTO> list = dao.searchBook9(txtSearch, index,"1");//Lấy sản phẩm theo tìm kiếm và phân trang
             if (list.size() > 0) {
                 session.setAttribute("LIST_BOOK", list);
                 request.setAttribute("CONTROLLER", "SearchBookController?searchBook=" + request.getParameter("searchBook") + "&");

@@ -9,6 +9,7 @@ import dao.CustomerDAO;
 import dao.StaffDAO;
 import dto.CustomerDTO;
 import dto.StaffDTO;
+import email.JavaMailUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +26,7 @@ import recaptcha.VerifyUtils;
 public class LoginController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/LoginPage/login.jsp";
-    private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
+    private static final String SUCCESS = "GetController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,7 +34,42 @@ public class LoginController extends HttpServlet {
         String url = ERROR;
         try {
             String action = request.getParameter("action");
+            String email = request.getParameter("email");
+            if (email == null) {
+                email = "";
+            }
             if (action.equals("Login")) {
+                throw new Exception();
+            } else if (action.equals("Forgot")) {//Tạo form cho "Quên mật khẩu?"
+                request.setAttribute("MODAL", " <form style=\"text-align: center;\" action=\"LoginController\" method=\"POST\">\n"
+                        + "                         <p><b>Nhập Email đăng kí tài khoản để nhận được thông tin tài khoản/mật khẩu qua email!</b></p>\n"
+                        + "                         <input style=\"width: 300px;\" placeholder=\"Nhập Email đăng kí\" type=\"text\" name=\"email\" value=\"" + email + "\">\n"
+                        + "                         <input style=\"text-align: center;\" type=\"submit\" value=\"Gửi\">\n"
+                        + "                         <input style=\"text-align: center;\" type=\"hidden\" name=\"action\" value=\"Send\">\n"
+                        + "                     </form>");
+                throw new Exception();
+            } else if (action.equals("Send")) {
+                CustomerDAO cusDao = new CustomerDAO();
+                String modal = new String();
+                if (cusDao.checkCustomerEmail(email)) {//Thực thi gửi email và thông báo email
+                    modal = "<form style=\"text-align: center;\" action=\"LoginController\" method=\"POST\">\n"
+                            + "                         <p><b>Nhập Email đăng kí tài khoản để nhận được thông tin tài khoản/mật khẩu qua email!</b></p>\n"
+                            + "                         <input style=\"width: 300px;\" placeholder=\"Nhập Email đăng kí\" type=\"text\" name=\"email\" value=\"" + email + "\">\n"
+                            + "                         <input style=\"text-align: center;\" type=\"submit\" value=\"Gửi\">\n"
+                            + "                         <input style=\"text-align: center;\" type=\"hidden\" name=\"action\" value=\"Send\">\n"
+                            + "                         <p style=\"text-align: center; color: green; margin-top: 10px;\"><b>Gửi qua Email thành công!</b></p>\n"
+                            + "                     </form>";
+                    JavaMailUtil.sendMail(email, 0, action);//Gửi thông tin qua email
+                } else {
+                    modal = "<form style=\"text-align: center;\" action=\"LoginController\" method=\"POST\">\n"
+                            + "                         <p><b>Nhập Email đăng kí tài khoản để nhận được thông tin tài khoản/mật khẩu qua email!</b></p>\n"
+                            + "                         <input style=\"width: 300px;\" placeholder=\"Nhập Email đăng kí\" type=\"text\" name=\"email\" value=\"" + email + "\">\n"
+                            + "                         <input style=\"text-align: center;\" type=\"submit\" value=\"Gửi lại\">\n"
+                            + "                         <input style=\"text-align: center;\" type=\"hidden\" name=\"action\" value=\"Send\">\n"
+                            + "                         <p style=\"text-align: center; color: red; margin-top: 10px;\"><b>Email chưa được đăng kí tài khoản</b></p>\n"
+                            + "                     </form>";
+                }
+                request.setAttribute("MODAL", modal);
                 throw new Exception();
             }
             String userID = request.getParameter("userID");
@@ -47,9 +83,8 @@ public class LoginController extends HttpServlet {
             }
             boolean valid = false;
             //Ma hoa AES
-            MyAES myCipher = new MyAES(password, MyAES.AES_192);
+            MyAES myCipher = new MyAES("1", MyAES.AES_192);
             String AES_ecryptedStr = myCipher.AES_encrypt(password);//Mã hóa AES
-            String AES_decryptedStr = myCipher.AES_decrypt(AES_ecryptedStr);//Giải mã AES
             password = AES_ecryptedStr;
             //Ma hoa AES
             String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
@@ -59,14 +94,31 @@ public class LoginController extends HttpServlet {
                 throw new Exception();
             }
             CustomerDTO loginCus = cusDao.checkLogin(userID, password);//Kiểm tra, xác thực tài khoản
-            if (loginCus != null && cusDao.updateStatusOnline(userID)) {
-                session.setAttribute("LOGIN_CUS", loginCus);
-                url = SUCCESS;
+            if (loginCus != null) {
+                if (loginCus.getDelete().equals("0")) {
+                    if (cusDao.updateStatusOnline(userID)) {
+                        loginCus.setStatus("1");
+                        session.setAttribute("LOGIN_CUS", loginCus);
+                        url = SUCCESS;
+                    }
+                } else {
+                    request.setAttribute("ERROR", "Tài khoản của bạn đã bị khóa");
+                    throw new Exception();
+                }
             } else {
+                request.setAttribute("ERROR", "Tài khoản hoặc mật khẩu không chính xác");
                 StaffDTO loginStaff = staffDao.checkLogin(userID, password);
-                if (loginStaff != null && staffDao.updateStatusOnline(userID)) {//Cập nhật trang thái tài khoản
-                    session.setAttribute("LOGIN_STAFF", loginStaff);
-                    url = SUCCESS;
+                if (loginStaff != null) {
+                    if (loginStaff.getDelete().equals("0")) {
+                        if (staffDao.updateStatusOnline(userID)) {
+                            loginStaff.setStatus("1");
+                            session.setAttribute("LOGIN_STAFF", loginStaff);
+                            url = SUCCESS;
+                        }
+                    } else {
+                        request.setAttribute("ERROR", "Tài khoản của bạn đã bị khóa");
+                        throw new Exception();
+                    }
                 } else {
                     request.setAttribute("ERROR", "Tài khoản hoặc mật khẩu không chính xác");
                 }

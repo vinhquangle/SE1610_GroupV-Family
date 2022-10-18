@@ -83,6 +83,10 @@
                 }
                 String show = "";
                 String controllerAdd = (String) request.getAttribute("CONTROLLER");
+                String index = (String) request.getParameter("index");
+                if (index == null) {
+                    index = "";
+                }
                 Locale localeVN = new Locale("vi", "VN");
                 NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
                 for (int i = 0; i < list.size(); i++) {
@@ -91,7 +95,7 @@
             <div class="col-md-4 col-xs-6 gg <%= show%>">
                 <div class="product">
                     <div class="product-img">
-                        <form style="display: inline-block;" method="POST" action="LoadController">
+                        <form style="display: inline-block;" method="GET" action="LoadController">
                             <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                             <a class="product-img" style="cursor: pointer;" onclick="this.parentNode.submit();"><img src="<%= list.get(i).getImg()%>" alt=""></a>
                         </form>
@@ -99,14 +103,14 @@
                     <div class="product-body">
                         <p class="product-category"><%= list.get(i).getCategory().getName()%></p>
                         <h3 style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 230px;" class="product-name" >
-                            <form style="display: inline-block;" method="POST" action="LoadController">
+                            <form style="display: inline-block;" method="GET" action="LoadController">
                                 <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                                 <a style="cursor: pointer; color: black; font-weight: bold;" onclick="this.parentNode.submit();"><%= list.get(i).getName()%></a>
                             </form>
                         </h3>
                         <h4 class="product-price"><%= price%></h4>                                    
                         <div class="product-btns">
-                            <form style="display: inline-block;" method="POST" action="LoadController">
+                            <form style="display: inline-block;" method="GET" action="LoadController">
                                 <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                                 <div class="product-btns">
                                     <button class="quick-view"><a style="cursor: pointer; color: black;" onclick="this.parentNode.submit();"><i class="fa fa-eye"></i><span class="tooltipp">Xem chi tiết</span></button>
@@ -115,11 +119,12 @@
                         </div>
                     </div>
                     <div class="add-to-cart">
-                        <form style="display: inline-block;" method="POST" action="AddBookCartController">
+                        <form style="display: inline-block;" method="GET" action="AddBookCartController">
                             <input name="quantity" id="quantity" type="hidden" value="1">
                             <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                             <input name="quantityCheck" value="<%= list.get(i).getQuantity()%>" type="hidden">
-                            <input name="controller" value="<%= controllerAdd %>" type="hidden">
+                            <input name="controller" value="<%= controllerAdd%>" type="hidden">
+                            <input name="index" value="<%= index%>" type="hidden">
                             <button type="submit" value="Home" name="action" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</button>
                         </form>
                     </div>

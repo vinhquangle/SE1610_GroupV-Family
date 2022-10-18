@@ -26,7 +26,7 @@
                 %>
                 <div class="input-checkbox">
                     <label for="category-6">
-                        <form action="FilterCategoryController" method="POST">
+                        <form action="FilterCategoryController" method="GET">
                             <input type="hidden" name="cateID" value="<%= cateDTO.getCategoryID()%>"/>
                             <button class="hover" style="border: none; background: none;"><%= cateDTO.getName()%></button>
                         </form>
@@ -48,7 +48,7 @@
                 %>
                 <div class="input-checkbox">                              
                     <label for="category-6">
-                        <form action="FilterPublisherController" method="POST">
+                        <form action="FilterPublisherController" method="GET">
                             <input type="hidden" name="pubID" value="<%= publisherDTO.getPublisherID()%>"/>
                             <button class="hover" style="border: none; background: none;"><%= publisherDTO.getName()%></button>
                         </form>
@@ -64,7 +64,7 @@
             <div class="checkbox-filter">
                 <div class="input-checkbox">                              
                     <label for="category-6">
-                        <form action="FilterPriceController" method="POST">
+                        <form action="FilterPriceController" method="GET">
                             <input type="hidden" value="100000" name="max"/>
                             <input type="hidden" value="0" name="min"/>
                             <button class="hover" style="border: none; background: none;" name="mess" value="0 - 100.000">0đ - 100.000đ</button>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="input-checkbox">
                     <label for="category-6">
-                        <form action="FilterPriceController" method="POST">
+                        <form action="FilterPriceController" method="GET">
                             <input type="hidden" value="200000" name="max"/>
                             <input type="hidden" value="100000" name="min"/>
                             <button class="hover" style="border: none; background: none;" name="mess" value="100.000 - 200.000" >100.000đ - 200.000đ</button>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="input-checkbox">
                     <label for="category-6">
-                        <form action="FilterPriceController" method="POST">
+                        <form action="FilterPriceController" method="GET">
                             <input type="hidden" value="1000000" name="max"/>
                             <input type="hidden" value="200000" name="min"/>
                             <button class="hover" style="border: none; background: none;" name="mess" value="200.000 - Above">200.000đ - Above</button>

@@ -40,10 +40,10 @@ public class FilterCategoryController extends HttpServlet {
             }
             HttpSession session = request.getSession();
             BookDAO bookDAO = new BookDAO();
-            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID);//Lấy sản phẩm theo thể loại
+            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID,"1");//Lấy sản phẩm theo thể loại
             session.setAttribute("COUNT_BOOK", listBookbyCate.size());
             session.setAttribute("LIST_BOOK_SORT", listBookbyCate);
-            listBookbyCate = bookDAO.filterbyCate_9(index, cateID);//Lấy sản phẩm theo thể loại và phân trang
+            listBookbyCate = bookDAO.filterbyCate9(index, cateID,"1");//Lấy sản phẩm theo thể loại và phân trang
             if (listBookbyCate.size() > 0) {
                 request.setAttribute("CATEGORY", new CategoryDTO(cateID, listBookbyCate.get(0).getCategory().getName(), listBookbyCate.get(0).getCategory().getStatus()));
                 session.setAttribute("LIST_BOOK", listBookbyCate);

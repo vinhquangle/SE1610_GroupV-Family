@@ -18,7 +18,7 @@ public class CustomerErrorDTO {
     private String emailError;
     private String addressError;
     private String phoneError;
-    private int pointError;
+    private String pointError;
     private String statusError;
     private String deleteError;
 
@@ -30,12 +30,12 @@ public class CustomerErrorDTO {
         this.emailError = "";
         this.addressError = "";
         this.phoneError = "";
-        this.pointError = 0;
+        this.pointError = "";
         this.statusError = "";
         this.deleteError = "";
     }
 
-    public CustomerErrorDTO(String customerIDError, String nameError, String passwordError, String confirmError, String emailError, String addressError, String phoneError, int pointError, String statusError, String deleteError) {
+    public CustomerErrorDTO(String customerIDError, String nameError, String passwordError, String confirmError, String emailError, String addressError, String phoneError, String pointError, String statusError, String deleteError) {
         this.customerIDError = customerIDError;
         this.nameError = nameError;
         this.passwordError = passwordError;
@@ -104,11 +104,11 @@ public class CustomerErrorDTO {
         this.phoneError = phoneError;
     }
 
-    public int getPointError() {
+    public String getPointError() {
         return pointError;
     }
 
-    public void setPointError(int pointError) {
+    public void setPointError(String pointError) {
         this.pointError = pointError;
     }
 

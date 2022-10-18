@@ -40,10 +40,10 @@ public class FilterPublisherController extends HttpServlet {
             }
             HttpSession session = request.getSession();
             BookDAO bookDAO = new BookDAO();
-            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID);//Lấy sản phẩm theo nhà xuất bản
+            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID, "1");//Lấy sản phẩm theo nhà xuất bản
             session.setAttribute("COUNT_BOOK", listBookbyPub.size());
             session.setAttribute("LIST_BOOK_SORT", listBookbyPub);
-            listBookbyPub = bookDAO.filterbyPub_9(pubID, index);//Lấy sản phẩm theo nhà xuất bản và phân trang
+            listBookbyPub = bookDAO.filterbyPub9(pubID, index, "1");//Lấy sản phẩm theo nhà xuất bản và phân trang
             if (listBookbyPub.size() > 0) {
                 session.setAttribute("LIST_BOOK", listBookbyPub);
                 request.setAttribute("PUBLISHER", new PublisherDTO(pubID, listBookbyPub.get(0).getPublisher().getName(), listBookbyPub.get(0).getPublisher().getStatus()));

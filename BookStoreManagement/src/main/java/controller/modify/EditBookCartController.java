@@ -32,52 +32,47 @@ public class EditBookCartController extends HttpServlet {
             String isbn = request.getParameter("isbn");
             int quantity = 0;
             BookDAO dao = new BookDAO();
-            int quantityCheck = dao.quantityCheck(isbn);//Lấy số lượng sản phẩm còn trong kho
-            quantity = Integer.parseInt(request.getParameter("quantity"));
-            BookDTO book = dao.loadBook(isbn);//Lấy thông tin sản phẩm theo ISBN
-            if (quantity < 1) {
-                request.setAttribute("MODAL", "<div class=\"row\">"
-                        + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
-                        + "                             <p style=\"color: red;\"><b>Thay đổi số lượng sản phẩm thất bại</b></p>\n"
-                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
-                        + "                         </div>\n"
-                        + "                     </div>\n"
-                        + "                     <div class=\"row\">\n"
+            int quantityCheck = dao.quantityCheck(isbn, "1");//Lấy số lượng sản phẩm còn trong kho
+            BookDTO book = dao.loadBook(isbn, "1");//Lấy thông tin sản phẩm theo ISBN
+            try {
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+            } catch (Exception e) {
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
                         + "                         <div class=\"col-md-3\">\n"
                         + "                                <div class=\"product-preview\">\n"
                         + "                                    <img src=\"" + book.getImg() + "\"/>\n"
                         + "                                </div>\n"
                         + "                            </div>\n"
                         + "                         <div class=\"col-md-9\">\n"
-                        + "                                <div class=\"product-details\">\n"
-                        + "                                    <h4 class=\"product-name\">" + book.getName() + "</h4>\n"
-                        + "                                 </div>"
-                        + "                                   <div>\n"
-                        + "                                        <p class=\"product-price\">Số lượng: " + quantity + "</p>\n"
-                        + "                                   </div>\n"
+                        + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  trong giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                        + "                                </div>\n"
+                        + "                            </div>");
+                throw new Exception();
+            }
+            if (quantity < 1) {
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
+                        + "                         <div class=\"col-md-3\">\n"
+                        + "                                <div class=\"product-preview\">\n"
+                        + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                        + "                                </div>\n"
+                        + "                            </div>\n"
+                        + "                         <div class=\"col-md-9\">\n"
+                        + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  trong giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
                         + "                                </div>\n"
                         + "                            </div>");
                 throw new Exception();
             } else if (quantity > quantityCheck) {
-                request.setAttribute("MODAL", "<div class=\"row\">"
-                        + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
-                        + "                             <p style=\"color: red;\"><b>Thay đổi số lượng sản phẩm thất bại</b></p>\n"
-                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
-                        + "                         </div>\n"
-                        + "                     </div>\n"
-                        + "                     <div class=\"row\">\n"
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
                         + "                         <div class=\"col-md-3\">\n"
                         + "                                <div class=\"product-preview\">\n"
                         + "                                    <img src=\"" + book.getImg() + "\"/>\n"
                         + "                                </div>\n"
                         + "                            </div>\n"
                         + "                         <div class=\"col-md-9\">\n"
-                        + "                                <div class=\"product-details\">\n"
-                        + "                                    <h4 class=\"product-name\">" + book.getName() + "</h4>\n"
-                        + "                                 </div>"
-                        + "                                   <div>\n"
-                        + "                                        <p class=\"product-price\">Số lượng: " + quantity + "</p>\n"
-                        + "                                   </div>\n"
+                        + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  trong giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
                         + "                                </div>\n"
                         + "                            </div>");
                 throw new Exception();

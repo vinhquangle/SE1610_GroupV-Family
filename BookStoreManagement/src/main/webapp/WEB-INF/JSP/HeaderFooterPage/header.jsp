@@ -71,6 +71,17 @@
         </script>
         <%
             }
+            String messi = (String) request.getAttribute("MESS");
+            if (messi != null) {
+        %>
+        <script>
+            window.addEventListener("load", function () {
+                alert(document.getElementById("messi").value);
+            }, );
+        </script>
+        <input type="hidden" id="messi" value="<%= messi%>">
+        <%
+            }
         %>
         <!-- Modal -->
         <div  class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,10 +94,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                            <%= messModal%>
+                        <%= messModal%>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>
@@ -154,23 +165,26 @@
                                             Tài khoản
                                             <i class="fa fa-angle-down"></i>
                                         </a>
-                                        <ul class="account_selection">
-                                            <li><a href="LogoutController?cusID=<%= cus.getCustomerID()%>"><i class="fa fa-sign-out" aria-hidden="true"></i>Log Out</a></li>
+                                        <ul style="width: 120px;"  class="account_selection">
+                                            <li><a href="ViewProfileController?action=Profile"><i class="fa fa-user" aria-hidden="true"></i>Tài khoản</a></li>
+                                            <li><a href="LogoutController?cusID=<%= cus.getCustomerID()%>"><i class="fa fa-sign-out" aria-hidden="true"></i>Đăng xuất</a></li>
                                                 <%
                                                 } else {
                                                 %>
+
                                             <li class="currency">
                                                 <a href="#">
-                                                    Chào mừng <%= staff.getName()%>										
+                                                    Chào mừng <%= staff.getName() %>										
                                                 </a>
                                             </li>
                                             <li class="account">
                                                 <a href="#">
                                                     Tài khoản
                                                     <i class="fa fa-angle-down"></i>
-                                                </a>
-                                                <ul class="account_selection">
-                                                    <li><a href="LogoutController?staffID=<%= staff.getStaffID()%>"><i class="fa fa-sign-out" aria-hidden="true"></i>Log Out</a></li>
+                                                </a>    
+                                                <ul style="width: 120px;"  class="account_selection">
+                                                    <li><a href="ViewProfileController?action=Profile"><i class="fa fa-user" aria-hidden="true"></i>Tài khoản</a></li>
+                                                    <li><a href="LogoutController?staffID=<%= staff.getStaffID()%>"><i class="fa fa-sign-out" aria-hidden="true"></i>Đăng xuất</a></li>
                                                         <%
                                                             }
                                                         %>
@@ -203,7 +217,7 @@
                                                                         }
                                                                         float total = 0;
                                                                     %>
-                                                                    <form action="SearchBookController" method="POST">
+                                                                    <form action="SearchBookController" method="GET">
                                                                         <input class="input" type="text" value="<%= search%>" name="searchBook" placeholder="Tìm sách theo tiêu đề, tác giả hoặc ISBN" style="width: 360px">
                                                                         <input class="search-btn" type="submit" name="button" value="Tìm kiếm" style="width: 100px"/>
                                                                     </form>
@@ -234,7 +248,6 @@
                                                                                 try {
                                                                                     Locale localeVN = new Locale("vi", "VN");
                                                                                     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-                                                                                    String totalV = new String();
                                                                                     Cart cart = (Cart) session.getAttribute("CART");
                                                                                     if (cart != null && cart.getCart().size() > 0) {
                                                                             %>
@@ -247,7 +260,7 @@
                                                                                         <img src="<%= book.getImg()%>" alt="">
                                                                                     </div>
                                                                                     <div class="product-body">
-                                                                                        <form action="LoadController" method="POST">
+                                                                                        <form action="LoadController" method="GET">
                                                                                             <input type="hidden" name="isbn" value="<%= book.getIsbn()%>" >
                                                                                             <h3 onclick="this.parentNode.submit();" class="product-name"> <a style="cursor: pointer;"><%= book.getName()%></a></h3>
                                                                                         </form>
@@ -259,7 +272,7 @@
                                                                                 %>
                                                                                 <div class="cart-summary">
                                                                                     <small>${sessionScope.SELECT} sản phẩm  </small>
-                                                                                    <h5>Tổng tiền: <%= totalV = currencyVN.format(total)%></h5>
+                                                                                    <h5>Tổng tiền: <%= currencyVN.format(total)%></h5>
                                                                                 </div>
                                                                             </div>
                                                                             <%
@@ -267,14 +280,24 @@
                                                                             %>
                                                                             <p id="emptyList">Trống</p>
                                                                             <%       }
+                                                                                if (cart == null || cart.getCart().isEmpty() || (cus == null && staff == null)) {
                                                                             %>
-
-                                                                            <%} catch (Exception e) {
+                                                                            <style>
+                                                                                #checkout{
+                                                                                    display: none;
+                                                                                }
+                                                                                #viewC{
+                                                                                    width: 100%;
+                                                                                    margin: auto;   
+                                                                                }
+                                                                            </style>
+                                                                            <%}
+                                                                                } catch (Exception e) {
                                                                                 }
                                                                             %> 
                                                                             <div class="cart-btns">
-                                                                                <a href="AddBookCartController?action=View">Xem giỏ hàng</a>
-                                                                                <a href="JSP/CheckOutPage/checkout.jsp">Thanh toán <i class="fa fa-arrow-circle-right"></i></a>
+                                                                                <a id="viewC" href="AddBookCartController?action=View">Xem giỏ hàng</a>
+                                                                                <a id="checkout" href="CheckoutController?action=Checkout">Thanh toán <i class="fa fa-arrow-circle-right"></i></a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -287,7 +310,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         </header>
                                         </body>
                                         </html>

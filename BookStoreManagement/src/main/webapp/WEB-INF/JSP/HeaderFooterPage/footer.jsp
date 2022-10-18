@@ -43,7 +43,7 @@
                                     <%
                                         for (CategoryDTO cateDTO : listCateFooter) {
                                     %>
-                                    <form action="FilterCategoryController" method="POST">
+                                    <form action="FilterCategoryController" method="GET">
                                         <input type="hidden" name="cateID" value="<%= cateDTO.getCategoryID()%>"/>
                                         <button class="hover" style="border: none; background: none;"><%= cateDTO.getName()%></button>
                                     </form>
@@ -63,7 +63,7 @@
                                     <%
                                         for (PublisherDTO publisherDTO : listPubFooter) {
                                     %>
-                                    <form action="FilterPublisherController" method="POST">
+                                    <form action="FilterPublisherController" method="GET">
                                         <input type="hidden" name="pubID" value="<%= publisherDTO.getPublisherID()%>"/>
                                         <button class="hover" style="border: none; background: none;"><%= publisherDTO.getName()%></button>
                                     </form>
@@ -101,6 +101,8 @@
                         <div class="col-md-12 text-center">
                             <ul class="footer-payments">
                                 <li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+                                <li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+                                <li><a href="#"><i class="fa fa-credit-card"></i></a></li>
                                 <li><a href="#"><i class="fa fa-map-marker"></i></a></li>
                                 <li><a href="#"><i class="fa fa-envelope-o"></i></a></li>
                                 <li><a href="#"><i class="fa fa-phone"></i></a></li>

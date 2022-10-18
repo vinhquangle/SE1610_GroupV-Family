@@ -14,6 +14,7 @@ public class OrderDTO {
     private String orderID;
     private CustomerDTO customer;
     private StaffDTO staff;
+    private PromotionDTO promotion;
     private double deliveryCost;
     private String date;
     private double total;
@@ -25,6 +26,7 @@ public class OrderDTO {
         this.orderID = "";
         this.customer = new CustomerDTO();
         this.staff = new StaffDTO();
+        this.promotion = new PromotionDTO();
         this.deliveryCost = 0;
         this.date = "";
         this.total = 0;
@@ -33,16 +35,21 @@ public class OrderDTO {
         this.delete = "";
     }
 
-    public OrderDTO(String orderID, CustomerDTO customer, StaffDTO staff, double deliveryCost, String date, double total, String description, String status, String delete) {
+    public OrderDTO(String orderID, CustomerDTO customer, StaffDTO staff, PromotionDTO promotion, double deliveryCost, String date, double total, String description, String status, String delete) {
         this.orderID = orderID;
         this.customer = customer;
         this.staff = staff;
+        this.promotion = promotion;
         this.deliveryCost = deliveryCost;
         this.date = date;
         this.total = total;
         this.description = description;
         this.status = status;
         this.delete = delete;
+    }
+
+    public PromotionDTO getPromotion() {
+        return promotion;
     }
 
     public String getDescription() {
@@ -115,6 +122,10 @@ public class OrderDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setPromotion(PromotionDTO promotion) {
+        this.promotion = promotion;
     }
 
 }

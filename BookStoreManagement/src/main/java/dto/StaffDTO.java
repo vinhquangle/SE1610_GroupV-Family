@@ -19,6 +19,7 @@ public class StaffDTO {
     private String dateOfBirth;
     private String status;
     private String delete;
+    public static final String PHONE_FORMAT = "\\d[9]|\\d{10}";
 
     public StaffDTO() {
         this.staffID = "";

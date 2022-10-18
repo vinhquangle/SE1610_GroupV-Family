@@ -8,9 +8,11 @@ package controller.load;
 import dao.BookDAO;
 import dao.CategoryDAO;
 import dao.PublisherDAO;
+import dao.ReviewDetailDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
 import dto.PublisherDTO;
+import dto.ReviewDetailDTO;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -43,18 +45,21 @@ public class GetController extends HttpServlet {
             BookDAO bookDao = new BookDAO();
             CategoryDAO cateDao = new CategoryDAO();
             PublisherDAO pubDao = new PublisherDAO();
-            List<CategoryDTO> listCate = cateDao.getListCategory(); //Lấy tất cả thể loại
-            List<PublisherDTO> listPub = pubDao.getListPublisher(); //Lấy tất cả NXB
-            List<BookDTO> listBook = bookDao.getListBook(index); //Lấy thông tin sách cho phân trang số 1
-            int count = bookDao.countBook();//Đếm tổng số lượng sản phẩm trong database
+            ReviewDetailDAO reviewDetailDao = new ReviewDetailDAO();
+            List<CategoryDTO> listCate = cateDao.getListCategory("1"); //Lấy tất cả thể loại
+            List<PublisherDTO> listPub = pubDao.getListPublisher("1"); //Lấy tất cả NXB
+            List<BookDTO> listBook = bookDao.getListBook(index, "1"); //Lấy thông tin sách cho phân trang số 1
+            List<ReviewDetailDTO> listReviewDetail = reviewDetailDao.loadReview("1");//Lấy tất cả đánh giá sách
+            int count = bookDao.countBook("1");//Đếm tổng số lượng sản phẩm trong database
             url = SUCCESS;
             if (listBook.size() > 0) {
                 HttpSession session = request.getSession();
                 session.setAttribute("LIST_BOOK", listBook);
                 session.setAttribute("LIST_PUB", listPub);
                 session.setAttribute("LIST_CATE", listCate);
+                session.setAttribute("LIST_REVIEW_DETAIL", listReviewDetail);
                 session.setAttribute("COUNT_BOOK", count);
-                session.setAttribute("LIST_BOOK_SORT", bookDao.getAllBook());
+                session.setAttribute("LIST_BOOK_SORT", bookDao.getAllBook("1"));
                 request.setAttribute("CONTROLLER", "GetController?");
             }
         } catch (Exception e) {

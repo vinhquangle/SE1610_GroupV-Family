@@ -192,7 +192,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="margin: auto; width: 75px;" class="">
+                                    <div style="margin: auto; width: 80px;" class="">
                                         <div class="product-details">
                                             <form action="EditBookCartController" method="POST">
                                                 <div class="input-number">
@@ -246,7 +246,7 @@
                                 <%
                                 } else {
                                 %>
-                                <p style="font-size: 60px; font-family: monospace; color: #d2d2d2;" id="emptyList">-----Danh sách trống-----</p>
+                                <p style="font-size: 60px; font-family: monospace; color: #d2d2d2;" id="emptyList">----Danh sách trống----</p>
                                 <style>
                                     .check{
                                         display: none;
@@ -263,7 +263,7 @@
                                 %>
                                 <div style="margin-top: 50px;" id="father">
                                     <a href="GetController?"><p class="con">Tiếp tục mua sắm</p></a>
-                                    <a href="GetController?"><p class="check">Thanh toán <i class="fa fa-arrow-circle-right"></i></p></a>
+                                    <a href="CheckoutController?action=Checkout"><p class="check">Thanh toán <i class="fa fa-arrow-circle-right"></i></p></a>
                                 </div>
                             </div>
                         </div>
@@ -274,6 +274,5 @@
         </div>
         <!-- FOOTER -->
         <%@include file="../HeaderFooterPage/footer.jsp" %>
-
     </body>
 </html>

@@ -20,6 +20,7 @@ public class CustomerDTO {
     private int point;
     private String status;
     private String delete;
+    public static final String PHONE_FORMAT = "\\d[9]|\\d{10}";
 
     public CustomerDTO() {
         this.customerID = "";

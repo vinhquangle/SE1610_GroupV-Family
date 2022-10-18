@@ -11,7 +11,6 @@ import dto.CustomerDTO;
 import dto.CustomerErrorDTO;
 import email.JavaMailUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,126 +37,21 @@ public class RegisterController extends HttpServlet {
         String url = ERROR;
         try {
             String action = request.getParameter("action");
-            String email = request.getParameter("email");
-            String regex = "^(.+)@(.+)$";//Mẫu xác thực email
-            Pattern pattern = Pattern.compile(regex);//Mẫu xác thực email
-            Matcher matcher = pattern.matcher(email);//Mẫu xác thực email
             HttpSession session = request.getSession();
-            Random rand = new Random();
             CustomerErrorDTO cusError = new CustomerErrorDTO();
+            CustomerDAO daoCus = new CustomerDAO();
+            CustomerDTO cus = new CustomerDTO();
+            String codeVerify = request.getParameter("verify");
             if (action.equals("Register")) {
                 throw new Exception();
-            } else if (action.equals("Verify")) {
-                if (!matcher.matches()) {//Kiểm tra email hợp lệ
-                    cusError.setEmailError("Email không hợp lệ!");
-                    url = "Check";
-                    throw new Exception();
-                }
-                int codeVerify = rand.ints(1000, 9999).findFirst().getAsInt();//Tạo mã xác minh cho email
-                JavaMailUtil.sendMail(email, codeVerify);//Gữi mã xác minh email
-                session.setAttribute("CODE", codeVerify);
-                session.setAttribute("EMAIL", email);
-            } else {
-                CustomerDAO daoCus = new CustomerDAO();
-                StaffDAO daoStaff = new StaffDAO();
-                String verify = request.getParameter("verify");
-                String customerID = request.getParameter("customerID");
-                String fullName = request.getParameter("fullName");
-                String phone = request.getParameter("phone");
-                String address = request.getParameter("address");
-                String password = request.getParameter("passwordr");
-                String confirm = request.getParameter("confirm");
-                String emailVerify = new String();
-                String codeVerify = new String();
-                try {
-                    emailVerify = (String) session.getAttribute("EMAIL");
-                    codeVerify = (String) session.getAttribute("CODE");
-                } catch (Exception e) {
-                }
-                boolean checkValidation = true;
-                boolean valid = false;
-                String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-                valid = VerifyUtils.verify(gRecaptchaResponse);//Xác thực reCaptcha
-                if (!valid) {
-                    request.setAttribute("ERROR", "reCaptcha không hợp lệ!");
-                    throw new Exception();
-                }
-                if (email == "") {
-                    cusError.setEmailError("Email không được để trống");
-                    checkValidation = false;
-                } else if (!email.equals(emailVerify)) {
-                    cusError.setEmailError("Email không khớp với Email được xác minh!");
-                    checkValidation = false;
-                } else if (!verify.equals(codeVerify)) {
-                    cusError.setEmailError("Mã xác minh không chính xác!");
-                    checkValidation = false;
-                } else if (verify == "") {
-                    cusError.setEmailError("Mã xác minh không được để trống!");
-                    checkValidation = false;
-                }
-                if (customerID.length() > 50 || customerID.length() < 2) {
-                    cusError.setCustomerIDError("Độ dài tài khoản phải từ 2-50 kí tự!");
-                    checkValidation = false;
-                    if (customerID == "") {
-                        cusError.setCustomerIDError("Tài khoản không được để trống!");
-                    }
-                }
-                boolean checkDuplicateEmail = daoCus.checkCustomerEmail(email);//Kiểm tra trùng lặp Email
-                if (checkDuplicateEmail) {
-                    cusError.setEmailError("Email này đã được sử dụng!");
-                    checkValidation = false;
-                }
-                try {
-                    Integer.parseInt(phone);
-                } catch (Exception e) {
-                    cusError.setPhoneError("Số điện thoại không hợp lệ!");
-                }
-                if (phone.length() > 15 || phone.length() < 8) {
-                    cusError.setPhoneError("Số điện thoại không hợp lệ!");
-                    checkValidation = false;
-                    if (phone == "") {
-                        cusError.setPhoneError("Số điện thoại không được để trống!");
-                    }
-                }
-                if (address.length() > 200) {
-                    cusError.setAddressError("Địa chỉ quá dài (bé hơn 200 kí tự)!");
-                    checkValidation = false;
-                    if (address == "") {
-                        cusError.setAddressError("Địa chỉ không được để trống!");
-                    }
-                }
-                boolean checkDuplicateID = daoCus.checkCustomerID(customerID);//Kiểm tra trùng lặp CustomerID
-                boolean ScheckDuplicateID = daoStaff.checkCusIDinStaff(customerID);//Kiểm tra trùng lặp StaffID
-                if (checkDuplicateID == true || ScheckDuplicateID == true) {
-                    cusError.setCustomerIDError("Tài khoản đã được sử dụng");
-                    checkValidation = false;
-                }
-                if (fullName.length() > 50 || fullName.length() < 2) {
-                    cusError.setNameError("Độ dài họ và tên phải từ 2-50 kí tự!");
-                    checkValidation = false;
-                    if (fullName == "") {
-                        cusError.setNameError("Họ và tên không được để trống!");
-                    }
-                }
-                if (password.length() < 8) {
-                    cusError.setPasswordError("Mật khẩu nên dài từ 8 kí tự trở lên");
-                    checkValidation = false;
-                    if (password == "") {
-                        cusError.setPasswordError("Mật khẩu không được để trống");
-                    }
-                }
-                if (!password.equals(confirm)) {
-                    cusError.setConfirmError("Xác nhận mật khẩu không khớp!");
-                    checkValidation = false;
-                }
-                //Ma hoa AES
-                MyAES myCipher = new MyAES(password, MyAES.AES_192);
-                String AES_ecryptedStr = myCipher.AES_encrypt(password);//Mã hóa AES
-                String AES_decryptedStr = myCipher.AES_decrypt(AES_ecryptedStr);//Giải mã AES
-                password = AES_ecryptedStr;
-                //Ma hoa AES
-                if (checkValidation) {
-                    boolean checkInsert = daoCus.createAccount(new CustomerDTO(customerID, fullName, password, email, address, phone, 0, "0", "0"));//Tạo Account và insert dữ liệu vào tblCustomer
+            }
+            System.out.println(codeVerify);
+            if (codeVerify != null) {
+                System.out.println(codeVerify);
+                String code = (String) session.getAttribute("CODE");
+                if (code.equals(codeVerify)) {
+                    cus = (CustomerDTO) session.getAttribute("CUS");
+                    boolean checkInsert = daoCus.createAccount(cus);//Tạo Account và insert dữ liệu vào tblCustomer
                     if (checkInsert) {
                         url = SUCCESS;
                         request.setAttribute("MODAL", "<div class=\"row\">"
@@ -173,19 +67,115 @@ public class RegisterController extends HttpServlet {
                                 + "                            </div>\n"
                                 + "                            </div>");
                     }
+                    throw new Exception();
                 } else {
-                    request.setAttribute("CUSTOMER_ERROR", cusError);
+                    request.setAttribute("MODAL", "Mã xác minh địa chỉ Email không chính xác. Vui lòng nhập lại!");
+                    throw new Exception();
                 }
+            }
+            String email = request.getParameter("email");
+            String regex = "^(.+)@(.+)$";//Mẫu xác thực email
+            Pattern pattern = Pattern.compile(regex);//Mẫu xác thực email
+            Matcher matcher = pattern.matcher(email);//Mẫu xác thực email
+            Random rand = new Random();
+            if (!matcher.matches()) {//Kiểm tra email hợp lệ
+                cusError.setEmailError("Email không hợp lệ!");
+            }
+            StaffDAO daoStaff = new StaffDAO();
+            String customerID = request.getParameter("customerID");
+            String fullName = request.getParameter("fullName");
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
+            String password = request.getParameter("passwordr");
+            String confirm = request.getParameter("confirm");
+
+            boolean checkValidation = true;
+            boolean valid = false;
+            String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+            valid = VerifyUtils.verify(gRecaptchaResponse);//Xác thực reCaptcha
+            if (!valid) {
+                request.setAttribute("ERROR", "reCaptcha không hợp lệ!");
+                throw new Exception();
+            }
+            if (email == "") {
+                cusError.setEmailError("Email không được để trống");
+                checkValidation = false;
+            }
+
+            if (customerID.length() > 50 || customerID.length() < 2) {
+                cusError.setCustomerIDError("Độ dài tài khoản phải từ 2-50 kí tự!");
+                checkValidation = false;
+                if (customerID == "") {
+                    cusError.setCustomerIDError("Tài khoản không được để trống!");
+                }
+            }
+            boolean checkDuplicateEmail = daoCus.checkCustomerEmail(email);//Kiểm tra trùng lặp Email
+            if (checkDuplicateEmail) {
+                cusError.setEmailError("Email này đã được sử dụng!");
+                checkValidation = false;
+            }
+            try {
+                Integer.parseInt(phone);
+            } catch (Exception e) {
+                cusError.setPhoneError("Số điện thoại không hợp lệ!");
+            }
+            if (phone.length() > 15 || phone.length() < 8) {
+                cusError.setPhoneError("Số điện thoại không hợp lệ!");
+                checkValidation = false;
+                if (phone == "") {
+                    cusError.setPhoneError("Số điện thoại không được để trống!");
+                }
+            }
+            if (address.length() > 200) {
+                cusError.setAddressError("Địa chỉ quá dài (bé hơn 200 kí tự)!");
+                checkValidation = false;
+                if (address == "") {
+                    cusError.setAddressError("Địa chỉ không được để trống!");
+                }
+            }
+            boolean checkDuplicateID = daoCus.checkCustomerID(customerID);//Kiểm tra trùng lặp CustomerID
+            boolean ScheckDuplicateID = daoStaff.checkCusIDinStaff(customerID);//Kiểm tra trùng lặp StaffID
+            if (checkDuplicateID == true || ScheckDuplicateID == true) {
+                cusError.setCustomerIDError("Tài khoản đã được sử dụng");
+                checkValidation = false;
+            }
+            if (fullName.length() > 50 || fullName.length() < 2) {
+                cusError.setNameError("Độ dài họ và tên phải từ 2-50 kí tự!");
+                checkValidation = false;
+                if (fullName == "") {
+                    cusError.setNameError("Họ và tên không được để trống!");
+                }
+            }
+            if (password.length() < 8) {
+                cusError.setPasswordError("Mật khẩu nên dài từ 8 kí tự trở lên");
+                checkValidation = false;
+                if (password == "") {
+                    cusError.setPasswordError("Mật khẩu không được để trống");
+                }
+            }
+            if (!password.equals(confirm)) {
+                cusError.setConfirmError("Xác nhận mật khẩu không khớp!");
+                checkValidation = false;
+            }
+            //Ma hoa AES
+            MyAES myCipher = new MyAES("1", MyAES.AES_192);//Cài đặt khóa cho AES
+            String AES_ecryptedStr = myCipher.AES_encrypt(password);//Mã hóa AES
+            password = AES_ecryptedStr;
+            //Ma hoa AES
+            if (checkValidation) {
+                cus = new CustomerDTO(customerID, fullName, password, email, address, phone, 0, "0", "0");
+                session.setAttribute("CUS", cus);
+                request.setAttribute("MODAL", "Mã xác minh đã được gửi qua địa chỉ Email của bạn");
+                int codeVerify1 = rand.ints(1000, 9999).findFirst().getAsInt();//Tạo mã xác minh cho email
+                JavaMailUtil.sendMail(email, codeVerify1, "Verify");//Gữi mã xác minh email
+                session.setAttribute("CODE", String.valueOf(codeVerify1));
+            } else {
+                request.setAttribute("CUSTOMER_ERROR", cusError);
             }
         } catch (Exception e) {
             log("ERROR AT REGISTERCONTROLLER : " + e.toString());
         } finally {
-            if (url.equals("Check")) {
-                PrintWriter out = response.getWriter();
-                out.println("Tài khoản Email không hợp lệ!\nVui lòng nhập lại");
-            } else {
-                request.getRequestDispatcher(url).forward(request, response);
-            }
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
