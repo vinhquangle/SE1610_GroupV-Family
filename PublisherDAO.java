@@ -19,8 +19,8 @@ import utilities.DBUtils;
  * @author Administrator
  */
 public class PublisherDAO {
-
-    
+    private static final String PUBLISHER = "SELECT publisherID, name, [status] FROM tblPublisher WHERE [status] LIKE ?";
+    private static final String GET_PUB = "SELECT publisherID, name, [status] FROM tblPublisher WHERE publisherID LIKE ? OR name LIKE ?"; 
     private static final String GET_PUB_ID = "SELECT publisherID, name, [status] FROM tblPublisher WHERE publisherID LIKE ?";
     private static final String SEARCH_PUB = "SELECT publisherID, Name, [status]\n"
             + "FROM  tblPublisher\n"
@@ -44,7 +44,39 @@ public class PublisherDAO {
     
     
     //Ham nay dung de lay list Publisher
-    
+    public List<PublisherDTO> getListPublisher(String st) throws SQLException {
+        List<PublisherDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(PUBLISHER);
+                ptm.setString(1, st);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String publisherID = rs.getString("publisherID");
+                    String name = rs.getString("name");
+                    String status = rs.getString("status");
+                    list.add(new PublisherDTO(publisherID, name, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
 
 //Ham nay dung de lay publisher theo ID - Quang Vinh
 
