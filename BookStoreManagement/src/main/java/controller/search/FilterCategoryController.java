@@ -54,7 +54,7 @@ public class FilterCategoryController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at PublisherController: " + e.toString());
+            log("Error at CategoryController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

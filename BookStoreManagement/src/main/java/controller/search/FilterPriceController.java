@@ -55,7 +55,7 @@ public class FilterPriceController extends HttpServlet {
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at CategoryController: " + e.toString());
+            log("Error at PriceController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
