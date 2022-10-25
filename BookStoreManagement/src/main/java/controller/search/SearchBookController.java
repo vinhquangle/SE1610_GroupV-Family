@@ -19,10 +19,18 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
+<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/SearchBookController.java
  * @author Quang Vinh-21/09/2022 Controller dung de search book by
  * ISBN/Title/Authors
  */
 //Quang Vinh >>>>>>>>>>
+=======
+ * @author Quang Vinh-21/09/2022 
+ *	Controller dung de search book by
+ * ISBN/Title/Authors
+ */
+//Quang Vinh
+>>>>>>> Quang-Vinh-Branch:SearchBookController.java
 public class SearchBookController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -105,4 +113,8 @@ public class SearchBookController extends HttpServlet {
     }// </editor-fold>
 
 }
+<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/SearchBookController.java
 //<<<<<<<<<<
+=======
+//
+>>>>>>> Quang-Vinh-Branch:SearchBookController.java

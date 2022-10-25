@@ -6,16 +6,16 @@
 package cart;
 
 import dto.BookDTO;
-import java.awt.print.Book;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
- * @author Quang Vinh - 21/09/2022
+ *
  */
-public class Cart{
+//Quang Vinh
+public class Cart {
+
     private Map<String, BookDTO> cart;
 
     public Cart() {
@@ -25,21 +25,24 @@ public class Cart{
         this.cart = cart;
     }
 
+    //Lấy giỏ hàng
     public Map<String, BookDTO> getCart() {
         return cart;
     }
 
+    //Thiết đặt giỏ hàng
     public void setCart(Map<String, BookDTO> cart) {
         this.cart = cart;
     }
 
-    public boolean add(BookDTO book){
+    //Thêm sản phẩm mới vào giỏ hàng
+    public boolean add(BookDTO book) {
         boolean check = false;
-        if(this.cart==null){
+        if (this.cart == null) {
             this.cart = new HashMap<>();
 
         }
-        if(this.cart.containsKey(book.getIsbn())){
+        if (this.cart.containsKey(book.getIsbn())) {
             int currentQuantity = this.cart.get(book.getIsbn()).getQuantity();
             book.setQuantity(currentQuantity + book.getQuantity());
         }
@@ -48,10 +51,11 @@ public class Cart{
         return check;
     }
 
-    public boolean remove(String isbn){
+    //Xóa sản phẩm khỏi giỏ hàng
+    public boolean remove(String isbn) {
         boolean check = false;
-        if(this.cart != null){
-            if(this.cart.containsKey(isbn)){
+        if (this.cart != null) {
+            if (this.cart.containsKey(isbn)) {
                 this.cart.remove(isbn);
                 check = true;
             }
@@ -59,22 +63,34 @@ public class Cart{
         return check;
     }
 
-    public boolean edit(String isbn, BookDTO book){
+    //Chỉnh sửa số lượng sản phẩm
+    public boolean edit(String isbn, BookDTO book) {
         boolean check = false;
-        if(this.cart !=null){
-            if(this.cart.containsKey(isbn)){
+        if (this.cart != null) {
+            if (this.cart.containsKey(isbn)) {
                 this.cart.replace(isbn, book);
                 check = true;
             }
         }
         return check;
     }
-    
-    public double getTotalMoney(){
+
+    //Lấy tổng thành tiền của giỏ hàng
+    public double getTotalMoney() {
         double total = 0;
-        for (BookDTO product  : cart.values()) {
+        for (BookDTO product : cart.values()) {
             total += product.getQuantity() * product.getPrice();
         }
         return total;
+    }
+
+    //Xóa tất cả sản phẩm trong giỏ hàng
+    public boolean removeAll() {
+        boolean check = false;
+        if (this.cart != null) {
+            this.cart.clear();
+            check = true;
+        }
+        return check;
     }
 }

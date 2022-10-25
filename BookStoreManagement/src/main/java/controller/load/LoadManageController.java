@@ -1,12 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controller.load;
 
 import dto.StaffDTO;
 import java.io.IOException;
+<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/load/LoadManageController.java
+=======
+import java.util.Map;
+>>>>>>> Quang-Vinh-Branch:RemoveBookCartController.java
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,15 +20,24 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/load/LoadManageController.java
 //Quốc Thịnh >>>>>>>>>>
 public class LoadManageController extends HttpServlet {
 
     private static final String MANAGE = "WEB-INF/JSP/ManagePage/manage.jsp";
     private static final String ERROR = "WEB-INF/JSP/LoginPage/login.jsp";
+=======
+//Quang Vinh
+public class RemoveBookCartController extends HttpServlet {
+
+    private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
+    private static final String SUCCESS = "WEB-INF/JSP/CartPage/viewCart.jsp";
+>>>>>>> Quang-Vinh-Branch:RemoveBookCartController.java
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/load/LoadManageController.java
         String url = MANAGE;
         try {
             HttpSession session = request.getSession();
@@ -36,6 +48,51 @@ public class LoadManageController extends HttpServlet {
             }
         } catch (Exception e) {
             url = ERROR;
+=======
+        String url = ERROR;
+        try {
+            String isbn = request.getParameter("isbn");
+            HttpSession session = request.getSession();
+            if (session != null) {
+                Cart cart = (Cart) session.getAttribute("CART");
+                if (cart != null) {
+                    int select = (int) session.getAttribute("SELECT");
+                    select -= cart.getCart().get(isbn).getQuantity();
+                    session.setAttribute("SELECT", select);
+                    request.setAttribute("MODAL", "<div class=\"row\">"
+                            + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
+                            + "                             <p style=\"color: #f58005;\"><b>Đã xóa sản phẩm khỏi giỏ hàng</b></p>\n"
+                            + "                         </div>\n"
+                            + "                     </div>\n"
+                            + "                     <div class=\"row\">\n"
+                            + "                         <div class=\"col-md-3\">\n"
+                            + "                                <div class=\"product-preview\">\n"
+                            + "                                    <img src=\"" + cart.getCart().get(isbn).getImg() + "\"/>\n"
+                            + "                                </div>\n"
+                            + "                            </div>\n"
+                            + "                         <div class=\"col-md-9\">\n"
+                            + "                                <div class=\"product-details\">\n"
+                            + "                                    <h4 class=\"product-name\">" + cart.getCart().get(isbn).getName() + "</h4>\n"
+                            + "                                 </div>"
+                            + "                                   <div>\n"
+                            + "                                        <p class=\"product-price\">Số lượng: " + cart.getCart().get(isbn).getQuantity() + "</p>\n"
+                            + "                                   </div>\n"
+                            + "                                </div>\n"
+                            + "                            </div>");
+                    cart.remove(isbn);//Xóa sản phẩm khỏi giỏ hàng theo ISBN
+                    session.setAttribute("CART", cart);
+                    //Cap nhat lai so luong san pham
+                    Map<String, BookDTO> listSize = cart.getCart();
+                    session.setAttribute("SIZE", listSize.size());
+                    if (listSize.size() == 0) {
+                        session.setAttribute("SELECT", 0);
+                    }
+                    url = SUCCESS;
+                }
+            }
+        } catch (Exception e) {
+            log("Error at RemoveBookCartController: " + e.toString());
+>>>>>>> Quang-Vinh-Branch:RemoveBookCartController.java
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -81,4 +138,8 @@ public class LoadManageController extends HttpServlet {
     }// </editor-fold>
 
 }
+<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/load/LoadManageController.java
 //<<<<<<<<<<
+=======
+//
+>>>>>>> Quang-Vinh-Branch:RemoveBookCartController.java
