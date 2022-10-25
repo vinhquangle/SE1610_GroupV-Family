@@ -7,14 +7,19 @@ package controller;
 import dao.StaffDAO;
 import dto.StaffDTO;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.text.Normalizer;
 import java.util.List;
 import java.util.regex.Pattern;
+=======
+import java.util.List;
+>>>>>>> origin/Ngọc-Thy-Branch
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+<<<<<<< HEAD
 import javax.servlet.http.HttpSession;
 
 /**
@@ -22,6 +27,14 @@ import javax.servlet.http.HttpSession;
  * @author vqPhi
  */
 @WebServlet(name = "SearchController", urlPatterns = {"/SearchController"})
+=======
+
+/**
+ *
+ * @author vungo
+ */
+@WebServlet(name = "SearchStaffController", urlPatterns = {"/SearchStaffController"})
+>>>>>>> origin/Ngọc-Thy-Branch
 public class SearchStaffController extends HttpServlet {
 
     private static final String ERROR = "searchStaff.jsp";
@@ -32,6 +45,7 @@ public class SearchStaffController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+<<<<<<< HEAD
             request.setCharacterEncoding("UTF-8");
             String temp = Normalizer.normalize(request.getParameter("searchStaff"), Normalizer.Form.NFD);
             Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
@@ -51,6 +65,21 @@ public class SearchStaffController extends HttpServlet {
             }
         } catch (Exception e) {
             log("Error at SearchBookController: " + e.toString());
+=======
+            String search = request.getParameter("searchStaff");
+            StaffDAO dao = new StaffDAO();
+            List<StaffDTO> listStaff = dao.searchStaff(search);
+            if (listStaff.size() > 0) {
+                request.setAttribute("LIST_STAFF", listStaff);
+
+            } else {
+                request.setAttribute("MESSAGE_STAFF", "KHONG TIM THAY");
+            }
+            url = SUCCESS;
+
+        } catch (Exception e) {
+            log("Error at SearchStaffController: " + e.toString());
+>>>>>>> origin/Ngọc-Thy-Branch
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -95,4 +124,8 @@ public class SearchStaffController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/Ngọc-Thy-Branch

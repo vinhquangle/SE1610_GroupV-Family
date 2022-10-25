@@ -21,7 +21,12 @@ import utilities.DBUtils;
  *
  */
 public class CustomerDAO {
+    private static final String CREATE = "INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete])\n"
+            + "VALUES (?,?,?,?,?,?,?,0,0)";
+    private static final String CHECK_CUSTOMER_ID = "SELECT customerID FROM tblCustomer WHERE customerID LIKE ?";
+    private static final String CHECK_CUSTOMER_EMAIL = "SELECT [Email] FROM tblCustomer WHERE [Email] LIKE ?";
 
+<<<<<<< HEAD
     private static final String LOGIN = "SELECT name, email, [address], phone, point, [status], [delete] FROM tblCustomer WHERE customerID LIKE ? AND [password] LIKE ?";
     private static final String UPDATE_STATUS = "UPDATE tblCustomer SET [status] = ? WHERE customerID LIKE ?";
     private static final String CREATE = "INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete]) \n"
@@ -117,14 +122,28 @@ public class CustomerDAO {
     public boolean updateStatusOnline(String cusID) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
+=======
+    public boolean createAccount(CustomerDTO customer) throws ClassNotFoundException, SQLException, NamingException {
+>>>>>>> origin/Ngọc-Thy-Branch
         boolean check = false;
-        String status = "1";
+        Connection conn = null;
+        PreparedStatement ptm = null;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
+<<<<<<< HEAD
                 ptm = conn.prepareStatement(UPDATE_STATUS);
                 ptm.setString(1, status);
                 ptm.setString(2, cusID);
+=======
+                ptm = conn.prepareStatement(CREATE);
+                ptm.setString(1, customer.getCustomerID());
+                ptm.setString(2, customer.getName());
+                ptm.setString(3, customer.getPassword());
+                ptm.setString(4, customer.getEmail());
+                ptm.setString(5, customer.getAddress());
+                ptm.setString(6, customer.getPhone());
+                ptm.setInt(7, customer.getPoint());
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
         } catch (Exception e) {
@@ -370,3 +389,4 @@ public class CustomerDAO {
         return check;
      }
 }
+

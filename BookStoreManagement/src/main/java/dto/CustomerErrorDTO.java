@@ -1,13 +1,15 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package dto;
 
 /**
  *
- * @author vungo
+ * @author ownhi
  */
+<<<<<<< HEAD:BookStoreManagement/src/main/java/dto/CustomerErrorDTO.java
 //Locate at dto
 public class CustomerErrorDTO {
 
@@ -37,23 +39,28 @@ public class CustomerErrorDTO {
 
     public CustomerErrorDTO(String customerIDError, String nameError, String passwordError, String confirmError, String emailError, String addressError, String phoneError, String pointError, String statusError, String deleteError) {
         this.customerIDError = customerIDError;
+=======
+public class CategoryErrorDTO {
+    
+    private String categoryIDError;
+    private String nameError;
+
+    public CategoryErrorDTO(String categoryIDError, String nameError) {
+        this.categoryIDError = categoryIDError;
+>>>>>>> origin/Ngọc-Thy-Branch:CustomerErrorDTO.java
         this.nameError = nameError;
-        this.passwordError = passwordError;
-        this.confirmError = confirmError;
-        this.emailError = emailError;
-        this.addressError = addressError;
-        this.phoneError = phoneError;
-        this.pointError = pointError;
-        this.statusError = statusError;
-        this.deleteError = deleteError;
+    }
+    public CategoryErrorDTO(){
+        categoryIDError="";
+        nameError = "";
     }
 
-    public String getCustomerIDError() {
-        return customerIDError;
+    public String getCategoryIDError() {
+        return categoryIDError;
     }
 
-    public void setCustomerIDError(String customerIDError) {
-        this.customerIDError = customerIDError;
+    public void setCategoryIDError(String categoryIDError) {
+        this.categoryIDError = categoryIDError;
     }
 
     public String getNameError() {
@@ -63,7 +70,9 @@ public class CustomerErrorDTO {
     public void setNameError(String nameError) {
         this.nameError = nameError;
     }
+    
 
+<<<<<<< HEAD:BookStoreManagement/src/main/java/dto/CustomerErrorDTO.java
     public String getPasswordError() {
         return passwordError;
     }
@@ -128,3 +137,6 @@ public class CustomerErrorDTO {
         this.deleteError = deleteError;
     }
 }
+=======
+}
+>>>>>>> origin/Ngọc-Thy-Branch:CustomerErrorDTO.java

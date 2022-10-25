@@ -115,4 +115,8 @@ public class StaffErrorDTO {
         this.confirmError = confirmError;
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/Ngọc-Thy-Branch
