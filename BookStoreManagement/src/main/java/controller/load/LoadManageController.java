@@ -5,10 +5,8 @@
  */
 package controller.load;
 
-import dao.BookDAO;
-import dto.BookDTO;
+import dto.StaffDTO;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,19 +17,25 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Quốc Thịnh >>>>>>>>>>
 public class LoadManageController extends HttpServlet {
 
     private static final String MANAGE = "WEB-INF/JSP/ManagePage/manage.jsp";
-    private static final String SUCCESS = "WEB-INF/JSP/ManagePage/manage.jsp";
+    private static final String ERROR = "WEB-INF/JSP/LoginPage/login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = MANAGE;
         try {
-
+            HttpSession session = request.getSession();
+            StaffDTO staff = new StaffDTO();
+            staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
+            if (staff == null) {
+                url = ERROR;
+            }
         } catch (Exception e) {
-            log("Error at LoadManageController: " + e.toString());
+            url = ERROR;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -77,3 +81,4 @@ public class LoadManageController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

@@ -14,32 +14,53 @@ public class BookDTO {
     private String isbn;
     private PublisherDTO publisher;
     private CategoryDTO category;
+    private ReviewDTO review;
     private String name;
     private String authorName;
     private double price;
+    private String description;
     private String img;
     private int quantity;
+    private String status;
 
     public BookDTO() {
         this.isbn = "";
         this.publisher = new PublisherDTO();
         this.category = new CategoryDTO();
+         this.review = new ReviewDTO();
         this.name = "";
         this.authorName = "";
         this.price = 0;
+        this.description="";
         this.img = "";
         this.quantity = 0;
+        this.status = "";
     }
 
-    public BookDTO(String isbn, PublisherDTO publisher, CategoryDTO category, String name, String authorName, double price, String img, int quantity) {
+    public BookDTO(String isbn, PublisherDTO publisher, CategoryDTO category, ReviewDTO review, String name, String authorName, double price, String description, String img, int quantity, String status) {
         this.isbn = isbn;
         this.publisher = publisher;
         this.category = category;
+        this.review = review;
         this.name = name;
         this.authorName = authorName;
         this.price = price;
+        this.description = description;
         this.img = img;
         this.quantity = quantity;
+        this.status = status;
+    }
+
+    public ReviewDTO getReview() {
+        return review;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public String getIsbn() {
@@ -104,6 +125,18 @@ public class BookDTO {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setReview(ReviewDTO review) {
+        this.review = review;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

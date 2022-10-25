@@ -16,6 +16,8 @@ public class BResponseDetailDTO {
     private BookDTO isbn;
     private int quantity;
     private double price;
+    private String status;
+    private String delete;
 
     public BResponseDetailDTO() {
         this.responseDetailID = "";
@@ -23,14 +25,26 @@ public class BResponseDetailDTO {
         this.isbn = new BookDTO();
         this.quantity = 0;
         this.price = 0;
+        this.status = "";
+        this.delete = "";
     }
 
-    public BResponseDetailDTO(String responseDetailID, BookResponseDTO response, BookDTO isbn, int quantity, double price) {
+    public BResponseDetailDTO(String responseDetailID, BookResponseDTO response, BookDTO isbn, int quantity, double price, String status, String delete) {
         this.responseDetailID = responseDetailID;
         this.response = response;
         this.isbn = isbn;
         this.quantity = quantity;
         this.price = price;
+        this.status = status;
+        this.delete = delete;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getDelete() {
+        return delete;
     }
 
     public String getResponseDetailID() {
@@ -71,6 +85,14 @@ public class BResponseDetailDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
     }
 
 }

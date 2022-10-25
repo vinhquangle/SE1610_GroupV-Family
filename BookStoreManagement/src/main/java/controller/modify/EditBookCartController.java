@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Quang Vinh >>>>>>>>>>
 public class EditBookCartController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -31,27 +32,85 @@ public class EditBookCartController extends HttpServlet {
             String isbn = request.getParameter("isbn");
             int quantity = 0;
             BookDAO dao = new BookDAO();
-            int quantityCheck = dao.quantityCheck(isbn);
-            quantity = Integer.parseInt(request.getParameter("quantity"));
+            int quantityCheck = dao.quantityCheck(isbn, "1");//Lấy số lượng sản phẩm còn trong kho
+            BookDTO book = dao.loadBook(isbn, "1");//Lấy thông tin sản phẩm theo ISBN
+            try {
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+            } catch (Exception e) {
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
+                        + "                         <div class=\"col-md-3\">\n"
+                        + "                                <div class=\"product-preview\">\n"
+                        + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                        + "                                </div>\n"
+                        + "                            </div>\n"
+                        + "                         <div class=\"col-md-9\">\n"
+                        + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  trong giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                        + "                                </div>\n"
+                        + "                            </div>");
+                throw new Exception();
+            }
             if (quantity < 1) {
-                request.setAttribute("MESSAG_FAIL", "Failed - Quantity must be greater than 0 or be a number!");
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
+                        + "                         <div class=\"col-md-3\">\n"
+                        + "                                <div class=\"product-preview\">\n"
+                        + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                        + "                                </div>\n"
+                        + "                            </div>\n"
+                        + "                         <div class=\"col-md-9\">\n"
+                        + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  trong giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                        + "                                </div>\n"
+                        + "                            </div>");
                 throw new Exception();
             } else if (quantity > quantityCheck) {
-                request.setAttribute("MESSAG_FAIL", "Failed - The requested quantity for " + quantity + " is not available!(Only " + quantityCheck + " in stock)");
+                request.setAttribute("MODAL", "<div class=\"row\">\n"
+                        + "                         <div class=\"col-md-3\">\n"
+                        + "                                <div class=\"product-preview\">\n"
+                        + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                        + "                                </div>\n"
+                        + "                            </div>\n"
+                        + "                         <div class=\"col-md-9\">\n"
+                        + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  trong giỏ hàng thất bại</b></p>\n"
+                        + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
+                        + "                                </div>\n"
+                        + "                            </div>");
                 throw new Exception();
             }
             HttpSession session = request.getSession();
             if (session != null) {
                 Cart cart = (Cart) session.getAttribute("CART");
                 if (cart != null) {
-                    BookDTO book = new BookDTO();
-                    if (cart.getCart().containsKey(isbn)) {
+                    if (cart.getCart().containsKey(isbn)) {//Kiểm tra sản phẩm trong giỏ hàng
                         book = cart.getCart().get(isbn);
+                        int select = (int) session.getAttribute("SELECT");
+                        select -= book.getQuantity();
+                        select += quantity;
+                        session.setAttribute("SELECT", select);
                         book.setQuantity(quantity);
-                        cart.edit(isbn, book);
+                        cart.edit(isbn, book);//Thay đổi số lượng sản phẩm có trong giỏ hàng
                         session.setAttribute("CART", cart);
                         url = SUCCESS;
-                        request.setAttribute("MESSAG_ADD", "Modified quantity! - " + book.getName() + " - " + "Quantity: " + quantity);
+                        request.setAttribute("MODAL", "<div class=\"row\">"
+                                + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
+                                + "                             <p style=\"color: green;\"><b>Thay đổi số lượng sản phẩm thành công</b></p>\n"
+                                + "                         </div>\n"
+                                + "                     </div>\n"
+                                + "                     <div class=\"row\">\n"
+                                + "                         <div class=\"col-md-3\">\n"
+                                + "                                <div class=\"product-preview\">\n"
+                                + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                                + "                                </div>\n"
+                                + "                            </div>\n"
+                                + "                         <div class=\"col-md-9\">\n"
+                                + "                                <div class=\"product-details\">\n"
+                                + "                                    <h4 class=\"product-name\">" + book.getName() + "</h4>\n"
+                                + "                                 </div>"
+                                + "                                   <div>\n"
+                                + "                                        <p class=\"product-price\">Số lượng: " + quantity + "</p>\n"
+                                + "                                   </div>\n"
+                                + "                                </div>\n"
+                                + "                            </div>");
                     }
                 }
             }
@@ -103,3 +162,4 @@ public class EditBookCartController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

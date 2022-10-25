@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Hữu Hiếu >>>>>>>>>>
 public class FilterPublisherController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -31,12 +32,22 @@ public class FilterPublisherController extends HttpServlet {
         String url = ERROR;
         try {
             String pubID = request.getParameter("pubID");
+            int index = 1;
+            try {
+                index = Integer.parseInt(request.getParameter("index"));
+            } catch (Exception e) {
+                index = 1;
+            }
             HttpSession session = request.getSession();
             BookDAO bookDAO = new BookDAO();
-            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID);
+            List<BookDTO> listBookbyPub = bookDAO.filterbyPub(pubID, "1");//Lấy sản phẩm theo nhà xuất bản
+            session.setAttribute("COUNT_BOOK", listBookbyPub.size());
+            session.setAttribute("LIST_BOOK_SORT", listBookbyPub);
+            listBookbyPub = bookDAO.filterbyPub9(pubID, index, "1");//Lấy sản phẩm theo nhà xuất bản và phân trang
             if (listBookbyPub.size() > 0) {
                 session.setAttribute("LIST_BOOK", listBookbyPub);
-                request.setAttribute("PUBLISHER", new PublisherDTO(pubID, listBookbyPub.get(0).getPublisher().getName()));
+                request.setAttribute("PUBLISHER", new PublisherDTO(pubID, listBookbyPub.get(0).getPublisher().getName(), listBookbyPub.get(0).getPublisher().getStatus()));
+                request.setAttribute("CONTROLLER", "FilterPublisherController?pubID=" + pubID + "&");
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");
@@ -89,3 +100,4 @@ public class FilterPublisherController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

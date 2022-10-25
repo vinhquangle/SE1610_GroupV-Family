@@ -13,9 +13,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
- * @author Admin
+ *
  */
+//Quốc Thịnh >>>>>>>>>>
 public class MyAES {
+
     public static final int AES_128 = 128;
     public static final int AES_192 = 192;
     public static final int AES_256 = 256;
@@ -27,46 +29,56 @@ public class MyAES {
         key = akey;
         AES_key = AES_createKey();
     }
+
     public MyAES(String akey, int AES_KeyLen) {
         key = akey;
-        if(AES_KeyLen == AES_256) this.AES_KeyLen = AES_256;
+        if (AES_KeyLen == AES_256) {
+            this.AES_KeyLen = AES_256;
+        }
         AES_key = AES_createKey();
     }
-    private byte[] AES_createKey(){
-        try{
+
+    //Tạo key
+    private byte[] AES_createKey() {
+        try {
             MessageDigest sha = MessageDigest.getInstance("SHA-1");
             byte[] keyBytes = key.getBytes("UTF-8");
             keyBytes = sha.digest(keyBytes);
-            AES_key = Arrays.copyOf(keyBytes, AES_KeyLen/8);
+            AES_key = Arrays.copyOf(keyBytes, AES_KeyLen / 8);
             return AES_key;
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
         return null;
     }
-    public String AES_encrypt(String source){
-        try{
+
+    //Mã hóa AES
+    public String AES_encrypt(String source) {
+        try {
             SecretKeySpec secretKey = new SecretKeySpec(AES_key, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] bytes = cipher.doFinal(source.getBytes("UTF-8"));
             return Base64.getEncoder().encodeToString(bytes);
-        }catch(Exception e){
-            System.out.println("\n AES Encrypt: "+e.toString());
+        } catch (Exception e) {
+            System.out.println("\n AES Encrypt: " + e.toString());
         }
         return null;
     }
-    public String AES_decrypt(String encryptedStr){
-        try{
+
+    //Giải mã AES
+    public String AES_decrypt(String encryptedStr) {
+        try {
             SecretKeySpec secretKey = new SecretKeySpec(AES_key, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             byte[] bytes = Base64.getDecoder().decode(encryptedStr);
             byte[] result = cipher.doFinal(bytes);
             return new String(result);
-        }catch(Exception e){
-            System.out.println("\n AES Decrypt: "+e.toString());
+        } catch (Exception e) {
+            System.out.println("\n AES Decrypt: " + e.toString());
         }
         return null;
     }
 }
+//<<<<<<<<<<

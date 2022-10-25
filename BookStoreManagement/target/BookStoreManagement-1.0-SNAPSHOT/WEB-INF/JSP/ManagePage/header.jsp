@@ -4,6 +4,7 @@
     Author     : PC
 --%>
 
+<%@page import="dto.StaffDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -38,21 +39,21 @@
         <!-- modal CSS
                     ============================================ -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>    
+    </head> 
+    <body style="background-color: transparent;">    
         <%@include file = "sideBoard.jsp" %>
         <!-- Start Welcome area -->
         <div class="all-content-wrapper" >
             <div class="header-advance-area">
-                <div class="header-top-area">
+                <div  class="header-top-area">
                     <div class="container-fluid">
-                        <div class="row">
+                        <div style="background-color: #494f57;" class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="header-top-wraper">
                                     <div class="row">
                                         <div class="col-lg-1 col-md-0 col-sm-1 col-xs-12">
                                             <div class="menu-switcher-pro" style="margin-left: 20px">
-                                                <button type="button" id="sidebarCollapse" class="btn bar-button-pro header-drl-controller-btn btn-info navbar-btn">
+                                                <button style="color: white;" type="button" id="sidebarCollapse" class="btn bar-button-pro header-drl-controller-btn btn-info navbar-btn">
                                                     <i class="fa fa-bars"></i>
                                                 </button>
                                             </div>
@@ -60,7 +61,7 @@
                                         <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
                                             <div class="header-top-menu tabl-d-n">
                                                 <ul class="nav navbar-nav mai-top-nav" >
-                                                    <li class="nav-item"><a href="#" class="nav-link">Home</a>
+                                                    <li style="margin: auto;" class="nav-item"><a style="margin: auto;"href="GetController?" class="nav-link">Home</a>
                                                     </li>                                               
                                                 </ul>
                                             </div>
@@ -68,20 +69,21 @@
                                         <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                             <div class="header-right-info">
                                                 <ul class="nav navbar-nav mai-top-nav header-right-menu">
-
                                                     <li class="nav-item">
                                                         <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
                                                             <i class="fa fa-user adminpro-user-rounded header-riht-inf" aria-hidden="true"></i>
-                                                            <span class="admin-name">Admin name</span>
-                                                            <i class="fa fa-angle-down adminpro-icon adminpro-down-arrow"></i>
+                                                            <span class="admin-name">Name</span>
                                                         </a>
-                                                        <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">
-                                                            <li><a href="register.html"><span class="fa fa-home author-log-ic"></span>Register</a>
-                                                            </li>
-                                                            <li><a href="#"><span class="fa fa-user author-log-ic"></span>My Profile</a>
-                                                            </li>                                                        
-                                                            <li><a href="login.html"><span class="fa fa-lock author-log-ic"></span>Log Out</a>
-                                                            </li>
+                                                        <ul style="background-color: white;" role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">     
+                                                            <style>
+                                                                #out{
+                                                                    color: #494f57;
+                                                                }
+                                                                #out:hover{
+                                                                    color: white;
+                                                                }
+                                                            </style>
+                                                            <li><a id="out" href="LogoutController?staffID="><span class="fa fa-lock author-log-ic out"></span><b>Đăng xuất</b></a></li>
                                                         </ul>
                                                     </li>
                                                 </ul>
@@ -93,36 +95,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="breadcome-area">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="breadcome-list single-page-breadcome"  style="margin-top: 40px;">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                            <div class="breadcome-heading" style="margin-left: 20px">
-                                                <form role="search" class="">
-                                                    <input type="text" placeholder="Search..." class="form-control">
-                                                    <a href=""><i class="fa fa-search"></i></a>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                            <ul class="breadcome-menu" >
-                                                <li><a href="#">Home</a> <span class="bread-slash">/</span>
-                                                </li>
-                                                <li><span class="bread-blod">Customer Management</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div style="margin-bottom: 70px;" class="container-fluid">
                     </div>
                 </div>
             </div>
+
             <!-- jquery
                     ============================================ -->
             <script src="JS/jquery-1.11.3.min.js"></script>

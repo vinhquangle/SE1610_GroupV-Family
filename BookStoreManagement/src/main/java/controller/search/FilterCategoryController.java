@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Hữu Hiếu >>>>>>>>>>
 public class FilterCategoryController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -31,12 +32,22 @@ public class FilterCategoryController extends HttpServlet {
         String url = ERROR;
         try {
             String cateID = request.getParameter("cateID");
+            int index = 1;
+            try {
+                index = Integer.parseInt(request.getParameter("index"));
+            } catch (Exception e) {
+                index = 1;
+            }
             HttpSession session = request.getSession();
             BookDAO bookDAO = new BookDAO();
-            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID);
+            List<BookDTO> listBookbyCate = bookDAO.filterbyCate(cateID,"1");//Lấy sản phẩm theo thể loại
+            session.setAttribute("COUNT_BOOK", listBookbyCate.size());
+            session.setAttribute("LIST_BOOK_SORT", listBookbyCate);
+            listBookbyCate = bookDAO.filterbyCate9(index, cateID,"1");//Lấy sản phẩm theo thể loại và phân trang
             if (listBookbyCate.size() > 0) {
-                request.setAttribute("CATEGORY", new CategoryDTO(cateID, listBookbyCate.get(0).getCategory().getName()));
+                request.setAttribute("CATEGORY", new CategoryDTO(cateID, listBookbyCate.get(0).getCategory().getName(), listBookbyCate.get(0).getCategory().getStatus()));
                 session.setAttribute("LIST_BOOK", listBookbyCate);
+                request.setAttribute("CONTROLLER", "FilterCategoryController?cateID=" + cateID + "&");
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");
@@ -76,7 +87,7 @@ public class FilterCategoryController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
+
     }
 
     /**
@@ -90,3 +101,4 @@ public class FilterCategoryController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

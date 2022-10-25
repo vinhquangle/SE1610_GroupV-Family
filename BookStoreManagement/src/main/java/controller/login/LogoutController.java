@@ -18,10 +18,11 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Quốc Thịnh >>>>>>>>>>
 public class LogoutController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
-    private static final String SUCCESS = "GetController";
+    private static final String SUCCESS = "LoginController?action=Login";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,13 +35,13 @@ public class LogoutController extends HttpServlet {
             String cus = request.getParameter("cusID");
             String staff = request.getParameter("staffID");
             if (cus != null) {
-                cusDao.updateStatusOffline(cus);
+                cusDao.updateStatusOffline(cus);//Cập nhật trạng thái tài khoản khách hành
             } else if (staff != null) {
-                staffDao.updateStatusOffline(staff);
+                staffDao.updateStatusOffline(staff);//Cập nhật trạng thái tài khoản nhân viên
             }
             session = request.getSession(false);
             if (session != null) {
-                session.invalidate();
+                session.invalidate();//Xóa session scope
             }
             url = SUCCESS;
         } catch (Exception e) {
@@ -90,3 +91,4 @@ public class LogoutController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

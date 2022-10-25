@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
  * @author Quang Vinh-21/09/2022 Controller dung de search book by
  * ISBN/Title/Authors
  */
+//Quang Vinh >>>>>>>>>>
 public class SearchBookController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -32,18 +33,29 @@ public class SearchBookController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            //Chuyển chuỗi có dấu thành không dấu
             request.setCharacterEncoding("UTF-8");
             String temp = Normalizer.normalize(request.getParameter("searchBook"), Normalizer.Form.NFD);
             Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
             String txtSearch = pattern.matcher(temp).replaceAll("");
+            //Chuyển chuỗi có dấu thành không dấu
             HttpSession session = request.getSession();
             BookDAO dao = new BookDAO();
-            List<BookDTO> list = dao.searchBook(txtSearch);
+            int index = 1;
+            try {
+                index = Integer.parseInt(request.getParameter("index"));
+            } catch (Exception e) {
+                index = 1;
+            }
+            session.setAttribute("COUNT_BOOK", dao.searchBook(txtSearch,"1").size());//Lấy sản phẩm theo tìm kiếm
+            session.setAttribute("LIST_BOOK_SORT", dao.searchBook(txtSearch,"1"));
+            List<BookDTO> list = dao.searchBook9(txtSearch, index,"1");//Lấy sản phẩm theo tìm kiếm và phân trang
             if (list.size() > 0) {
-                session.setAttribute("LIST_BOOK", list);//ATTRIBUTE CHU HOA 
+                session.setAttribute("LIST_BOOK", list);
+                request.setAttribute("CONTROLLER", "SearchBookController?searchBook=" + request.getParameter("searchBook") + "&");
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "NOT FOUND!");
+                request.setAttribute("MESSAGE", "KHÔNG TÌM THẤY!");
                 url = SUCCESS;
             }
         } catch (Exception e) {
@@ -93,3 +105,4 @@ public class SearchBookController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

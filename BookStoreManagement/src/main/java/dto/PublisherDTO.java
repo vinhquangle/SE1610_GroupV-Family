@@ -13,15 +13,22 @@ public class PublisherDTO {
 
     private String publisherID;
     private String name;
+    private String status;
 
     public PublisherDTO() {
         this.publisherID = "";
         this.name = "";
+        this.status = "";
     }
 
-    public PublisherDTO(String publisherID, String name) {
+    public PublisherDTO(String publisherID, String name, String status) {
         this.publisherID = publisherID;
         this.name = name;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public String getPublisherID() {
@@ -38,6 +45,10 @@ public class PublisherDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

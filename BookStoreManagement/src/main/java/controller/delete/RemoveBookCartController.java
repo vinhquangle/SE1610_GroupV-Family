@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Quang Vinh >>>>>>>>>>
 public class RemoveBookCartController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -33,11 +34,37 @@ public class RemoveBookCartController extends HttpServlet {
             if (session != null) {
                 Cart cart = (Cart) session.getAttribute("CART");
                 if (cart != null) {
-                    cart.remove(isbn);
+                    int select = (int) session.getAttribute("SELECT");
+                    select -= cart.getCart().get(isbn).getQuantity();
+                    session.setAttribute("SELECT", select);
+                    request.setAttribute("MODAL", "<div class=\"row\">"
+                            + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
+                            + "                             <p style=\"color: #f58005;\"><b>Đã xóa sản phẩm khỏi giỏ hàng</b></p>\n"
+                            + "                         </div>\n"
+                            + "                     </div>\n"
+                            + "                     <div class=\"row\">\n"
+                            + "                         <div class=\"col-md-3\">\n"
+                            + "                                <div class=\"product-preview\">\n"
+                            + "                                    <img src=\"" + cart.getCart().get(isbn).getImg() + "\"/>\n"
+                            + "                                </div>\n"
+                            + "                            </div>\n"
+                            + "                         <div class=\"col-md-9\">\n"
+                            + "                                <div class=\"product-details\">\n"
+                            + "                                    <h4 class=\"product-name\">" + cart.getCart().get(isbn).getName() + "</h4>\n"
+                            + "                                 </div>"
+                            + "                                   <div>\n"
+                            + "                                        <p class=\"product-price\">Số lượng: " + cart.getCart().get(isbn).getQuantity() + "</p>\n"
+                            + "                                   </div>\n"
+                            + "                                </div>\n"
+                            + "                            </div>");
+                    cart.remove(isbn);//Xóa sản phẩm khỏi giỏ hàng theo ISBN
                     session.setAttribute("CART", cart);
                     //Cap nhat lai so luong san pham
                     Map<String, BookDTO> listSize = cart.getCart();
                     session.setAttribute("SIZE", listSize.size());
+                    if (listSize.size() == 0) {
+                        session.setAttribute("SELECT", 0);
+                    }
                     url = SUCCESS;
                 }
             }
@@ -88,3 +115,4 @@ public class RemoveBookCartController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

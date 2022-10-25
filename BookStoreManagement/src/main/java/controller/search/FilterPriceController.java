@@ -7,8 +7,6 @@ package controller.search;
 
 import dao.BookDAO;
 import dto.BookDTO;
-import dto.CategoryDTO;
-import dto.PublisherDTO;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -21,6 +19,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Hữu Hiếu >>>>>>>>>>
 public class FilterPriceController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -36,13 +35,22 @@ public class FilterPriceController extends HttpServlet {
             request.setAttribute("MAX", max);
             request.setAttribute("MIN", min);
             request.setAttribute("MESS", request.getParameter("mess"));
+            int index = 1;
+            try {
+                index = Integer.parseInt(request.getParameter("index"));
+            } catch (Exception e) {
+                index = 1;
+            }
             BookDAO bookDao = new BookDAO();
             HttpSession session = request.getSession();
-            List<BookDTO> listBook = bookDao.filterByPrice(min,max);
-            if(listBook.size() > 0){
+            session.setAttribute("COUNT_BOOK", bookDao.filterByPrice(min, max, "1").size());//Lấy sản phẩm theo giá cả
+            session.setAttribute("LIST_BOOK_SORT", bookDao.filterByPrice(min, max, "1"));
+            List<BookDTO> listBook = bookDao.filterByPrice9(min, max, index, "1");//Lấy sản phẩm theo giá cả và phân trang
+            if (listBook.size() > 0) {
                 session.setAttribute("LIST_BOOK", listBook);
+                request.setAttribute("CONTROLLER", "FilterPriceController?min=" + min + "&max=" + max + "&mess=" + request.getParameter("mess") + "&");
                 url = SUCCESS;
-            }else {
+            } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");
                 url = SUCCESS;
             }
@@ -93,3 +101,4 @@ public class FilterPriceController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

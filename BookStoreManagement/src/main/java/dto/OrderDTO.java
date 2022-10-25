@@ -14,29 +14,50 @@ public class OrderDTO {
     private String orderID;
     private CustomerDTO customer;
     private StaffDTO staff;
+    private PromotionDTO promotion;
     private double deliveryCost;
     private String date;
     private double total;
+    private String description;
     private String status;
+    private String delete;
 
     public OrderDTO() {
         this.orderID = "";
         this.customer = new CustomerDTO();
         this.staff = new StaffDTO();
+        this.promotion = new PromotionDTO();
         this.deliveryCost = 0;
         this.date = "";
         this.total = 0;
+        this.description = "";
         this.status = "";
+        this.delete = "";
     }
 
-    public OrderDTO(String orderID, CustomerDTO customer, StaffDTO staff, double deliveryCost, String date, double total, String status) {
+    public OrderDTO(String orderID, CustomerDTO customer, StaffDTO staff, PromotionDTO promotion, double deliveryCost, String date, double total, String description, String status, String delete) {
         this.orderID = orderID;
         this.customer = customer;
         this.staff = staff;
+        this.promotion = promotion;
         this.deliveryCost = deliveryCost;
         this.date = date;
         this.total = total;
+        this.description = description;
         this.status = status;
+        this.delete = delete;
+    }
+
+    public PromotionDTO getPromotion() {
+        return promotion;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDelete() {
+        return delete;
     }
 
     public String getOrderID() {
@@ -93,6 +114,18 @@ public class OrderDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPromotion(PromotionDTO promotion) {
+        this.promotion = promotion;
     }
 
 }

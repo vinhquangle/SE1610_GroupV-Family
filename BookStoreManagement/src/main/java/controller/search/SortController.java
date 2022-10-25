@@ -5,8 +5,11 @@
  */
 package controller.search;
 
+import dao.CategoryDAO;
+import dao.PublisherDAO;
 import dto.BookDTO;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+//Quốc Phi >>>>>>>>>>
 public class SortController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
@@ -31,45 +35,77 @@ public class SortController extends HttpServlet {
         String url = ERROR;
         try {
             String sort = request.getParameter("sort");
+            int index = 1;
+            try {
+                index = Integer.parseInt(request.getParameter("index"));
+            } catch (Exception e) {
+                index = 1;
+            }
+            String txtsearch = request.getParameter("searchBook");
+            String cateN = request.getParameter("cateID");
+            String pubN = request.getParameter("pubID");
+            String max = request.getParameter("max");
+            String min = request.getParameter("min");
+            String mes = request.getParameter("mess");
+            CategoryDAO cateDao = new CategoryDAO();
+            PublisherDAO pubDao = new PublisherDAO();
+            if (cateN != "") {
+                request.setAttribute("CATEGORY", cateDao.getCategory(cateN));//Lấy thông tin thể loại
+            } else if (pubN != "") {
+                request.setAttribute("PUBLISHER", pubDao.getPublisher(pubN));//Lấy thông tin nhà xuất bản
+            } else if (max != null && min != null) {
+                request.setAttribute("MAX", max);
+                request.setAttribute("MIN", min);
+                request.setAttribute("MESS", mes);
+            }
             String mess = new String();
             HttpSession session = request.getSession();
-            List<BookDTO> listBook = (List<BookDTO>) session.getAttribute("LIST_BOOK");
+            List<BookDTO> listBook = (List<BookDTO>) session.getAttribute("LIST_BOOK_SORT");
+            List<BookDTO> list = new ArrayList<BookDTO>();
+            int size = listBook.size();//Lấy số lượng từ danh sách sản phẩm
             switch (sort) {
                 case "0":
                     Collections.sort(listBook, new Comparator<BookDTO>() {
                         public int compare(BookDTO o1, BookDTO o2) {
-                            return (int) ((int) o1.getPrice()- o2.getPrice());
+                            return (int) ((int) o1.getPrice() - o2.getPrice());//Sắp xếp tăng dần theo giá 
                         }
                     });
-                    mess ="Price (Ascending - Low To High)";
+                    mess = "Giá bán (Tăng dần - Thấp tới cao)";
                     break;
                 case "1":
                     Collections.sort(listBook, new Comparator<BookDTO>() {
                         public int compare(BookDTO o1, BookDTO o2) {
-                             return (int) ((int) o2.getPrice()- o1.getPrice());
+                            return (int) ((int) o2.getPrice() - o1.getPrice());//Sắp xếp giảm dần theo giá 
                         }
                     });
-                    mess ="Price (Decreasing - High To Low)";
+                    mess = "Giá bán (Giảm dần - Cao tới thấp)";
                     break;
                 case "2":
                     Collections.sort(listBook, new Comparator<BookDTO>() {
                         public int compare(BookDTO o1, BookDTO o2) {
-                            return o1.getName().compareTo(o2.getName());
+                            return o1.getName().compareTo(o2.getName());//Sắp xếp tăng dần theo chữ cái
                         }
                     });
-                    mess ="Title (Alphabet - A to Z)";
+                    mess = "Tiêu đề (Chữ cái - A -> Z)";
                     break;
                 case "3":
                     Collections.sort(listBook, new Comparator<BookDTO>() {
                         public int compare(BookDTO o1, BookDTO o2) {
-                            return o2.getName().compareTo(o1.getName());
+                            return o2.getName().compareTo(o1.getName());//Sắp xếp giảm dần theo chữ cái
                         }
                     });
-                    mess ="Title (Alphabet - Z to A)";
+                    mess = "Tiêu đề (Chữ cái - Z -> A)";
                     break;
             }
-            session.setAttribute("LIST_BOOK", listBook);
+            for (int i = 0; i < 9; i++) {//Sắp xếp sản phẩm theo phân trang
+                int number = (index - 1) * 9 + i;
+                if (number <= (size - 1)) {
+                    list.add(i, listBook.get((index - 1) * 9 + i));
+                }
+            }
+            session.setAttribute("LIST_BOOK", list);
             request.setAttribute("SORT", mess);
+            request.setAttribute("CONTROLLER", "SortController?sort=" + sort + "&searchBook=" + txtsearch + "&cateID=" + cateN + "&pubID=" + pubN + "&max=" + max + "&min=" + min + "&mess=" + mes + "&");
             url = SUCCESS;
         } catch (Exception e) {
             log("Error at SearchBookController: " + e.toString());
@@ -118,3 +154,4 @@ public class SortController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

@@ -16,6 +16,7 @@ public class BookResponseDTO {
     private StaffDTO staff;
     private String date;
     private String status;
+    private String delete;
 
     public BookResponseDTO() {
         this.responseID = "";
@@ -23,14 +24,20 @@ public class BookResponseDTO {
         this.staff = new StaffDTO();
         this.date = "";
         this.status = "";
+        this.delete = "";
     }
 
-    public BookResponseDTO(String responseID, BookRequestDTO request, StaffDTO staff, String date, String status) {
+    public BookResponseDTO(String responseID, BookRequestDTO request, StaffDTO staff, String date, String status, String delete) {
         this.responseID = responseID;
         this.request = request;
         this.staff = staff;
         this.date = date;
         this.status = status;
+        this.delete = delete;
+    }
+
+    public String getDelete() {
+        return delete;
     }
 
     public String getResponseID() {
@@ -71,6 +78,10 @@ public class BookResponseDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
     }
 
 }

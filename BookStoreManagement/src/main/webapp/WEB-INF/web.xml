@@ -68,6 +68,50 @@
         <servlet-name>ManageCustomerController</servlet-name>
         <servlet-class>controller.manage.ManageCustomerController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AuthorizePaymentController</servlet-name>
+        <servlet-class>paypal.AuthorizePaymentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReviewPaymentController</servlet-name>
+        <servlet-class>paypal.ReviewPaymentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExcutePaymentController</servlet-name>
+        <servlet-class>paypal.ExcutePaymentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckoutController</servlet-name>
+        <servlet-class>controller.checkout.CheckoutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MoMoPayment</servlet-name>
+        <servlet-class>momo.MoMoPayment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MoMoResponse</servlet-name>
+        <servlet-class>momo.MoMoResponse</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManagePublisherController</servlet-name>
+        <servlet-class>controller.manage.ManagePublisherController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageCategoryController</servlet-name>
+        <servlet-class>controller.manage.ManageCategoryController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePasswordController</servlet-name>
+        <servlet-class>controller.modify.ChangePasswordController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewProfileController</servlet-name>
+        <servlet-class>controller.profile.ViewProfileController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageStaffController</servlet-name>
+        <servlet-class>controller.manage.ManageStaffController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetController</servlet-name>
         <url-pattern>/GetController</url-pattern>
@@ -135,6 +179,50 @@
     <servlet-mapping>
         <servlet-name>ManageCustomerController</servlet-name>
         <url-pattern>/ManageCustomerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthorizePaymentController</servlet-name>
+        <url-pattern>/AuthorizePaymentController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewPaymentController</servlet-name>
+        <url-pattern>/ReviewPaymentController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExcutePaymentController</servlet-name>
+        <url-pattern>/ExcutePaymentController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckoutController</servlet-name>
+        <url-pattern>/CheckoutController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MoMoPayment</servlet-name>
+        <url-pattern>/MoMoPayment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MoMoResponse</servlet-name>
+        <url-pattern>/MoMoResponse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManagePublisherController</servlet-name>
+        <url-pattern>/ManagePublisherController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageCategoryController</servlet-name>
+        <url-pattern>/ManageCategoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePasswordController</servlet-name>
+        <url-pattern>/ChangePasswordController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewProfileController</servlet-name>
+        <url-pattern>/ViewProfileController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageStaffController</servlet-name>
+        <url-pattern>/ManageStaffController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

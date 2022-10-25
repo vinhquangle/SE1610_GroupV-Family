@@ -9,6 +9,7 @@ package logingoogle;
  *
  * @author Admin
  */
+//Quốc Thịnh >>>>>>>>>>
 public class GooglePojo {
 
     private String id;
@@ -85,3 +86,4 @@ public class GooglePojo {
     }
 
 }
+//<<<<<<<<<<

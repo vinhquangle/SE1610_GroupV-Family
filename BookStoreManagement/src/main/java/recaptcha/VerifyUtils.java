@@ -16,6 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
  *
  * @author Admin
  */
+//Quốc Thịnh >>>>>>>>>>
 public class VerifyUtils {
     public static final String SITE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
     public static final String SECRET_KEY = "6LfxTU4gAAAAAIkr8DBNEbBVW79Sk3IwDcX2Tz9j";
@@ -73,3 +74,4 @@ public class VerifyUtils {
 		}
 	}
 }
+//<<<<<<<<<<

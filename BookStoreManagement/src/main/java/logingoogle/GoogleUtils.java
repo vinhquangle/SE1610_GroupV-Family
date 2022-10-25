@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
  *
  * @author Admin
  */
+//Quốc Thịnh >>>>>>>>>>
 public class GoogleUtils {
     public static String getToken(final String code) throws ClientProtocolException, IOException {
     String response;
@@ -37,3 +38,4 @@ public class GoogleUtils {
     return googlePojo;
   }
 }
+//<<<<<<<<<<

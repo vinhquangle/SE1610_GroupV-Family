@@ -25,6 +25,7 @@ import logingoogle.GoogleUtils;
  *
  * @author Admin
  */
+//Quốc Thịnh >>>>>>>>>>
 public class LoginGoogleController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -66,12 +67,12 @@ public class LoginGoogleController extends HttpServlet {
             CustomerDAO dao = new CustomerDAO();
             CustomerDTO cus = new CustomerDTO(userId, fullname, password, email, address, phone, 0, "1", "0");
             try {
-                if (dao.checkCustomerEmail(email) && !dao.checkCustomerID(userId)) {
+                if (dao.checkCustomerEmail(email) && !dao.checkCustomerID(userId)) {//Kiểm tra id và email trùng lặp 
                     request.setAttribute("ERROR", "Email already in use");
                     RequestDispatcher dis = request.getRequestDispatcher("WEB-INF/JSP/LoginPage/login.jsp");
                     dis.forward(request, response);
                 } else if (!dao.createAccount(cus)) {
-                    cus = dao.checkLogin(userId, password);
+                    cus = dao.checkLogin(userId, password);//Kiểm tra, xác thực tài khoản
                 }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(LoginGoogleController.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,3 +114,4 @@ public class LoginGoogleController extends HttpServlet {
     }// </editor-fold>
 
 }
+//<<<<<<<<<<

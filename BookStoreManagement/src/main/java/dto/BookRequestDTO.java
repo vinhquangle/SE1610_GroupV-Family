@@ -15,19 +15,26 @@ public class BookRequestDTO {
     private StaffDTO staff;
     private String date;
     private String status;
+    private String delete;
 
     public BookRequestDTO() {
         this.requestID = "";
         this.staff = new StaffDTO();
         this.date = "";
         this.status = "";
+        this.delete = "";
     }
 
-    public BookRequestDTO(String requestID, StaffDTO staff, String date, String status) {
+    public BookRequestDTO(String requestID, StaffDTO staff, String date, String status, String delete) {
         this.requestID = requestID;
         this.staff = staff;
         this.date = date;
         this.status = status;
+        this.delete = delete;
+    }
+
+    public String getDelete() {
+        return delete;
     }
 
     public String getRequestID() {
@@ -60,6 +67,10 @@ public class BookRequestDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
     }
 
 }

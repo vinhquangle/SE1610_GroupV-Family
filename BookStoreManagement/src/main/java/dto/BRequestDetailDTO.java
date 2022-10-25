@@ -15,19 +15,33 @@ public class BRequestDetailDTO {
     private BookRequestDTO request;
     private BookDTO isbn;
     private int quantity;
+    private String status;
+    private String delete;
 
     public BRequestDetailDTO() {
         this.requestDetailID = "";
         this.request = new BookRequestDTO();
         this.isbn = new BookDTO();
         this.quantity = 0;
+        this.status = "";
+        this.delete = "";
     }
 
-    public BRequestDetailDTO(String requestDetailID, BookRequestDTO request, BookDTO isbn, int quantity) {
+    public BRequestDetailDTO(String requestDetailID, BookRequestDTO request, BookDTO isbn, int quantity, String status, String delete) {
         this.requestDetailID = requestDetailID;
         this.request = request;
         this.isbn = isbn;
         this.quantity = quantity;
+        this.status = status;
+        this.delete = delete;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getDelete() {
+        return delete;
     }
 
     public String getRequestDetailID() {
@@ -60,6 +74,14 @@ public class BRequestDetailDTO {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
