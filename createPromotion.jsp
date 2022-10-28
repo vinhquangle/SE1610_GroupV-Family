@@ -4,6 +4,8 @@
     Author     : vqphi
 --%>
 
+<%@page import="dto.CustomerDTO"%>
+<%@page import="dao.CustomerDAO"%>
 <%@page import="dto.PromotionDTO"%>
 <%@page import="dao.PromotionDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,11 +15,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Promotion</title>
     </head>
+    <%
+        CustomerDTO loginCustomerDTO = (CustomerDTO)session.getAttribute("LOGIN_USER");
+        if(loginCustomerDTO!=null){
+            String search = (String)request.getParameter("search");
+            if(search==null){
+                search= "";
+            }
+        }
+    %>
     <body>
         <%
             PromotionDTO proDTO = new PromotionDTO();
             String msg = (String)request.getAttribute("CREATE_PROMOTION");
-            String staffID = request.getParameter("StaffID");
+            String staffID = loginCustomerDTO.getCustomerID();
             String dateStart = request.getParameter("DateStart");
             String dateEnd = request.getParameter("DateEnd");
             String description = request.getParameter("Description");
