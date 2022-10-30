@@ -15,6 +15,7 @@
         <title>Customer</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
     </head>
     <body>
         <!-- The Modal -->

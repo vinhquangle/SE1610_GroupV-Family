@@ -14,6 +14,7 @@ public class OrderDetailDTO {
     private String detailID;
     private OrderDTO order;
     private BookDTO isbn;
+    private double price;
     private int quantity;
     private double total;
     private String status;
@@ -22,18 +23,28 @@ public class OrderDetailDTO {
         this.detailID = "";
         this.order = new OrderDTO();
         this.isbn = new BookDTO();
+        this.price = 0;
         this.quantity = 0;
         this.total = 0;
         this.status = "";
     }
 
-    public OrderDetailDTO(String detailID, OrderDTO order, BookDTO isbn, int quantity, double total, String status) {
+    public OrderDetailDTO(String detailID, OrderDTO order, BookDTO isbn, double price, int quantity, double total, String status) {
         this.detailID = detailID;
         this.order = order;
         this.isbn = isbn;
+        this.price = price;
         this.quantity = quantity;
         this.total = total;
         this.status = status;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getStatus() {

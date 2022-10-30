@@ -31,15 +31,19 @@ public class AuthorizePaymentController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             List<BookDTO> listBook = new ArrayList<BookDTO>();
+            String ship = (String) session.getAttribute("SHIP");
             Cart cart = (Cart) session.getAttribute("CART");
             for (BookDTO book : cart.getCart().values()) {
                 listBook.add(book);
             }
             PaymentServices paymentServices = new PaymentServices();
-            String approvalLink = paymentServices.authorizePayment(listBook);
+            String approvalLink = paymentServices.authorizePayment(listBook, ship);
             response.sendRedirect(approvalLink);
         } catch (Exception ex) {
             Logger.getLogger(AuthorizePaymentController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            request.setAttribute("errorMessage", "Invalid Payment Details");
+            request.getRequestDispatcher("WEB-INF/JSP/HomePage/error.jsp").forward(request, response);
         }
     }
 

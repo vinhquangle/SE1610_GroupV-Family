@@ -11,14 +11,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>View Cart Page</title>
+        <title>Cart</title>
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <!-- Bootstrap -->
         <link type="text/css" rel="stylesheet" href="../../CSS/bootstrap.min.css" />
-
         <!-- Font Awesome Icon -->
         <link rel="stylesheet" href="../../CSS/font-awesome.min.css" />
-
         <!-- Custom stlylesheet -->
         <link type="text/css" rel="stylesheet" href="../../CSS/style.css" />
         <link rel="stylesheet" type="text/css" href="../../STYLES/bootstrap4/bootstrap.min.css" />
@@ -220,7 +218,7 @@
                                         function subtract(a) {
                                             var quantity = (Number(document.getElementById(a).value));
                                             if (quantity > 1) {
-                                                quantity -= 1
+                                                quantity -= 1;
                                                 document.getElementById(a).value = quantity;
                                             }
                                         }

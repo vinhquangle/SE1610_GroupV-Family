@@ -15,6 +15,7 @@ import com.paypal.api.payments.PayerInfo;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.PaymentExecution;
 import com.paypal.api.payments.RedirectUrls;
+import com.paypal.api.payments.ShippingAddress;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
@@ -34,10 +35,10 @@ public class PaymentServices {
     private static final String MODE = "sandbox";
     private static final double EXCHANGE_RATE = 24000;
 
-    public String authorizePayment(List<BookDTO> listBook) throws PayPalRESTException {
+    public String authorizePayment(List<BookDTO> listBook, String ship) throws PayPalRESTException {
         Payer payer = getPayerInformation();
         RedirectUrls redirectUrls = getRedirectUrls();
-        List<Transaction> listTransaction = getTransactionInformation(listBook);
+        List<Transaction> listTransaction = getTransactionInformation(listBook,ship);
         Payment requestPayment = new Payment();
         requestPayment.setTransactions(listTransaction)
                 .setRedirectUrls(redirectUrls)
@@ -60,7 +61,7 @@ public class PaymentServices {
         return approvalLink;
     }
 
-    private List<Transaction> getTransactionInformation(List<BookDTO> listBook) {
+    private List<Transaction> getTransactionInformation(List<BookDTO> listBook, String shipP) {
         Transaction transaction = new Transaction();
         ItemList itemList = new ItemList();
         List<Item> items = new ArrayList<Item>();
@@ -74,14 +75,14 @@ public class PaymentServices {
                     .setName(book.getName())
                     .setPrice(String.valueOf(price))
                     .setQuantity(String.valueOf(book.getQuantity()));
-            subTotal += price*book.getQuantity();
+            subTotal += price * book.getQuantity();
             items.add(item);
         }
         Details details = new Details();
-              if (subTotal < 15) {
+        if(shipP.equals("YES") && subTotal < 15){
             ship = 1.00;
-        } else {
-            ship = 0.00;
+        }else if(shipP.equals("NO") || subTotal >= 15){
+             ship = 0.00;
         }
         total = subTotal + ship;
         details.setShipping(String.valueOf(ship));
@@ -102,7 +103,7 @@ public class PaymentServices {
 
     private RedirectUrls getRedirectUrls() {
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("http://localhost:8080/BookStoreManagement/GetController");
+        redirectUrls.setCancelUrl("http://localhost:8080/BookStoreManagement/CheckoutController?action=Checkout");
         redirectUrls.setReturnUrl("http://localhost:8080/BookStoreManagement/ReviewPaymentController");
         return redirectUrls;
     }
@@ -125,10 +126,9 @@ public class PaymentServices {
         payer.setPaymentMethod("paypal");
         PayerInfo payerInfor = new PayerInfo();
         payerInfor.setFirstName("Thịnh")
-                .setLastName("Phạm")
-                .setEmail("thinhphamquoc9999@gmail.com");
+                .setEmail("thinhphamquoc9999@gmail.com")
+                .setShippingAddress(new ShippingAddress("hay"));
         payer.setPayerInfo(payerInfor);
         return payer;
     }
 }
-//<<<<<<<<<<

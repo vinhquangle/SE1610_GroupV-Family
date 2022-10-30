@@ -15,6 +15,9 @@ public class OrderDTO {
     private CustomerDTO customer;
     private StaffDTO staff;
     private PromotionDTO promotion;
+    private String address;
+    private double subtotal;
+    private double discount;
     private double deliveryCost;
     private String date;
     private double total;
@@ -27,6 +30,9 @@ public class OrderDTO {
         this.customer = new CustomerDTO();
         this.staff = new StaffDTO();
         this.promotion = new PromotionDTO();
+        this.subtotal = 0;
+        this.discount = 0;
+        this.address = "";
         this.deliveryCost = 0;
         this.date = "";
         this.total = 0;
@@ -35,17 +41,44 @@ public class OrderDTO {
         this.delete = "";
     }
 
-    public OrderDTO(String orderID, CustomerDTO customer, StaffDTO staff, PromotionDTO promotion, double deliveryCost, String date, double total, String description, String status, String delete) {
+    public OrderDTO(String orderID, CustomerDTO customer, StaffDTO staff, PromotionDTO promotion, String address, double subtotal, double discount, double deliveryCost, String date, double total, String description, String status, String delete) {
         this.orderID = orderID;
         this.customer = customer;
         this.staff = staff;
         this.promotion = promotion;
+        this.address = address;
+        this.subtotal = subtotal;
+        this.discount = discount;
         this.deliveryCost = deliveryCost;
         this.date = date;
         this.total = total;
         this.description = description;
         this.status = status;
         this.delete = delete;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public PromotionDTO getPromotion() {

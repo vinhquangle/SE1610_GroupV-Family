@@ -16,6 +16,12 @@
     
     <dependencies>
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
@@ -134,8 +140,6 @@
                     </execution>
                 </executions>
             </plugin>
-           
         </plugins>
     </build>
-
 </project>

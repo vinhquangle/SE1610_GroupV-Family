@@ -19,8 +19,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterPriceController.java
 //Hữu Hiếu >>>>>>>>>>
 public class FilterPriceController extends HttpServlet {
+========
+//Quốc Thịnh >>>>>>>>>>
+public class GetController extends HttpServlet {
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/load/GetController.java
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
     private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
@@ -30,11 +35,14 @@ public class FilterPriceController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterPriceController.java
             String min = request.getParameter("min");
             String max = request.getParameter("max");
             request.setAttribute("MAX", max);
             request.setAttribute("MIN", min);
             request.setAttribute("MESS", request.getParameter("mess"));
+========
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/load/GetController.java
             int index = 1;
             try {
                 index = Integer.parseInt(request.getParameter("index"));
@@ -42,6 +50,7 @@ public class FilterPriceController extends HttpServlet {
                 index = 1;
             }
             BookDAO bookDao = new BookDAO();
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterPriceController.java
             HttpSession session = request.getSession();
             session.setAttribute("COUNT_BOOK", bookDao.filterByPrice(min, max, "1").size());//Lấy sản phẩm theo giá cả
             session.setAttribute("LIST_BOOK_SORT", bookDao.filterByPrice(min, max, "1"));
@@ -53,6 +62,23 @@ public class FilterPriceController extends HttpServlet {
             } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");
                 url = SUCCESS;
+========
+            CategoryDAO cateDao = new CategoryDAO();
+            PublisherDAO pubDao = new PublisherDAO();
+            List<CategoryDTO> listCate = cateDao.getListCategory("1"); //Lấy tất cả thể loại
+            List<PublisherDTO> listPub = pubDao.getListPublisher("1"); //Lấy tất cả NXB
+            List<BookDTO> listBook = bookDao.getListBook(index, "1"); //Lấy thông tin sách cho phân trang số 1
+            int count = bookDao.countBook("1");//Đếm tổng số lượng sản phẩm trong database
+            url = SUCCESS;
+            if (listBook.size() > 0) {
+                HttpSession session = request.getSession();
+                session.setAttribute("LIST_BOOK", listBook);
+                session.setAttribute("LIST_PUB", listPub);
+                session.setAttribute("LIST_CATE", listCate);
+                session.setAttribute("COUNT_BOOK", count);
+                session.setAttribute("LIST_BOOK_SORT", bookDao.getAllBook("1"));
+                request.setAttribute("CONTROLLER", "GetController?");
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/load/GetController.java
             }
         } catch (Exception e) {
             log("Error at CategoryController: " + e.toString());
@@ -101,4 +127,8 @@ public class FilterPriceController extends HttpServlet {
     }// </editor-fold>
 
 }
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterPriceController.java
 //<<<<<<<<<<
+========
+//<<<<<<<<<<
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/load/GetController.java

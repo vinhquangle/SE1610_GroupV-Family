@@ -17,28 +17,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Header Page</title>
+        <title>Header</title>
         <meta charset="utf-8">
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <!-- Google font -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
         <!-- Bootstrap -->
         <link type="text/css" rel="stylesheet" href="CSS/bootstrap.min.css" />
-
         <!-- Slick -->
         <link type="text/css" rel="stylesheet" href="CSS/slick.css" />
         <link type="text/css" rel="stylesheet" href="CSS/slick-theme.css" />
-
         <!-- nouislider -->
         <link type="text/css" rel="stylesheet" href="CSS/nouislider.min.css" />
-
         <!-- Font Awesome Icon -->
         <link rel="stylesheet" href="CSS/font-awesome.min.css" />
-
         <!-- Custom stlylesheet -->
         <link type="text/css" rel="stylesheet" href="CSS/stylefix.css" />
-
         <link rel="stylesheet" type="text/css" href="STYLES/bootstrap4/bootstrap.min.css" />
         <link href="PLUGINS/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="STYLES/main_styles.css" />
@@ -102,6 +96,7 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
         <!-- Header -->
         <header style="z-index: 50;" class="header trans_300">
             <!-- Top Navigation -->
@@ -131,11 +126,6 @@
                                         }
                                         if (staff == null && cus == null) {
                                     %>
-                                    <li class="currency">
-                                        <a href="LoadManageController?action=manage">
-                                            Quản lí										
-                                        </a>
-                                    </li>
                                     <li class="currency">
                                         <a href="#">
                                             Chào mừng đến với Phương Nam										
@@ -171,10 +161,14 @@
                                                 <%
                                                 } else {
                                                 %>
-
+                                            <li class="currency">
+                                                <a href="LoadManageController?action=manage">
+                                                    Quản lí										
+                                                </a>
+                                            </li>
                                             <li class="currency">
                                                 <a href="#">
-                                                    Chào mừng <%= staff.getName() %>										
+                                                    Chào mừng <%= staff.getName()%>										
                                                 </a>
                                             </li>
                                             <li class="account">
@@ -203,7 +197,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12 text-right">
                                                         <div class="logo_container">
-                                                            <a href="GetController?">Phương<span>Nam</span></a>
+                                                            <a style="font-size: 44px;" href="GetController?">Phương<span>Nam</span></a>
                                                         </div>
                                                         <nav class="navbar">
                                                             <!-- SEARCH BAR -->
@@ -218,20 +212,22 @@
                                                                         float total = 0;
                                                                     %>
                                                                     <form action="SearchBookController" method="GET">
-                                                                        <input class="input" type="text" value="<%= search%>" name="searchBook" placeholder="Tìm sách theo tiêu đề, tác giả hoặc ISBN" style="width: 360px">
+                                                                        <input class="input" type="text" value="<%= search%>" name="searchBook" placeholder="Tìm sách theo tiêu đề, tác giả hoặc ISBN" style="width: 360px;">
                                                                         <input class="search-btn" type="submit" name="button" value="Tìm kiếm" style="width: 100px"/>
                                                                     </form>
                                                                 </div>
                                                             </div>
                                                             <!-- /SEARCH BAR -->
-
+                                                            <%
+                                                                if (staff == null) {
+                                                            %>
                                                             <!-- ACCOUNT -->
                                                             <div class="clearfix">
                                                                 <div class="header-ctn">
                                                                     <!-- Cart -->
                                                                     <div class="dropdown">
-                                                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="cursor: pointer">
-                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="cursor: pointer;">
+                                                                            <i class="fa fa-shopping-cart fa-3x"></i>
                                                                             <span>Giỏ hàng</span>
 
                                                                             <%
@@ -305,6 +301,17 @@
                                                                 </div> 
                                                             </div>
                                                             <!-- /ACCOUNT -->
+                                                            <%
+                                                            } else {
+                                                            %>
+                                                            <a style="text-decoration: none;" href="CreateCartController?action=Create">
+                                                                <div style="text-align: center; margin-top: 20px; cursor: pointer; text-decoration: none;">
+                                                                    <i style="color: #1e1e27" class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
+                                                                    <p style="color: #1e1e27"><b>Tạo giỏ hàng</b></p>
+                                                                </div></a>
+                                                                <%
+                                                                    }
+                                                                %>
                                                         </nav>
                                                     </div>
                                                 </div>

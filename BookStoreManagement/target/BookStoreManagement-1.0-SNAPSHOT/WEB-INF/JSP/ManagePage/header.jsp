@@ -10,7 +10,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Header Page</title>
+        <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
+        <title>Header</title>
         <!-- Google Fonts
                     ============================================ -->
         <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet">
@@ -40,7 +41,14 @@
                     ============================================ -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     </head> 
-    <body style="background-color: transparent;">    
+    <body style="background-color: transparent;">   
+        <%
+            StaffDTO staff = new StaffDTO();
+            try {
+                staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
+            } catch (Exception e) {
+            }
+        %>
         <%@include file = "sideBoard.jsp" %>
         <!-- Start Welcome area -->
         <div class="all-content-wrapper" >
@@ -72,7 +80,7 @@
                                                     <li class="nav-item">
                                                         <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
                                                             <i class="fa fa-user adminpro-user-rounded header-riht-inf" aria-hidden="true"></i>
-                                                            <span class="admin-name">Name</span>
+                                                            <span class="admin-name"><%= staff.getName()%></span>
                                                         </a>
                                                         <ul style="background-color: white;" role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">     
                                                             <style>
@@ -83,7 +91,7 @@
                                                                     color: white;
                                                                 }
                                                             </style>
-                                                            <li><a id="out" href="LogoutController?staffID="><span class="fa fa-lock author-log-ic out"></span><b>Đăng xuất</b></a></li>
+                                                            <li><a id="out" href="LogoutController?staffID=<%= staff.getStaffID()%>"><span class="fa fa-lock author-log-ic out"></span><b>Đăng xuất</b></a></li>
                                                         </ul>
                                                     </li>
                                                 </ul>

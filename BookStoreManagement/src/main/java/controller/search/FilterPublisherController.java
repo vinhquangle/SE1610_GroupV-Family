@@ -20,8 +20,13 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterPublisherController.java
 //Hữu Hiếu >>>>>>>>>>
 public class FilterPublisherController extends HttpServlet {
+========
+//Quốc Thịnh >>>>>>>>>>
+public class LoadManageController extends HttpServlet {
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/load/LoadManageController.java
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
     private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
@@ -31,6 +36,7 @@ public class FilterPublisherController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterPublisherController.java
             String pubID = request.getParameter("pubID");
             int index = 1;
             try {
@@ -55,6 +61,16 @@ public class FilterPublisherController extends HttpServlet {
             }
         } catch (Exception e) {
             log("Error at PublisherController: " + e.toString());
+========
+            HttpSession session = request.getSession();
+            StaffDTO staff = new StaffDTO();
+            staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
+            if (staff == null) {
+                url = ERROR;
+            }
+        } catch (Exception e) {
+            url = ERROR;
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/load/LoadManageController.java
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -20,26 +20,22 @@
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        <title>Product Details Page</title>
+        <title>Details</title>
     </head>
     <body>
         <%@include file="../HeaderFooterPage/header.jsp" %>
         <%            BookDTO book = (BookDTO) session.getAttribute("BOOK_DETAIL");
-            List<ReviewDetailDTO> listReviewDetail = (List<ReviewDetailDTO>) session.getAttribute("LIST_REVIEW_DETAIL");
-            List<ReviewDetailDTO> listReviewBook = new ArrayList<ReviewDetailDTO>();
+            List<ReviewDetailDTO> listReviewBook = (List<ReviewDetailDTO>) session.getAttribute("LIST_REVIEW_DETAIL");
             List<BookDTO> sameCate = (List<BookDTO>) session.getAttribute("SAME_CATE");
             Locale localeVN = new Locale("vi", "VN");
             NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
             String price = currencyVN.format(book.getPrice());
-            for (ReviewDetailDTO reviewDetailDTO : listReviewDetail) {
-                if (reviewDetailDTO.getReview().getReviewID().equals(book.getReview().getReviewID())) {
-                    listReviewBook.add(reviewDetailDTO);
-                }
-            }
-            if (listReviewBook.isEmpty()) {
-                listReviewBook = new ArrayList<ReviewDetailDTO>();
-            }
         %>
+        <script>
+            $(window).on('load', function () {
+                loadReview('',<%= book.getReview().getReviewID()%>);
+            });
+        </script>
         <!-- BREADCRUMB -->
         <div id="breadcrumb" class="section" style="margin-top: 180px; ">
             <!-- container -->
@@ -173,7 +169,6 @@
                                     var charCode = (evt.which) ? evt.which : event.keyCode;
                                     if ((charCode < 48 || charCode > 57))
                                         return false;
-
                                     return true;
                                 }
 
@@ -205,7 +200,11 @@
                                 <div id="tab1" class="tab-pane fade in active">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p> <%= book.getDescription()%></p>
+                                            <p>
+                                                <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                                <%= book.getDescription()%>
+                                                <i class="fa fa-quote-right" aria-hidden="true"></i>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -354,60 +353,155 @@
                                         <!-- Reviews -->
                                         <div class="col-md-6">
                                             <div id="reviews">
-                                                <%
-                                                    for (ReviewDetailDTO reviewDetailDTO : listReviewBook) {
-                                                        int start = (int) reviewDetailDTO.getRate();
-                                                        int startEmpty = 5 - start;
-                                                %>
-                                                <ul class="reviews">
-                                                    <li>
-                                                        <div class="review-heading">
-                                                            <h5 class="name"><%= reviewDetailDTO.getCustomer().getName()%></h5>
-                                                            <p class="date"><%= reviewDetailDTO.getDate()%></p>
-                                                            <div class="review-rating">
-                                                                <%
-                                                                    for (int i = 0; i < start; i++) {
-                                                                %>
-                                                                <i class="fa fa-star"></i>
-                                                                <%
-                                                                    }
-                                                                %>
-                                                                <%
-                                                                    for (int i = 0; i < startEmpty; i++) {
-                                                                %>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <%
-                                                                    }
-                                                                %>
-                                                            </div>
-                                                        </div>
-                                                        <div class="review-body">
-                                                            <p><%= reviewDetailDTO.getDescription()%></p>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <%
-                                                    }
-                                                %>
-                                                <ul class="reviews-pagination">
-                                                    <li class="active">1</li>
-                                                    <li><a href="#">2</a></li>
-                                                    <li><a href="#">3</a></li>
-                                                    <li><a href="#">4</a></li>
-                                                    <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                                </ul>
                                             </div>
                                         </div>
+                                        <script>
+                                            var count = 0;
+                                            function show(a) {
+                                                if (count === 0) {
+                                                    document.getElementById(a).style.display = "inline-block";
+                                                    count++;
+                                                } else if (count > 0) {
+                                                    document.getElementById(a).style.display = "none";
+                                                    count = 0;
+                                                }
+                                            }
+                                            function loadReview(index, reviewId, use, reviewDetailID) {
+                                                console.log(reviewId);
+                                                document.getElementById("reviews").innerHTML = "";
+                                                if (index === "") {
+                                                    index = "1";
+                                                }
+                                                $.ajax({
+                                                    url: "/BookStoreManagement/LoadReviewController",
+                                                    type: "post", //send it through get method
+                                                    data: {
+                                                        index: index,
+                                                        reviewId: reviewId,
+                                                        use: use,
+                                                        reviewDetailID: reviewDetailID
+                                                    },
+                                                    success: function (data) {
+                                                        var row = document.getElementById("reviews");
+                                                        row.innerHTML += data;
+                                                        document.getElementById(index).classList.add("active");
+                                                        for (var i = 0; i < document.getElementsByClassName("tagA").length; i++) {
+                                                            document.getElementsByClassName("tagA")[i].style.display = "none";
+                                                        }
+                                                    },
+                                                    error: function (xhr) {
+                                                        //Do Something to handle error
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                        <style>
+                                            .pagination {
+                                                display: inline-block;
+                                            }
+
+                                            .pagination a {
+                                                color: black;
+                                                float: left;
+                                                padding: 8px 16px;
+                                                text-decoration: none;
+                                            }
+
+                                            .pagination a.active {
+                                                background-color: #15161d;
+                                                color: white;
+                                            }
+
+                                            .pagination a:hover:not(.active) {background-color: #ddd;}
+                                        </style>
                                         <!-- /Reviews -->
+                                        <%
+                                            ReviewDetailDTO review = new ReviewDetailDTO();
+                                            if (staff == null) {
+                                        %>
                                         <!-- Review Form -->
                                         <div class="col-md-3">
                                             <div id="review-form">
-                                                <form class="review-form">
-                                                    <input class="input" type="text" placeholder="Your Name">
-                                                    <input class="input" type="email" placeholder="Your Email">
-                                                    <textarea class="input" placeholder="Your Review"></textarea>
+                                                <form style="text-align: center;" action="AddReviewController" method="POST" class="review-form">
+                                                    <input hidden="" name="reviewID" value="<%= book.getReview().getReviewID()%>">
+                                                    <input hidden="" name="isbn" value="<%= book.getIsbn()%>">                                                    
+                                                    <%
+                                                        boolean check = false;
+                                                        if (cus != null) {
+                                                    %>
+                                                    <input readonly="" class="input" type="text" placeholder="Tên của bạn" value="<%= cus.getName()%>">
+                                                    <input readonly="" class="input" type="email" placeholder="Địa chỉ email của bạn" value="<%= cus.getEmail()%>">
+                                                    <% for (ReviewDetailDTO reviewDetailDTO : listReviewBook) {
+                                                            if (reviewDetailDTO.getCustomer().getCustomerID().equals(cus.getCustomerID())) {
+                                                                review = reviewDetailDTO;
+                                                                check = true;
+                                                            }
+                                                        }
+                                                        if (check) {
+                                                            double star = review.getRate();
+                                                            double noStar = 5 - star;
+                                                            if (review.getDescription() == null) {
+                                                                review.setDescription("");
+                                                            }
+                                                    %>
+                                                    <textarea id="review" readonly="" name="review" class="input" placeholder="Phần phê bình"><%= review.getDescription()%></textarea>
                                                     <div class="input-rating">
-                                                        <span>Your Rating: </span>
+                                                        <span>Đánh giá: </span>
+                                                        <div id="starsed" class="stars">
+                                                            <%
+                                                                for (int i = 0; i < star; i++) {
+                                                            %>
+                                                            <i style="color: #d10024" class="fa fa-star"></i>
+                                                            <%
+                                                                }
+                                                            %>
+                                                            <%
+                                                                for (int i = 0; i < noStar; i++) {
+                                                            %>
+                                                            <i style="color: #e4e8f1" class="fa fa-star-o"></i>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </div>
+                                                        <input hidden="" name="reviewDetailID" value="<%= review.getReviewDetailID()%>">
+                                                        <div id="stars" class="stars">
+                                                            <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
+                                                            <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
+                                                            <input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
+                                                            <input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
+                                                            <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" onclick="edit()" class="primary-btn" id="edite">Chỉnh sửa</button>
+                                                    <button name="action" value="Edit" class="primary-btn" id="save">Lưu</button>
+                                                    <style>
+                                                        #save{
+                                                            display: none;
+                                                        }
+                                                        #stars{
+                                                            display: none;
+                                                        }
+                                                    </style>
+                                                    <script>
+                                                        function edit() {
+                                                            document.getElementById("review").readOnly = false;
+                                                            document.getElementById("review").style.border = "2px solid black";
+                                                            document.getElementById("save").style.display = "inline-block";
+                                                            document.getElementById("stars").style.display = "inline-block";
+                                                            document.getElementById("edite").style.display = "none";
+                                                            document.getElementById("starsed").style.display = "none";
+                                                        }
+                                                    </script>
+                                                    <%
+                                                    } else {
+                                                        String reviews = request.getParameter("review");
+                                                        if (reviews == null) {
+                                                            reviews = "";
+                                                        }
+                                                    %>
+                                                    <textarea name="review" class="input" placeholder="Phần phê bình"><%= reviews%></textarea>
+                                                    <div class="input-rating">
+                                                        <span>Đánh giá: </span>
                                                         <div class="stars">
                                                             <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
                                                             <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
@@ -416,11 +510,22 @@
                                                             <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
                                                         </div>
                                                     </div>
-                                                    <button class="primary-btn">Submit</button>
+                                                    <button name="action" value="Add" class="primary-btn">Tạo đánh giá</button>
+                                                    <%
+                                                        }
+                                                    } else if (cus == null) {
+                                                    %>
+                                                    <button name="action" value="Add" class="primary-btn">Tạo đánh giá</button>
+                                                    <%
+                                                        }
+                                                    %>
                                                 </form>
                                             </div>
                                         </div>
                                         <!-- /Review Form -->
+                                        <%
+                                            }
+                                        %>
                                     </div>
                                 </div>
                                 <!-- /tab3  -->

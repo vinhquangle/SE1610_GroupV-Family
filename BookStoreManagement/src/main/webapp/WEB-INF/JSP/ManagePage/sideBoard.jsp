@@ -4,12 +4,14 @@
     Author     : PC
 --%>
 
+<%@page import="dto.StaffDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>SideBoard Page</title>
+        <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
+        <title>SideBoard</title>
         <!-- Google Fonts
                     ============================================ -->
         <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet">
@@ -40,11 +42,12 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
+        <%
+            //        StaffDTO staff = new StaffDTO();
+        %>
         <div class="left-sidebar-pro">
             <nav id="sidebar" class="">
                 <div class="sidebar-header">
-                    <a href="index.html"><img class="main-logo" src="img/logo/logo.png" alt="" /></a>
-                    <strong><img src="img/logo/logosn.png" alt="" /></strong>
                 </div>
                 <div class="left-custom-menu-adp-wrap comment-scrollbar">
                     <nav class="sidebar-nav left-sidebar-menu-pro">
@@ -55,7 +58,7 @@
                                     <span style="font-size: 14px;" class="mini-click-non">Quản lí sách</span></a>
                                 <ul class="submenu-angle" aria-expanded="false">
                                     <li><a onclick="load('ManageBookController', '')" title="Book" href="#"><i class="fa fa-book sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Sách</span></a></li>    
-                                    <li><a onclick="load('ManageBookController')" title="Book Requesting" href="#"><i class="fa fa-heart-o sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Yêu cầu nhập sách</span></a></li>
+                                    <li><a onclick="loadRequest('ManageRequestController','','')" title="Book Requesting" href="#"><i class="fa fa-heart-o sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Yêu cầu nhập sách</span></a></li>
                                     <li><a onclick="load('ManageBookController')" title="Book Responding" href="#"><i class="fa fa-level-down sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Phản hồi nhập sách</span></a></li>
                                 </ul>
                             </li>
@@ -65,8 +68,14 @@
                                     <span style="font-size: 14px;"  class="mini-click-non">Quản lí tài khoản</span>
                                 </a>
                                 <ul class="submenu-angle" aria-expanded="true">
-                                    <li><a onclick="loadCus('ManageCustomerController','')" title="Customer" href="#"><i class="fa fa-user sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Khách hàng</span></a></li>
-                                    <li><a onclick="loadStaff('ManageStaffController','')" title="Staff and Deliverer" href="#"><i class="fa fa-male sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Nhân viên</span></a></li>                              
+                                    <li><a onclick="loadCus('ManageCustomerController', '')" title="Customer" href="#"><i class="fa fa-user sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Khách hàng</span></a></li>
+                                        <%
+                                            if (staff.getRole().equals("Admin")) {
+                                        %>
+                                    <li><a onclick="loadStaff('ManageStaffController', '')" title="Staff and Deliverer" href="#"><i class="fa fa-male sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Nhân viên</span></a></li>                              
+                                        <%
+                                            }
+                                        %>
                                 </ul>
                             </li>                          
                             <li>
@@ -74,9 +83,16 @@
                                     <i class="fa big-icon fa-shopping-cart icon-wrap"></i>
                                     <span style="font-size: 14px;" class="mini-click-non">Quản lí đơn hàng</span></a>
                                 <ul class="submenu-angle" aria-expanded="false">
-                                    <li><a onclick="load('ManageCustomerController')" title="Completed" href="#"><i class="fa fa-check sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Hoàn thành</span></a></li>                                
-                                    <li><a onclick="load('ManageCustomerController')" title="On process" href="#"><i class="fa fa-location-arrow sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Đang tiến hành</span></a></li>
-                                    <li><a onclick="load('ManageCustomerController')" title="Cancelled" href="#"><i class="fa fa-ban sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Hủy bỏ</span></a></li>
+                                    <%
+                                        if (staff.getRole().equals("Deliverer")) {
+                                    %>
+                                    <li><a onclick="loadOrder('ManageOrderController', '', 'ship')" title="Cancelled" href="#"><i class="fa fa-truck sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Đơn hàng của tôi</span></a></li>
+                                        <%
+                                            }
+                                        %>
+                                    <li><a onclick="loadOrder('ManageOrderController', '', '1')" title="Completed" href="#"><i class="fa fa-check sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Hoàn thành</span></a></li>                                
+                                    <li><a onclick="loadOrder('ManageOrderController', '', '0')" title="On process" href="#"><i class="fa fa-location-arrow sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Đang tiến hành</span></a></li>
+                                    <li><a onclick="loadOrder('ManageOrderController', '', '-1')" title="Cancelled" href="#"><i class="fa fa-ban sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Hủy bỏ</span></a></li>
                                 </ul>
                             </li>
                             <li>
@@ -100,17 +116,23 @@
                                     <i class="fa big-icon fa-bullhorn icon-wrap"></i>
                                     <span style="font-size: 14px;" class="mini-click-non">Quản lí khuyến mãi</span></a>
                                 <ul class="submenu-angle" aria-expanded="false">
-                                    <li><a title="Promotion" href="#"><i class="fa fa-bullhorn sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Khuyến mãi</span></a></li>                                                                    
+                                    <li><a onclick="loadPromotion('ManagePromotionController', '')" title="Promotion" href="#"><i class="fa fa-bullhorn sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Khuyến mãi</span></a></li>                                                                    
                                 </ul>
                             </li>
+                            <%
+                                if (staff.getRole().equals("Admin")) {
+                            %>
                             <li>
                                 <a class="has-arrow" href="#" aria-expanded="false">
                                     <i class="fa big-icon fa-credit-card-alt icon-wrap"></i>
                                     <span style="font-size: 14px;" class="mini-click-non">Quản lí doanh thu</span></a>
                                 <ul class="submenu-angle" aria-expanded="false">
-                                    <li><a onclick="load('ManageCustomerController')" title="Revenue" href="#"><i class="fa fa-money sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Doanh thu</span></a></li>                                                                    
+                                    <li><a onclick="loadRevenue('ManageRevenueController')" title="Revenue" href="#"><i class="fa fa-money sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Doanh thu</span></a></li>                                                                    
                                 </ul>
                             </li>
+                            <%
+                                }
+                            %>
                         </ul>
                     </nav>
                 </div>

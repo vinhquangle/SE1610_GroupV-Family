@@ -413,7 +413,7 @@ public class ManageCustomerController extends HttpServlet {
                     + "                            </h5>"
                     + "                                <button style=\"border: none; color: white; background-color: #009933;\" type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#myModal\">\n"
                     + "                                    <img style=\" height: 20px; width: 20px;\" src=\"IMG/plus.png\"/>\n"
-                    + "                                    <b>Thêm tài khoản nhân viên</b>\n"
+                    + "                                    <b>Thêm tài khoản khách hàng</b>\n"
                     + "                                </button>\n"
                     + "                            </div>\n");
             if (listCust.size() <= 0) {
@@ -456,7 +456,8 @@ public class ManageCustomerController extends HttpServlet {
                     out.println("                              <td><i style=\"color: red;\" class=\"fa fa-times\" aria-hidden=\"true\"></i><input readonly=\"\" style=\"width: 30px; color: red; border: none;\" type=\"hidden\" value=\"" + delete + "\"/></td>\n");
                 }
                 out.println("                        <td>\n"
-                        + "                                        <button id=\"edit\" onclick=\"updateCus('ManageCustomerController?index=" + index + "','" + search + "','" + customerDTO.getCustomerID() + "'," + index + ",'load')\" data-toggle=\"tooltip\" title=\"Edit\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
+
+                        + "                                        <button id=\"edit\" onclick=\"updateCus('ManageCustomerController?index=" + index + "','" + search + "','" + customerDTO.getCustomerID() + "'," + index + ",'load')\" data-toggle=\"tooltip\" title=\"Chỉnh sửa\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
                         + "                        </td>\n"
                         + "                        \n"
                         + "                </tr>\n");

@@ -5,6 +5,7 @@
  */
 package controller.login;
 
+import aes.MyAES;
 import dao.CustomerDAO;
 import dto.CustomerDTO;
 import java.io.IOException;
@@ -65,14 +66,26 @@ public class LoginGoogleController extends HttpServlet {
             String address = new String();
             String password = googlePojo.getId();
             CustomerDAO dao = new CustomerDAO();
-            CustomerDTO cus = new CustomerDTO(userId, fullname, password, email, address, phone, 0, "1", "0");
+            MyAES myCipher = new MyAES("1", MyAES.AES_192);
+            String AES_ecryptedStr = myCipher.AES_encrypt(password);
+            CustomerDTO cus = new CustomerDTO(userId, fullname, AES_ecryptedStr, email, address, phone, 0, "1", "0");
             try {
-                if (dao.checkCustomerEmail(email) && !dao.checkCustomerID(userId)) {//Kiểm tra id và email trùng lặp 
-                    request.setAttribute("ERROR", "Email already in use");
-                    RequestDispatcher dis = request.getRequestDispatcher("WEB-INF/JSP/LoginPage/login.jsp");
-                    dis.forward(request, response);
+                if (dao.checkCustomerEmail(email)) {//Kiểm tra id và email trùng lặp 
+                    if (!dao.checkCustomerID(userId)) {
+                        request.setAttribute("ERROR", "Email already in use");
+                        RequestDispatcher dis = request.getRequestDispatcher("WEB-INF/JSP/LoginPage/login.jsp");
+                        dis.forward(request, response);
+                    } else if (dao.checkCustomerID(userId)) {
+                        if (dao.updateStatusOnline(userId)) {
+                            cus.setStatus("1");
+                        }
+                        cus = dao.checkLogin(userId, AES_ecryptedStr);//Kiểm tra, xác thực tài khoản
+                    }
                 } else if (!dao.createAccount(cus)) {
-                    cus = dao.checkLogin(userId, password);//Kiểm tra, xác thực tài khoản
+                    if (dao.updateStatusOnline(userId)) {
+                        cus.setStatus("1");
+                    }
+                    cus = dao.checkLogin(userId, AES_ecryptedStr);//Kiểm tra, xác thực tài khoản
                 }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(LoginGoogleController.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,7 +96,7 @@ public class LoginGoogleController extends HttpServlet {
             } finally {
                 HttpSession session = request.getSession();
                 session.setAttribute("LOGIN_CUS", cus);
-                RequestDispatcher dis = request.getRequestDispatcher("WEB-INF/JSP/HomePage/homePage.jsp");
+                RequestDispatcher dis = request.getRequestDispatcher("GetController");
                 dis.forward(request, response);
             }
         }
@@ -114,4 +127,3 @@ public class LoginGoogleController extends HttpServlet {
     }// </editor-fold>
 
 }
-//<<<<<<<<<<

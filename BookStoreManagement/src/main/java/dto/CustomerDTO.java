@@ -117,6 +117,4 @@ public class CustomerDTO {
     public void setDelete(String delete) {
         this.delete = delete;
     }
-
 }
-

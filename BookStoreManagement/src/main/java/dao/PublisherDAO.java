@@ -19,14 +19,9 @@ import utilities.DBUtils;
  * @author Administrator
  */
 public class PublisherDAO {
-<<<<<<< HEAD:BookStoreManagement/src/main/java/dao/PublisherDAO.java
 
     private static final String PUBLISHER = "SELECT publisherID, name, [status] FROM tblPublisher WHERE [status] LIKE ?";
     private static final String GET_PUB = "SELECT publisherID, name, [status] FROM tblPublisher WHERE publisherID LIKE ? OR name LIKE ?";
-=======
-    private static final String PUBLISHER = "SELECT publisherID, name, [status] FROM tblPublisher WHERE [status] LIKE ?";
-    private static final String GET_PUB = "SELECT publisherID, name, [status] FROM tblPublisher WHERE publisherID LIKE ? OR name LIKE ?"; 
->>>>>>> Quang-Vinh-Branch:PublisherDAO.java
     private static final String GET_PUB_ID = "SELECT publisherID, name, [status] FROM tblPublisher WHERE publisherID LIKE ?";
     private static final String SEARCH_PUB = "SELECT publisherID, Name, [status]\n"
             + "FROM  tblPublisher\n"
@@ -47,13 +42,8 @@ public class PublisherDAO {
     private static final String CREATE = "INSERT INTO tblPublisher(publisherID, name, [status]) VALUES (?,?,?)";
     private static final String CHECK_ID = "SELECT publisherID FROM tblPublisher WHERE publisherID=?";
     private static final String CHECK_NAME = "SELECT name FROM tblPublisher WHERE name LIKE ?";
-<<<<<<< HEAD:BookStoreManagement/src/main/java/dao/PublisherDAO.java
-
-=======
-    
-    
     //Ham nay dung de lay list Publisher
->>>>>>> Quang-Vinh-Branch:PublisherDAO.java
+
     public List<PublisherDTO> getListPublisher(String st) throws SQLException {
         List<PublisherDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -87,12 +77,6 @@ public class PublisherDAO {
         }
         return list;
     }
-<<<<<<< HEAD:BookStoreManagement/src/main/java/dao/PublisherDAO.java
-    //Ham nay dung de lay publisher theo ID - Quang Vinh
-=======
-
-//Ham nay dung de lay publisher theo ID - Quang Vinh
->>>>>>> Quang-Vinh-Branch:PublisherDAO.java
 
     public PublisherDTO getPublisherByID(String pubB) throws SQLException {
         PublisherDTO pub = new PublisherDTO();
@@ -429,9 +413,4 @@ public class PublisherDAO {
         }
         return check;
     }
-<<<<<<< HEAD:BookStoreManagement/src/main/java/dao/PublisherDAO.java
-=======
-
-    
->>>>>>> Quang-Vinh-Branch:PublisherDAO.java
 }

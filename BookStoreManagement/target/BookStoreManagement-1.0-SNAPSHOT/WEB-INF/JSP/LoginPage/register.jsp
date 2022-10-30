@@ -10,7 +10,7 @@
 <html style="background-image: url(https://cdn.pixabay.com/photo/2016/02/16/21/07/books-1204029_960_720.jpg)">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Register Page</title>
+        <title>Register</title>
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <!-- Google font -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -21,10 +21,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">        
         <!-- nouislider -->
         <link type="text/css" rel="stylesheet" href="CSS/nouislider.min.css"/>
-
         <!-- Font Awesome Icon -->
         <link rel="stylesheet" href="CSS/font-awesome.min.css">
-
         <!-- Custom stlylesheet -->
         <link type="text/css" rel="stylesheet" href="CSS/style.css"/>
         <link type="text/css" rel="stylesheet" href="CSS/styleCreate.css"/>
@@ -217,49 +215,49 @@
                     <i id="b" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="e" onfocus="change('email', 'b')" onblur="change1('email', 'e', 'b')" style="border: 1px solid black; margin: auto;" class="form-control" type="text" name="email" maxlength="50" value="<%= email%>">
                     <label id="email" style="color: #666666;" class="form-label" for="form12" >Địa chỉ Email</label>
-                    <p style="color: #cc0000;"><%=cusError.getEmailError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getEmailError()%></p>
                 </div>
                 <div id="content"></div>
                 <div class="form-outline" style="display: inline-block; width: 22rem;">
                     <i id="c" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="a" onfocus="change('acc', 'c')" onblur="change1('acc', 'a', 'c')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="customerID" value="<%= customerID%>">
                     <label id="acc" style="color: #666666;" class="form-label" for="form11" >Tài khoản</label>
-                    <p style="color: #cc0000;"><%=cusError.getCustomerIDError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getCustomerIDError()%></p>
                 </div>
                 <div class="form-outline" style="display: inline-block; width: 22rem;">
                     <i id="f" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="n" onfocus="change('name', 'f')" onblur="change1('name', 'n', 'f')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="fullName"value="<%= fullName%>">
                     <label id="name" style="color: #666666;" class="form-label" for="form11" >Họ và tên</label>
-                    <p style="color: #cc0000;"><%=cusError.getNameError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getNameError()%></p>
                 </div>
                 <div class="form-outline" style="display: inline-block; width: 22rem;">
                     <i id="z" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="p" onfocus="change('phone', 'z')" onblur="change1('phone', 'p', 'z')" style="border: 1px solid black;" class="form-control" id="form11" type="tel" name="phone" value="<%= phone%>">
                     <label id="phone" style="color: #666666;" class="form-label" for="form11" >Số điện thoại</label>
-                    <p style="color: #cc0000;"><%=cusError.getPhoneError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getPhoneError()%></p>
                 </div>
                 <div class="form-outline" style="display: inline-block; width: 22rem;">
                     <i id="j" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="d" onfocus="change('add', 'j')" onblur="change1('add', 'd', 'j')" style="border: 1px solid black;" class="form-control" id="form11" type="text" name="address" value="<%= address%>">
                     <label id="add" style="color: #666666;" class="form-label" for="form11" >Địa chỉ</label>
-                    <p style="color: #cc0000;"><%=cusError.getAddressError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getAddressError()%></p>
                 </div>
                 <div class="form-outline" style="display: inline-block; width: 22rem;">
                     <i id="k" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="s" onfocus="change('password', 'k')" onblur="change1('password', 's', 'k')" style="border: 1px solid black;" class="form-control" id="form11" type="password" name="passwordr" value="<%= password%>">
                     <label id="password" style="color: #666666;" class="form-label" for="form11" >Mật khẩu</label>
-                    <p style="color: #cc0000;"><%=cusError.getPasswordError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getPasswordError()%></p>
                 </div>
                 <div class="form-outline" style="display: inline-block; width: 22rem;">
                     <i id="u" style="display: none; width: 1px; height: 1px;"></i>
                     <input id="r" onfocus="change('rpassword', 'u')" onblur="change1('rpassword', 'r', 'u')" style="border: 1px solid black;" class="form-control" id="form11" type="password" name="confirm" value="<%= confirm%>">
-                    <p style="color: #cc0000;"><%=cusError.getConfirmError()%></p>
+                    <p style="color: white; background-color: #d10024; border-radius: 10px; margin-top: 5px;"><%=cusError.getConfirmError()%></p>
                     <label id="rpassword" style="color: #666666;" class="form-label" for="form11" >Nhập lại mật khẩu</label>
                 </div>
                 <div style="display: block; width: 300px; margin-left: auto; margin-right: auto;" class="g-recaptcha" data-sitekey="6LfxTU4gAAAAANL7i9yWhE0_BtD9TgxTRtdY06Vc"></div></br>
                 <p style="
                    color: white;
-                   background-color: red;
+                   background-color: #d10024;
                    font-weight: bold;
                    width: 350px;
                    margin: auto;

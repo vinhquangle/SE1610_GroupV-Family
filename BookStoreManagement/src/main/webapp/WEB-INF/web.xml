@@ -112,6 +112,42 @@
         <servlet-name>ManageStaffController</servlet-name>
         <servlet-class>controller.manage.ManageStaffController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageOrderController</servlet-name>
+        <servlet-class>controller.manage.ManageOrderController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewOrderDetailController</servlet-name>
+        <servlet-class>controller.profile.ViewOrderDetailController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateCartController</servlet-name>
+        <servlet-class>controller.add.CreateCartController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertBookCart</servlet-name>
+        <servlet-class>controller.add.InsertBookCart</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageRevenueController</servlet-name>
+        <servlet-class>controller.manage.ManageRevenueController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadReviewController</servlet-name>
+        <servlet-class>controller.load.LoadReviewController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddReviewController</servlet-name>
+        <servlet-class>controller.add.AddReviewController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManagePromotionController</servlet-name>
+        <servlet-class>controller.manage.ManagePromotionController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageRequestController</servlet-name>
+        <servlet-class>controller.manage.ManageRequestController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetController</servlet-name>
         <url-pattern>/GetController</url-pattern>
@@ -223,6 +259,42 @@
     <servlet-mapping>
         <servlet-name>ManageStaffController</servlet-name>
         <url-pattern>/ManageStaffController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageOrderController</servlet-name>
+        <url-pattern>/ManageOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewOrderDetailController</servlet-name>
+        <url-pattern>/ViewOrderDetailController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateCartController</servlet-name>
+        <url-pattern>/CreateCartController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertBookCart</servlet-name>
+        <url-pattern>/InsertBookCart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageRevenueController</servlet-name>
+        <url-pattern>/ManageRevenueController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadReviewController</servlet-name>
+        <url-pattern>/LoadReviewController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddReviewController</servlet-name>
+        <url-pattern>/AddReviewController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManagePromotionController</servlet-name>
+        <url-pattern>/ManagePromotionController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageRequestController</servlet-name>
+        <url-pattern>/ManageRequestController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

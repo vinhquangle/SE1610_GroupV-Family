@@ -17,15 +17,15 @@ import dto.ReviewDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.Normalizer;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 /**
  *
  * @author Admin
@@ -52,8 +52,9 @@ public class ManageBookController extends HttpServlet {
         List<PublisherDTO> listPub = new ArrayList<>();
         List<CategoryDTO> listCate = new ArrayList<>();
         BookErrorDTO bookError = new BookErrorDTO();
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         try {
-            HttpSession session = request.getSession();
             String isbnN = request.getParameter("isbnN");
             String isbn = request.getParameter("isbn");
             book = bookDao.loadBook(isbn, "%%");
@@ -63,8 +64,8 @@ public class ManageBookController extends HttpServlet {
             indexCount = bookDao.countBook("%%");//Lấy số lượng sản phẩm trong kho
             search = request.getParameter("searchBook");
             String use = request.getParameter("use");
-            listPub = (List<PublisherDTO>) session.getAttribute("LIST_PUB");
-            listCate = (List<CategoryDTO>) session.getAttribute("LIST_CATE");
+            listPub = pubDao.getListPublisher("%%");
+            listCate = cateDao.getListCategory("%%");
             try {
                 index = Integer.parseInt(request.getParameter("index"));
             } catch (Exception e) {
@@ -261,7 +262,7 @@ public class ManageBookController extends HttpServlet {
                     + "                            <span aria-hidden=\"true\">&times;</span>\n"
                     + "                        </button>\n"
                     + "                 </div>\n"
-                    + "                    <div style=\"width: 1140px;\" class=\"modal-body\">\n"
+                    + "                    <div style=\"width: 1140px; max-height: calc(100vh - 200px); overflow-y: auto;\" class=\"modal-body\">\n"
                     + "                        <div class=\"row\">\n"
                     + "                            <div class=\"col-md-4\">\n"
                     + "                                <img style=\"width: 60%;\" src=\"" + book.getImg() + "\"/></br>\n"
@@ -441,7 +442,7 @@ public class ManageBookController extends HttpServlet {
                             + "                                    <td>" + list.get(i).getPublisher().getName() + "</td>\n"
                             + "                                    <td>" + list.get(i).getCategory().getName() + "</td>\n"
                             + "                                    <td>" + list.get(i).getQuantity() + "</td>\n"
-                            + "                                    <td>" + (int) list.get(i).getPrice() + "</td>\n"
+                            + "                                    <td>" + currencyVN.format(list.get(i).getPrice()) + "</td>\n"
                             + "                                    <td><img style=\"width: 100px\" src=\"" + list.get(i).getImg() + "\" alt=\"\"</td>\n");
                     String status = list.get(i).getStatus();
                     if (status.equals("1")) {
@@ -450,7 +451,7 @@ public class ManageBookController extends HttpServlet {
                         out.println("                                    <td><i style=\"color: red;\" class=\"fa fa-times\" aria-hidden=\"true\"></i><input readonly=\"\" style=\"width: 30px; color: red; border: none;\" class=\"" + count + "\" type=\"hidden\" value=\"" + status + "\"/></td>\n");
                     }
                     out.println("                                    <td>\n"
-                            + "                                        <button id=\"edit\" onclick=\"loadBook('ManageBookController?index=" + index + "','" + search + "','" + list.get(i).getIsbn() + "'," + index + ", 'load')\"  title=\"Edit\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
+                            + "                                        <button id=\"edit\" onclick=\"loadBook('ManageBookController?index=" + index + "','" + search + "','" + list.get(i).getIsbn() + "'," + index + ", 'load')\"  title=\"Chỉnh sửa\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
                             + "                                   </td>\n"
                             + "                                </tr>"
                     );
@@ -473,7 +474,7 @@ public class ManageBookController extends HttpServlet {
                     + "                    </div>\n"
                     + "                </div>\n"
                     + "            </div>\n"
-                    + "        </div>    \n"
+                    + "        </div>\n"
                     + "  </body>\n"
                     + "</html>\n");
         }

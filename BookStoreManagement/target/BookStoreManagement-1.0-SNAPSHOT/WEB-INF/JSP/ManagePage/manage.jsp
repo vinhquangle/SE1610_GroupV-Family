@@ -10,8 +10,24 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
-        <title>Manage Page</title>
+        <title>Manage</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">  
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+        <link rel="stylesheet" href="https://unpkg.com/charts.css/dist/charts.min.css">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <style>
+            #emptyList{
+                font-size: 20px;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
         <%@include file="header.jsp" %>
@@ -19,9 +35,7 @@
             <p style=" height: 80px; font-size: 90px; text-align: center; color: #494f57;">Book Store Management</p>
             <img style="margin-top: 20px; height: 450px;" src="IMG/manage.png"/>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
         <script>
             function load(a, index, b, isbn, isbnN, use, title, author, pub, cate, quan, price, img, status, des) {
                 document.getElementById("content").innerHTML = "";
@@ -271,7 +285,6 @@
                 loadStaff(a, "", b, staffID, use, role, name, phone, dob, password, confirm);
             }
             function loadCus(a, index, b, cusID, use, email, name, phone, addr, point, password, confirm) {
-                console.log(a + ", " + index + ", " + b + ", " + cusID + ", " + use + ", " + email + ", " + name + ", " + phone + ", " + addr + ", " + point + ", " +password + ", " + confirm);
                 document.getElementById("content").innerHTML = "";
                 if (index === "") {
                     index = "1";
@@ -337,6 +350,178 @@
                 var addr = document.getElementsByClassName(c)[7].value;
                 loadCus(a, "", b, cusID, use, email, name, phone, addr, point, password, confirm);
             }
+            function loadOrder(a, index, status, b, use, orderID) {
+                var edit = $('input[type="radio"][name="setStatus"]:checked').val();
+                document.getElementById("content").innerHTML = "";
+                if (index === "") {
+                    index = "1";
+                }
+                $.ajax({
+                    url: "/BookStoreManagement/" + a,
+                    type: "post", //send it through get method
+                    data: {
+                        index: index,
+                        searchOrder: b,
+                        status: status,
+                        use: use,
+                        orderID: orderID,
+                        edit: edit
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML += data;
+                        document.getElementById(index).classList.add("active");
+                        if (use === "load" || use === "edit") {
+                            $('#exampleModalCenter').modal('show');
+                        }
+                        var modal = document.getElementById("makeModal").value;
+                        if (modal !== null && modal !== "") {
+                            alert(modal);
+                        }
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            function loadRevenue(a, date) {
+                document.getElementById("content").innerHTML = "";
+                $.ajax({
+                    url: "/BookStoreManagement/" + a,
+                    type: "post", //send it through get method
+                    data: {
+                        date: date
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML += data;
+                        date = notice.split('-');
+                        document.getElementById("day").innerHTML = date[2];
+                        document.getElementById("month").innerHTML = date[1];
+                        document.getElementById("year").innerHTML = date[0];
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            function loadPromotion(a, index, searchPromotion, promotionID, use) {
+                if (index === "") {
+                    index = "1";
+                }
+                document.getElementById("content").innerHTML = "";
+                $.ajax({
+                    url: "/BookStoreManagement/" + a,
+                    type: "post", //send it through get method
+                    data: {
+                        index: index,
+                        searchPromotion: searchPromotion,
+                        promotionID: promotionID,
+                        use: use
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML += data;
+                        document.getElementById(index).classList.add("active");
+                        if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
+                            $('#exampleModalCenter').modal('show');
+                        }
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            function loadRequest(a, index, tab, searchRequest, requestID, use, isbn, quantity) {
+                if (index === "") {
+                    index = "1";
+                }
+                if (tab === "") {
+                    tab = "tab02";
+                }
+                var tabs;
+                document.getElementById("content").innerHTML = "";
+                $.ajax({
+                    url: "/BookStoreManagement/" + a,
+                    type: "post", //send it through get method
+                    data: {
+                        index: index,
+                        searchRequest: searchRequest,
+                        requestID: requestID,
+                        use: use,
+                        isbn: isbn,
+                        quantity: quantity,
+                        tab: tab
+
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML += data;
+                        if (tab === "tab02") {
+                            tabs = "tab01"
+                            document.getElementById("searchBook").style.display = "none";
+                            document.getElementById("searchButton").style.display = "none";
+                        } else if (tab === "tab01") {
+                            tabs = "tab02"
+                            document.getElementById("searchBook").style.display = "inline-block";
+                            document.getElementById("searchButton").style.display = "inline-block";
+                        }
+                        document.getElementById(tab).classList.add("active");
+                        document.getElementById(tab).classList.add("font-weight-bold");
+                        document.getElementById(tabs).classList.add("text-muted");
+                        document.getElementById(tab + "1").classList.add("show");
+                        $(document).ready(function () {
+                            $(".tabs").click(function () {
+                                $(".tabs").removeClass("active");
+                                $(".tabs h6").removeClass("font-weight-bold");
+                                $(".tabs h6").addClass("text-muted");
+                                $(this).removeClass("text-muted");
+                                $(this).children("h6").removeClass("text-muted");
+                                $(this).children("h6").addClass("font-weight-bold");
+                                $(this).addClass("font-weight-bold");
+                                $(this).addClass("active");
+                                current_fs = $(".active");
+                                next_fs = $(this).attr('id');
+                                if (next_fs === "tab02") {
+                                    document.getElementById("searchBook").style.display = "none";
+                                    document.getElementById("searchButton").style.display = "none";
+                                } else if (next_fs === "tab01") {
+                                    document.getElementById("searchBook").style.display = "inline-block";
+                                    document.getElementById("searchButton").style.display = "inline-block";
+                                }
+                                next_fs = "#" + next_fs + "1";
+                                $("fieldset").removeClass("show");
+                                $(next_fs).addClass("show");
+                                current_fs.animate({}, {
+                                    step: function () {
+                                        current_fs.css({
+                                            'display': 'none',
+                                            'position': 'relative'
+                                        });
+                                        next_fs.css({
+                                            'display': 'block'
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                        var classIndex = index - 1;
+                        document.getElementsByClassName("index")[classIndex].classList.add("active");
+                        if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
+                            $('#exampleModalCenter').modal('show');
+                        } else if (use === "add" || use === "addBook" || use === "searchAdd" || use === "editBook") {
+                            $('#myModal').modal('show');
+                        }
+                        var modal = document.getElementById("makeModal").value;
+                        if (modal !== null && modal !== "") {
+                            alert(modal);
+                        }
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
         </script>
         <style>
             #edit:hover{
@@ -351,28 +536,81 @@
                 background-color: green;
                 color: white;
             }
-            #inputisbn::-webkit-outer-spin-button,
-            #inputisbn::-webkit-inner-spin-button {
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
             }
             .pagination {
                 display: inline-block;
             }
-
             .pagination a {
                 color: black;
                 float: left;
                 padding: 8px 16px;
                 text-decoration: none;
             }
-
             .pagination a.active {
                 background-color: #15161d;
                 color: white;
             }
 
-            .pagination a:hover:not(.active) {background-color: #ddd;}
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+            }
+            #line-example-1 {
+                height: 500px;
+                max-width: 80%;
+                margin: 0 auto;
+                background-color: white;
+            }
+            fieldset {
+                display: none;
+            }
+            fieldset.show {
+                display: block;
+            }
+            select:focus, input:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border: 1px solid #2196F3 !important;
+                outline-width: 0 !important;
+                font-weight: 400;
+            }
+            button:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                outline-width: 0;
+            }
+            .tabs {
+                margin: 2px 5px 0px 5px;
+                padding-bottom: 10px;
+                cursor: pointer;
+            }
+            .tabs:hover, .tabs.active {
+                border-bottom: 1px solid #2196F3;
+            }
+            a:hover {
+                text-decoration: none;
+                color: #1565C0;
+            }
+            .box {
+                margin-bottom: 10px;
+                border-radius: 5px;
+                padding: 10px;
+            }
+            .line {
+                background-color: #CFD8DC;
+                height: 1px;
+                width: 100%;
+            }
+            @media screen and (max-width: 768px) {
+                .tabs h6 {
+                    font-size: 12px;
+                }
+            }
         </style>
     </body>
 </html>

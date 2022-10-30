@@ -12,13 +12,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
-        <title>Check Out Page</title>
+        <title>Checkout</title>
     </head>
     <body>
         <%@include file="../HeaderFooterPage/header.jsp" %>
         <script>
             function submitForm() {
                 document.getElementById("myForm").submit();
+            }
+            function hide() {
+                document.getElementById("payment-5").checked = true;
+                document.getElementById("info").style.display = "none";
+                document.getElementById("addr").style.display = "inline-block";
+            }
+            function show() {
+                document.getElementById("info").style.display = "inline-block";
+                document.getElementById("addr").style.display = "none";
             }
         </script>
         <!-- BREADCRUMB -->
@@ -45,7 +54,7 @@
                     <form id="myForm" action="CheckoutController" method="GET">
                         <div class="col-md-7">
                             <!-- Shipping Details -->
-                            <div class="billing-details">
+                            <div id="info" class="billing-details">
                                 <div class="section-title">
                                     <h3 class="title">Địa chỉ giao hàng</h3>
                                 </div>
@@ -62,8 +71,10 @@
                             <!-- /Shipping Details -->
 
                             <!-- Order notes -->
+                            <p id="addr" style="display: none; color: #1e1e27; font-size: 20px;">Địa chỉ nhà sách: <span style="color: #d10024">146C Đ. Nguyễn Ảnh Thủ, Ấp Đông, Hóc Môn, Thành phố Hồ Chí Minh 700000</span>
+                                (Lưu ý khi đến nhận hàng, quý khách vui lòng đọc số điện thoại đăng kí tài khoản để được hỗ trợ lấy hàng. Xin chân thành cảm ơn quý khách)</p>
                             <div class="order-notes">
-                                <textarea class="input" placeholder="Ghi chú"></textarea>
+                                <textarea name="des" class="input" placeholder="Ghi chú"></textarea>
                             </div>
                             <!-- /Order notes -->
                         </div>
@@ -97,7 +108,7 @@
                                 <div class="payment-method">
                                     <div class="input-radio">
                                         <input checked="" name="method" type="radio" id="payment-4" value="ship">
-                                        <label for="payment-4">
+                                        <label onclick="show()" for="payment-4">
                                             <span></span>
                                             <b>Giao hàng tận nơi (có thể mất phí)</b>
                                         </label>
@@ -108,12 +119,13 @@
                                             </div>
                                         </div>
                                         <div class="caption">
-                                            <p>Đơn hàng của quý khách sẽ được giao theo địa chỉ chỉ định (đối với đơn hàng trên 350k sẽ được miễn phí giao hàng)</p>
+
+                                            <p>Đơn hàng của quý khách sẽ được giao theo địa chỉ chỉ định (đối với đơn hàng trên 360k sẽ được miễn phí giao hàng)</p>
                                         </div>
                                     </div> 
                                     <div class="input-radio">
                                         <input name="method" type="radio" id="payment-5" value="store">
-                                        <label for="payment-5">
+                                        <label onclick="hide()" for="payment-5">
                                             <span></span>
                                             <b>Nhận tại cửa hàng</b>
                                         </label>
@@ -140,20 +152,10 @@
                                     </div>
                                 </div>
                                 <div class="input-radio">
-                                    <input type="radio" name="payment" id="payment-2" value="momo">
-                                    <label for="payment-2">
-                                        <span></span>
-                                        Momo
-                                    </label>
-                                    <div class="caption">
-                                        <p>Khi chọn phương thức thanh toán này, quý khách hàng sẽ thanh toán đơn hàng qua ứng dụng <b style="color: #a50064;">Momo</b>.</p>
-                                    </div>
-                                </div>
-                                <div class="input-radio">
                                     <input type="radio" name="payment" id="payment-3" value="paypal">
                                     <label for="payment-3">
                                         <span></span>
-                                        Paypal
+                                        <b style="color: #003087">Pay</b><b style="color: #009cde">Pal</b>
                                     </label>
                                     <div class="caption">
                                         <p>Khi chọn phương thức thanh toán này, quý khách hàng sẽ thanh toán đơn hàng qua ứng dụng <b style="color: #003087">Pay</b><b style="color: #009cde">Pal</b>.</p>

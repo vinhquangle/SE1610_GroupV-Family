@@ -5,7 +5,9 @@
 package controller.load;
 
 import dao.BookDAO;
+import dao.ReviewDetailDAO;
 import dto.BookDTO;
+import dto.ReviewDetailDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +33,12 @@ public class LoadController extends HttpServlet {
         String url = ERROR;
         try {
             BookDAO bookDao = new BookDAO();
+            ReviewDetailDAO reviewDetailDao = new ReviewDetailDAO();
             HttpSession session = request.getSession();
             String isbn = request.getParameter("isbn");
             List<BookDTO> listBook = bookDao.getAllBook("1");//Lấy tất cả sách trong database
-            BookDTO book = bookDao.loadBook(isbn,"1"); //Lấy thông tin sách theo ISBN
+            BookDTO book = bookDao.loadBook(isbn, "1"); //Lấy thông tin sách theo ISBN
+            List<ReviewDetailDTO> listReviewDetail = reviewDetailDao.loadReview("1", book.getReview().getReviewID());//Lấy tất cả đánh giá sách
             List<BookDTO> sameCate = new ArrayList<>();
             int count = 0;
             for (BookDTO bookDTO : listBook) {
@@ -45,6 +49,7 @@ public class LoadController extends HttpServlet {
             }
             session.setAttribute("SAME_CATE", sameCate);
             session.setAttribute("BOOK_DETAIL", book);
+            session.setAttribute("LIST_REVIEW_DETAIL", listReviewDetail);
             url = SUCCESS;
         } catch (Exception e) {
             log("ERROR AT GETCONTROLLER : " + e.toString());
@@ -93,4 +98,3 @@ public class LoadController extends HttpServlet {
     }// </editor-fold>
 
 }
-//<<<<<<<<<<

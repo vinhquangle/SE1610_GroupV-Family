@@ -5,11 +5,17 @@
  */
 package controller.search;
 
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterCategoryController.java
 import dao.BookDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
 import java.io.IOException;
 import java.util.List;
+========
+import dao.CustomerDAO;
+import dao.StaffDAO;
+import java.io.IOException;
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/login/LogoutController.java
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +26,26 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterCategoryController.java
 //Hữu Hiếu >>>>>>>>>>
 public class FilterCategoryController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
     private static final String SUCCESS = "WEB-INF/JSP/HomePage/homePage.jsp";
+========
+//Quốc Thịnh >>>>>>>>>>
+public class LogoutController extends HttpServlet {
+
+    private static final String ERROR = "WEB-INF/JSP/HomePage/error.jsp";
+    private static final String SUCCESS = "LoginController?action=Login";
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/login/LogoutController.java
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+<<<<<<<< HEAD:BookStoreManagement/src/main/java/controller/search/FilterCategoryController.java
             String cateID = request.getParameter("cateID");
             int index = 1;
             try {
@@ -52,6 +67,21 @@ public class FilterCategoryController extends HttpServlet {
             } else {
                 request.setAttribute("MESSAGE", "NOT FOUND!");
                 url = SUCCESS;
+========
+            HttpSession session = request.getSession();
+            CustomerDAO cusDao = new CustomerDAO();
+            StaffDAO staffDao = new StaffDAO();
+            String cus = request.getParameter("cusID");
+            String staff = request.getParameter("staffID");
+            if (cus != null) {
+                cusDao.updateStatusOffline(cus);//Cập nhật trạng thái tài khoản khách hành
+            } else if (staff != null) {
+                staffDao.updateStatusOffline(staff);//Cập nhật trạng thái tài khoản nhân viên
+            }
+            session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();//Xóa session scope
+>>>>>>>> Quốc-Thịnh-Branch:BookStoreManagement/src/main/java/controller/login/LogoutController.java
             }
         } catch (Exception e) {
             log("Error at PublisherController: " + e.toString());

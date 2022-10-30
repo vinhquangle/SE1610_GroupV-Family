@@ -282,7 +282,7 @@ public class ManagePublisherController extends HttpServlet {
                     out.println("                              <td><i style=\"color: red;\" class=\"fa fa-times\" aria-hidden=\"true\"></i><input readonly=\"\" style=\"width: 30px; color: red; border: none;\" class=\"" + count + "\" type=\"hidden\" value=\"" + status + "\"/></td>\n");
                 }
                 out.println("                                    <td>\n"
-                        + "                                        <button id=\"edit\" onclick=\"updatePub('ManagePublisherController?index=" + index + "','" + search + "','" + listPub.get(i).getPublisherID() + "'," + index + ",'load')\" data-toggle=\"tooltip\" title=\"Edit\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
+                        + "                                        <button id=\"edit\" onclick=\"updatePub('ManagePublisherController?index=" + index + "','" + search + "','" + listPub.get(i).getPublisherID() + "'," + index + ",'load')\" data-toggle=\"tooltip\" title=\"Chỉnh sửa\" class=\"pd-setting-ed\"><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n"
                         + "                                   </td>\n"
                         + "                                </tr>\n"
                 );

@@ -6,14 +6,17 @@
 package controller.profile;
 
 import dao.CustomerDAO;
+import dao.OrderDAO;
 import dao.StaffDAO;
 import dto.CustomerDTO;
 import dto.CustomerErrorDTO;
+import dto.OrderDTO;
 import dto.StaffDTO;
 import dto.StaffErrorDTO;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +45,9 @@ public class ViewProfileController extends HttpServlet {
             StaffDTO staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
             if (cus != null) {
                 request.setCharacterEncoding("UTF-8");
+                OrderDAO orderDao = new OrderDAO();
+                List<OrderDTO> listOrder = orderDao.loadOrderByCusID(cus.getCustomerID());
+                request.setAttribute("ORDER", listOrder);
                 CustomerDAO daoCus = new CustomerDAO();
                 String fullName = request.getParameter("name");
                 String phone = request.getParameter("phone");
@@ -112,7 +118,8 @@ public class ViewProfileController extends HttpServlet {
                 if (fullName.isBlank() || fullName.isEmpty()) {
                     checkValidation = false;
                     staffError.setNameError("Họ và tên không được bỏ trống");
-                }if (phone.isBlank() || phone.isEmpty()) {
+                }
+                if (phone.isBlank() || phone.isEmpty()) {
                     checkValidation = false;
                     staffError.setPhoneError("Số điện thoại không được để trống");
                 } else if (!phone.matches(new StaffDTO().PHONE_FORMAT)) {
@@ -195,4 +202,3 @@ public class ViewProfileController extends HttpServlet {
     }// </editor-fold>
 
 }
-//<<<<<<<<<<

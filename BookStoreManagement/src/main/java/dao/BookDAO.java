@@ -77,6 +77,8 @@ public class BookDAO {
     private static final String DUPLICATE_ISBN = "SELECT * FROM tblBook WHERE isbn NOT LIKE ? AND isbn LIKE ?";
     private static final String CREATE_BOOK = "INSERT INTO [tblBook](ISBN,Name,publisherID,categoryID,reviewID,[Author-name],Price,[Image],Quantity,[Status],[Description])\n"
             + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_QUANTITY = "UPDATE tblBook SET quantity = quantity - ? WHERE ISBN LIKE ?";
+    private static final String REFUND_QUANTITY = "UPDATE tblBook SET quantity = quantity + ? WHERE ISBN LIKE ?";
 
     public List<BookDTO> getListBook(int page, String st) throws SQLException {
         List<BookDTO> list = new ArrayList<>();
@@ -696,6 +698,55 @@ public class BookDAO {
         return check;
     }
 
+    public boolean updateQuantity(String isbn, int quantity) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(UPDATE_QUANTITY);
+                ptm.setInt(1, quantity);
+                ptm.setString(2, isbn);
+                check = ptm.executeUpdate() > 0 ? true : false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    public boolean refundQuantity(String isbn, int quantity) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(REFUND_QUANTITY);
+                ptm.setInt(1, quantity);
+                ptm.setString(2, isbn);
+                check = ptm.executeUpdate() > 0 ? true : false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
     public List<BookDTO> getAllBook(String st) throws SQLException {
         List<BookDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -812,7 +863,7 @@ public class BookDAO {
         return flag;
     }
 
-    public boolean createBook(BookDTO book) throws SQLException{
+    public boolean createBook(BookDTO book) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;

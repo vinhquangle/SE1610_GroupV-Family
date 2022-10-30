@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,6 +33,7 @@ public class ReviewPaymentController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            HttpSession session = request.getSession();
             String paymentID = request.getParameter("paymentId");
             String payerID = request.getParameter("PayerID");
             PaymentServices paymentServices = new PaymentServices();
@@ -39,13 +41,18 @@ public class ReviewPaymentController extends HttpServlet {
             PayerInfo payerInfo = payment.getPayer().getPayerInfo();
             Transaction transaction = payment.getTransactions().get(0);
             ShippingAddress shippingAddress = transaction.getItemList().getShippingAddress();
+            request.setAttribute("paymentId", paymentID);
+            request.setAttribute("PayerID", payerID);
             request.setAttribute("payer", payerInfo);
             request.setAttribute("transaction", transaction);
             request.setAttribute("shippingAddress", shippingAddress);
-
+            session.setAttribute("FEE_SHIP", payment.getTransactions().get(0).getAmount().getDetails().getShipping());
             url = SUCCESS;
         } catch (Exception ex) {
             Logger.getLogger(ReviewPaymentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AuthorizePaymentController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            request.setAttribute("errorMessage", "Invalid Payment Details");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -91,4 +98,3 @@ public class ReviewPaymentController extends HttpServlet {
     }// </editor-fold>
 
 }
-//<<<<<<<<<<

@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
-        <title>Login Page</title>
+        <title>Login</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -22,7 +22,7 @@
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel="stylesheet" href="CSS/styleLogin.css" type="text/css">
     </head>
-    <body style="background-image: url(https://www.unleash.ai/wp-content/uploads/2021/12/1412-read.jpg);">
+    <body style="background-image: url(https://www.unleash.ai/wp-content/uploads/2021/12/1412-read.jpg); width: 100%;">
         <%
             String messModal = (String) request.getAttribute("MODAL");
             if (messModal == null) {
@@ -100,7 +100,7 @@
                                 <div style="display: block; width: 300px;" class="g-recaptcha" data-sitekey="6LfxTU4gAAAAANL7i9yWhE0_BtD9TgxTRtdY06Vc"></div></br>
                                 <p style="
                                    color: white;
-                                   background-color: red;
+                                   background-color: #d10024;
                                    font-weight: bold;
                                    width: 350px;
                                    margin: auto;

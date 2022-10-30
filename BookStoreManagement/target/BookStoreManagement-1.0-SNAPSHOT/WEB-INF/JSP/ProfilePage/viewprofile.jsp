@@ -9,7 +9,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Profile Customer Page</title>
+        <title>Profile</title>
+        <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <meta charset="utf-8">
         <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/1903/1903162.png" type = "image/x-icon">
         <!-- Google font -->
@@ -59,7 +60,7 @@
                 var choosen = urlParams.get('index');
                 if (choosen === null) {
                     choosen = "1";
-                }else{
+                } else {
                     on(choosen);
                 }
                 document.getElementById(choosen).classList.add("active");

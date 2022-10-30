@@ -27,7 +27,7 @@ public class LoginController extends HttpServlet {
 
     private static final String ERROR = "WEB-INF/JSP/LoginPage/login.jsp";
     private static final String SUCCESS = "GetController";
-
+    private static final String ADMIN = "LoadManageController?action=manage";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -113,7 +113,11 @@ public class LoginController extends HttpServlet {
                         if (staffDao.updateStatusOnline(userID)) {
                             loginStaff.setStatus("1");
                             session.setAttribute("LOGIN_STAFF", loginStaff);
-                            url = SUCCESS;
+                            if (loginStaff.getRole().equals("Staff")) {
+                                url = SUCCESS;
+                            } else if (loginStaff.getRole().equals("Admin") || loginStaff.getRole().equals("Deliverer")) {
+                                url = ADMIN;    
+                            }
                         }
                     } else {
                         request.setAttribute("ERROR", "Tài khoản của bạn đã bị khóa");
