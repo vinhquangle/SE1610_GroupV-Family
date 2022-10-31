@@ -148,6 +148,10 @@
         <servlet-name>ManageRequestController</servlet-name>
         <servlet-class>controller.manage.ManageRequestController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageResponseController</servlet-name>
+        <servlet-class>controller.manage.ManageResponseController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetController</servlet-name>
         <url-pattern>/GetController</url-pattern>
@@ -295,6 +299,10 @@
     <servlet-mapping>
         <servlet-name>ManageRequestController</servlet-name>
         <url-pattern>/ManageRequestController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageResponseController</servlet-name>
+        <url-pattern>/ManageResponseController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

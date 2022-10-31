@@ -404,7 +404,7 @@
                     }
                 });
             }
-            function loadPromotion(a, index, searchPromotion, promotionID, use) {
+            function loadPromotion(a, index, searchPromotion, promotionID, use, dateS, dateE, condition, percent, des) {
                 if (index === "") {
                     index = "1";
                 }
@@ -416,7 +416,12 @@
                         index: index,
                         searchPromotion: searchPromotion,
                         promotionID: promotionID,
-                        use: use
+                        use: use,
+                        dateS: dateS,
+                        dateE: dateE,
+                        condition: condition,
+                        percent: percent,
+                        des: des
                     },
                     success: function (data) {
                         var row = document.getElementById("content");
@@ -424,6 +429,12 @@
                         document.getElementById(index).classList.add("active");
                         if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
                             $('#exampleModalCenter').modal('show');
+                        } else if (use === "add") {
+                            $('#myModal').modal('show');
+                        }
+                        var modal = document.getElementById("makeModal").value;
+                        if (modal !== null && modal !== "") {
+                            alert(modal);
                         }
                     },
                     error: function (xhr) {
@@ -431,9 +442,12 @@
                     }
                 });
             }
-            function loadRequest(a, index, tab, searchRequest, requestID, use, isbn, quantity) {
+            function loadRequest(a, indexR, tab, searchRequest, requestID, use, isbn, quantity, searchBook, index) {
                 if (index === "") {
                     index = "1";
+                }
+                if (indexR === "") {
+                    indexR = "1";
                 }
                 if (tab === "") {
                     tab = "tab02";
@@ -445,23 +459,24 @@
                     type: "post", //send it through get method
                     data: {
                         index: index,
+                        indexR: indexR,
                         searchRequest: searchRequest,
                         requestID: requestID,
                         use: use,
                         isbn: isbn,
                         quantity: quantity,
-                        tab: tab
-
+                        tab: tab,
+                        searchBook: searchBook
                     },
                     success: function (data) {
                         var row = document.getElementById("content");
                         row.innerHTML += data;
                         if (tab === "tab02") {
-                            tabs = "tab01"
+                            tabs = "tab01";
                             document.getElementById("searchBook").style.display = "none";
                             document.getElementById("searchButton").style.display = "none";
                         } else if (tab === "tab01") {
-                            tabs = "tab02"
+                            tabs = "tab02";
                             document.getElementById("searchBook").style.display = "inline-block";
                             document.getElementById("searchButton").style.display = "inline-block";
                         }
@@ -504,12 +519,68 @@
                                 });
                             });
                         });
-                        var classIndex = index - 1;
+                        if (index != null) {
+                            var classIndex = index - 1;
+                        } else {
+                            var classIndex = indexR - 1;
+                        }
                         document.getElementsByClassName("index")[classIndex].classList.add("active");
+                        document.getElementById(indexR).classList.add("active");
                         if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
                             $('#exampleModalCenter').modal('show');
-                        } else if (use === "add" || use === "addBook" || use === "searchAdd" || use === "editBook") {
+                        } else if (use === "add" || use === "addBook" || use === "searchAdd" || use === "editBook" || use === "removeBook") {
                             $('#myModal').modal('show');
+                        }
+                        var modal = document.getElementById("makeModal").value;
+                        if (modal !== null && modal !== "") {
+                            alert(modal);
+                        }
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            function loadResponse(a, index, b, use, responseID, indexR, searchRequest, requestID, isbn, quantity, price, quantityCheck) {
+                if (indexR === "") {
+                    indexR = "1";
+                }
+                if (index === "") {
+                    index = "1";
+                }
+                document.getElementById("content").innerHTML = "";
+                $.ajax({
+                    url: "/BookStoreManagement/" + a,
+                    type: "post", //send it through get method
+                    data: {
+                        index: index,
+                        searchResponse: b,
+                        use: use,
+                        responseID: responseID,
+                        requestID: requestID,
+                        indexR: indexR,
+                        searchRequest: searchRequest,
+                        isbn: isbn,
+                        quantity: quantity,
+                        price: price,
+                        quantityCheck: quantityCheck
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("content");
+                        row.innerHTML += data;
+                        if (indexR != null || indexR > 0) {
+                            var classIndex = indexR - 1;
+                        } else {
+                            var classIndex = 0;
+                        }
+                        document.getElementsByClassName("indexR")[classIndex].classList.add("active");
+                        document.getElementById(index).classList.add("active");
+                        if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
+                            $('#exampleModalCenter').modal('show');
+                        } else if (use === "add" || use === "search" || use === "create") {
+                            $('#myModal').modal('show');
+                        } else if (use === "choosen" || use === "save") {
+                            $('#modal2').modal('show');
                         }
                         var modal = document.getElementById("makeModal").value;
                         if (modal !== null && modal !== "") {

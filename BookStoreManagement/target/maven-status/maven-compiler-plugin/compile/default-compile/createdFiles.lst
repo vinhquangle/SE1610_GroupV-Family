@@ -8,6 +8,7 @@ controller\delete\RemoveBookCartController.class
 dao\BResponseDetailDAO.class
 dao\CategoryDAO.class
 controller\login\LoginGoogleController.class
+controller\manage\ManageResponseController.class
 controller\add\AddBookCartController.class
 controller\search\SortController$3.class
 aes\MyAES.class

@@ -77,6 +77,10 @@ public class PromotionDAO {
             + "FROM tblPromotion promo LEFT JOIN tblStaff s ON s.staffID=promo.staffID\n"
             + "WHERE promo.[promotionID] LIKE ?\n"
             + "ORDER By promo.[Status] DESC";
+    private static final String UPDATE_PROMOTION = "UPDATE [tblPromotion] SET [Date-start]=?, [Date-end]=?, [Description]=?, [Condition]=?, [Discount]=?, [Status]=?\n"
+            + "WHERE promotionID=?";
+    private static final String CREATE_PROMOTION = "INSERT INTO [tblPromotion]( staffID, [Date-start], [Date-end], [Description], [Condition], [Discount], [Status])\n"
+            + "VALUES(?,?,?,?,?,?,?)";
 
     public List<PromotionDTO> loadPromotion() throws SQLException {
         List<PromotionDTO> listPromotion = new ArrayList<>();
@@ -345,5 +349,65 @@ public class PromotionDAO {
         }
 
         return promotion;
+    }
+
+    public boolean updatePromotion(PromotionDTO promo) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(UPDATE_PROMOTION);
+                ptm.setString(1, promo.getDateStart());
+                ptm.setString(2, promo.getDateEnd());
+                ptm.setString(3, promo.getDescription());
+                ptm.setDouble(4, promo.getCondition());
+                ptm.setDouble(5, promo.getDiscount());
+                ptm.setString(6, promo.getStatus());
+                ptm.setString(7, promo.getPromotionID());
+                check = ptm.executeUpdate() > 0 ? true : false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean createPromotion(PromotionDTO promo) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(CREATE_PROMOTION);
+                ptm.setString(1, promo.getStaff().getStaffID());
+                ptm.setString(2, promo.getDateStart());
+                ptm.setString(3, promo.getDateEnd());
+                ptm.setString(4, promo.getDescription());
+                ptm.setDouble(5, promo.getCondition());
+                ptm.setDouble(6, promo.getDiscount());
+                ptm.setString(7, promo.getStatus());
+                check = ptm.executeUpdate() > 0 ? true : false;
+            }
+        } catch (Exception e) {
+
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 }
