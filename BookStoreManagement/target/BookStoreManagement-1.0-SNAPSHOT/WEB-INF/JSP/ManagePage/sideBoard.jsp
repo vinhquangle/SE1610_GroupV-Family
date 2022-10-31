@@ -58,8 +58,8 @@
                                     <span style="font-size: 14px;" class="mini-click-non">Quản lí sách</span></a>
                                 <ul class="submenu-angle" aria-expanded="false">
                                     <li><a onclick="load('ManageBookController', '')" title="Book" href="#"><i class="fa fa-book sub-icon-mg" aria-hidden="true"></i> <span class="mini-sub-pro">Sách</span></a></li>    
-                                    <li><a onclick="loadRequest('ManageRequestController','','')" title="Book Requesting" href="#"><i class="fa fa-heart-o sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Yêu cầu nhập sách</span></a></li>
-                                    <li><a onclick="load('ManageBookController')" title="Book Responding" href="#"><i class="fa fa-level-down sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Phản hồi nhập sách</span></a></li>
+                                    <li><a onclick="loadRequest('ManageRequestController','','')" title="Book Requesting" href="#"><i class="fa fa-reply sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Yêu cầu nhập sách</span></a></li>
+                                    <li><a onclick="loadResponse('ManageResponseController','')" title="Book Responding" href="#"><i class="fa fa-level-down sub-icon-mg" aria-hidden="true"></i><span class="mini-sub-pro">Phản hồi nhập sách</span></a></li>
                                 </ul>
                             </li>
                             <li>

@@ -308,7 +308,7 @@ public class ManageBookController extends HttpServlet {
                     + "                        </div>\n"
                     + "                    </div>\n"
                     + "                    <div class=\"modal-footer\">\n"
-                    + "                        <button style=\"display: none\" type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Close</button>\n"
+                    + "                        <button style=\"display: none\" type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>\n"
                     + "                        <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Close</button>\n"
                     + "                        <button data-bs-dismiss=\"modal\" onclick=\"book('ManageBookController?index=" + index + "','edit'," + index + ")\" type=\"button\" class=\"btn btn-primary\">Lưu thay đổi</button>\n"
                     + "                    </div>\n"

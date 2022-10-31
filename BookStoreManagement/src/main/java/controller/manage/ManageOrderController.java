@@ -193,7 +193,7 @@ public class ManageOrderController extends HttpServlet {
                     + "                            <span aria-hidden=\"true\">&times;</span>\n"
                     + "                        </button>\n"
                     + "                    </div>\n"
-                    + "                    <div style=\" max-height: calc(100vh - 200px); overflow-y: auto;\" class=\"modal-body\">\n"
+                    + "                    <div style=\" max-height: calc(100vh - 200px);\" class=\"modal-body\">\n"
                     + "                        <div class=\"row\">\n"
                     + "                            <div class=\"col-md-4\">\n"
                     + "                                <div><b>Khuyến mãi</b></div>\n"
@@ -264,11 +264,12 @@ public class ManageOrderController extends HttpServlet {
                     + "                            <div style=\"text-align: center;\" class=\"col-md-3\">\n"
                     + "                                <b><p>Tổng</p></b>\n"
                     + "                            </div>\n"
-                    + "                        </div>\n");
+                    + "                        </div>\n"
+                    + "                 <div style=\"overflow-y: scroll; overflow-x: hidden; height: 250px\">\n");
             int count = 0;
             for (OrderDetailDTO orderDetailDTO : listOrderDetail) {
                 count++;
-                out.println("                        <div style=\"border-bottom: 1px solid #cccdcf; margin-bottom: 10px;\" class=\"row\">\n"
+                out.println("                     <div style=\"border-bottom: 1px solid #cccdcf; margin-bottom: 10px;\" class=\"row\">\n"
                         + "                            <div class=\"col-md-1\">\n"
                         + "                                <b>" + count + "</b>\n"
                         + "                            </div>\n"
@@ -289,9 +290,12 @@ public class ManageOrderController extends HttpServlet {
                         + "                            <div style=\"text-align: center;\" class=\"col-md-3\">\n"
                         + "                                <span style=\"color: #d10024; font-weight: bold\">" + currencyVN.format(orderDetailDTO.getTotal()) + "</span>\n"
                         + "                            </div>\n"
-                        + "         </div>\n");
+                        + "         </div>\n"
+            
+            );
             }
-            out.println("</div>\n"
+            out.println("                   </div>\n"
+                    + "                 </div>\n"
                     + "                    <div class=\"modal-footer\">\n"
                     + "                        <button style=\"display: none;\" type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>\n"
                     + "                        <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>\n");
@@ -324,7 +328,7 @@ public class ManageOrderController extends HttpServlet {
                     + "                            </div>\n");
             if (listOrder.size() <= 0) {
                 out.println("<div class=\"\">\n"
-                        + "                    <p style=\"margin-top:100px; font-size: 100px; text-align: center;\">NOT FOUND!</p>\n"
+                        + "                    <p style=\"margin-top:100px; font-size: 100px; text-align: center;\">Không tìm thấy!</p>\n"
                         + "                </div>");
             } else {
                 out.println("                            <table>\n"

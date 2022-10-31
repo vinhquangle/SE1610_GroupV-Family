@@ -263,7 +263,7 @@ public class ManageCategoryController extends HttpServlet {
                     + "                            </div>\n");
             if (listCate.size() <= 0) {
                 out.println("<div class=\"\">\n"
-                        + "                    <p style=\"margin-top:100px; font-size: 100px; text-align: center;\">NOT FOUND!</p>\n"
+                        + "                    <p style=\"margin-top:100px; font-size: 100px; text-align: center;\">Không tìm thấy!</p>\n"
                         + "                </div>");
             } else {
                 out.println("                            <table>\n"
