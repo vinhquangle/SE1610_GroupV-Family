@@ -70,7 +70,7 @@ public class ManageResponseController extends HttpServlet {
             search = request.getParameter("searchResponse");
             searchR = request.getParameter("searchRequest");
             indexCount = responseDAO.loadResponse().size();
-            indexCountR = requestDao.loadRequest("%%").size();
+            indexCountR = requestDao.loadRequest("0", "0").size();
             cart = (Cart) session.getAttribute("CART2");
             String responseID = request.getParameter("responseID");
             String use = request.getParameter("use");
@@ -87,7 +87,7 @@ public class ManageResponseController extends HttpServlet {
             }
             if (searchR == null || searchR == "") {
                 searchR = "";
-                listRequest = requestDao.load9Request("%%", indexR);
+                listRequest = requestDao.load9Request("0", "0", indexR);
             } else {
                 //Chuyển chuỗi có dấu thành không dấu
                 request.setCharacterEncoding("UTF-8");
@@ -95,8 +95,8 @@ public class ManageResponseController extends HttpServlet {
                 Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
                 String txtSearch = pattern.matcher(temp).replaceAll("");
                 //Chuyển chuỗi có dấu thành không dấu
-                indexCountR = requestDao.searchRequest(txtSearch, "%%").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
-                listRequest = requestDao.search9Request(txtSearch, indexR, "%%");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
+                indexCountR = requestDao.searchRequest(txtSearch, "0", "0").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
+                listRequest = requestDao.search9Request(txtSearch, indexR, "0", "0");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
             }
             if (search == null || search == "") {
                 search = "";
@@ -185,30 +185,43 @@ public class ManageResponseController extends HttpServlet {
                         }
                     }
                 } else if (use.equals("create")) {
-                    boolean flag = true;
+                    boolean check = false;
                     requestId = request.getParameter("requestID");
                     listDetail = detailDao.loadDetailByRequest(requestId);
                     listResponse1 = responseDAO.loadResponseByRequest(requestId, "1");
-                    if (cart == null || cart.getCart().size() <= 0) {
-                        modal = "Tạo thất bại(Danh sách đang trống)";
-                        throw new Exception();
-                    } else if (cart.getCart().size() > 0) {
-                        int responseId = responseDAO.insertResponse(requestId, staff.getStaffID(), "1", "0");
+                    if (cart != null) {
                         for (BookDTO bookK : cart.getCart().values()) {
                             if (bookK.getQuantity() > 0) {
-                                int quantityPass = 0;
-                                detailRSDao.insertResponseDetail(responseId, bookK, "1", "0");
-                                for (BookResponseDTO bookResponseDTO : listResponse1) {
-                                    quantityPass += responseDetailDao.quantityCheck(bookK.getIsbn(), bookResponseDTO.getResponseID());
-                                }
-                                if (quantityPass >= detailDao.quantityCheck(bookK.getIsbn(), requestId)) {
-                                    detailDao.updateStatus("1", bookK.getIsbn(), requestId);
+                                check = true;
+                            }
+                        }
+                        if (!check) {
+                            cart.removeAll();
+                        }
+                        if (cart.getCart().size() <= 0) {
+                            success = "NOPE";
+                            throw new Exception();
+                        } else if (cart.getCart().size() > 0) {
+                            int responseId = responseDAO.insertResponse(requestId, staff.getStaffID(), "1", "0");
+                            for (BookDTO bookK : cart.getCart().values()) {
+                                if (bookK.getQuantity() > 0) {
+                                    int quantityPass = bookK.getQuantity();
+                                    detailRSDao.insertResponseDetail(responseId, bookK, "1", "0");
+                                    for (BookResponseDTO bookResponseDTO : listResponse1) {
+                                        quantityPass += responseDetailDao.quantityCheck(bookK.getIsbn(), bookResponseDTO.getResponseID());
+                                    }
+                                    if (quantityPass >= detailDao.quantityCheck(bookK.getIsbn(), requestId)) {
+                                        detailDao.updateStatus("1", bookK.getIsbn(), requestId);
+                                    }
                                 }
                             }
                         }
-                        if (flag) {
-                            requestDao.updateStatus("1", requestId);
-                        }
+                    } else {
+                        success = "NOPE";
+                        throw new Exception();
+                    }
+                    if (!detailDao.checkStatus("0", requestId)) {
+                        requestDao.updateStatus("1", requestId);
                     }
                     success = "Done";
                     cart.removeAll();
@@ -228,6 +241,19 @@ public class ManageResponseController extends HttpServlet {
                 //Chuyển chuỗi có dấu thành không dấu
                 indexCount = responseDAO.searchResponse(txtSearch).size();
                 listResponse = responseDAO.search9Response(txtSearch, index);
+            }
+            if (searchR == null || searchR == "") {
+                searchR = "";
+                listRequest = requestDao.load9Request("0", "0", indexR);
+            } else {
+                //Chuyển chuỗi có dấu thành không dấu
+                request.setCharacterEncoding("UTF-8");
+                String temp = Normalizer.normalize(request.getParameter("searchRequest"), Normalizer.Form.NFD);
+                Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+                String txtSearch = pattern.matcher(temp).replaceAll("");
+                //Chuyển chuỗi có dấu thành không dấu
+                indexCountR = requestDao.searchRequest(txtSearch, "0", "0").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
+                listRequest = requestDao.search9Request(txtSearch, indexR, "0", "0");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
             }
             session.setAttribute("CART2", cart);
         } catch (Exception e) {
@@ -401,20 +427,29 @@ public class ManageResponseController extends HttpServlet {
             if (success.equals("Done")) {
                 out.println("  <p style=\"margin: 5px auto 5px auto; text-align: center; width: 100%; color: white; background-color: green; font-weight: bold; display: inline-block; border-radius: 10px; font-size: 25px;\">Tạo nhập sách thành công</p></br>");
                 success = "";
+            } else if (success.equals("NOPE")) {
+                out.println("  <p style=\"margin: 5px auto 5px auto; text-align: center; width: 100%; color: white; background-color: red; font-weight: bold; display: inline-block; border-radius: 10px; font-size: 25px;\">Tạo nhập sách thất bại (Dánh sách nhập trống)</p></br>");
+                success = "";
             }
-            out.println("                                    <div style=\"width: 1138px; margin: auto\" class=\"row\">\n"
-                    + "                                        <div class=\"col-md-12\">\n"
-                    + "                                            <div style=\" background-color: #1e1e27; color: white; font-weight: bold; font-size: 12px; text-align: center;\" class=\"row\">\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\">Mã yêu cầu</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-3\">Người tạo</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-3\">Ngày tạo</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Tình trạng</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Trạng thái</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\"></div>\n"
-                    + "                                            </div>\n"
-                    + "                                            <div id=\"createContent\"></div>\n"
-                    + "                                        </div>\n"
-                    + "                                    </div>\n");
+            if (listRequest.size() <= 0) {
+                out.println("<div class=\"\">\n"
+                        + "                    <p style=\"margin-top:100px; font-size: 100px; text-align: center;\">Không tìm thấy!</p>\n"
+                        + "                </div>");
+            } else {
+                out.println("                                    <div style=\"width: 1138px; margin: auto\" class=\"row\">\n"
+                        + "                                        <div class=\"col-md-12\">\n"
+                        + "                                            <div style=\" background-color: #1e1e27; color: white; font-weight: bold; font-size: 12px; text-align: center;\" class=\"row\">\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\">Mã yêu cầu</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-3\">Người tạo</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-3\">Ngày tạo</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Tình trạng</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Trạng thái</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\"></div>\n"
+                        + "                                            </div>\n"
+                        + "                                            <div id=\"createContent\"></div>\n"
+                        + "                                        </div>\n"
+                        + "                                    </div>\n");
+            }
             int count = 0;
             for (BookRequestDTO requestDTO : listRequest) {
                 count--;

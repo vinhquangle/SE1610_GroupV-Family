@@ -20,7 +20,7 @@ import utilities.DBUtils;
  * @author PCPV
  */
 public class PromotionDAO {
-
+    
     private static final String SEARCH_PROMOTION = "SELECT promo.[promotionID] AS promoID, promo.[staffID] AS staffpromo,\n"
             + "promo.[Date-start] AS startpromo,promo.[Date-end] AS endpromo,\n"
             + "promo.[Description] AS despromo,promo.[Condition] AS condipromo,\n"
@@ -81,6 +81,63 @@ public class PromotionDAO {
             + "WHERE promotionID=?";
     private static final String CREATE_PROMOTION = "INSERT INTO [tblPromotion]( staffID, [Date-start], [Date-end], [Description], [Condition], [Discount], [Status])\n"
             + "VALUES(?,?,?,?,?,?,?)";
+    private static final String GET_PROMOTION_LIST = "SELECT promo.[promotionID] AS promoID, promo.[staffID] AS staffpromo,\n"
+            + "promo.[Date-start] AS startpromo,promo.[Date-end] AS endpromo,\n"
+            + "promo.[Description] AS despromo,promo.[Condition] AS condipromo,\n"
+            + "promo.[Discount] AS dispromo,promo.[Status] AS statuspromo,\n"
+            + "s.[staffID] AS staffS, s.[Name] AS nameS,s.[Password] AS passS,s.[Role] AS roleS,\n"
+            + "s.Phone AS phoneS,s.[Date-of-birth] AS dobS,s.[Status] AS statusS,s.[Delete] AS deleteS\n"
+            + "FROM tblPromotion promo LEFT JOIN tblStaff s ON s.staffID=promo.staffID\n"
+            + "WHERE promo.[Status] LIKE ?\n"
+            + "ORDER BY promo.[status] DESC";
+    
+    public List<PromotionDTO> loadAvailablePromotion(String st) throws SQLException {
+        List<PromotionDTO> listPromotion = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PROMOTION_LIST);
+                ptm.setString(1, st);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String promotionID = rs.getString("promoID");
+                    String dateStart = rs.getString("startpromo");
+                    String dateEnd = rs.getString("endpromo");
+                    String description = rs.getString("despromo");
+                    double condition = rs.getDouble("condipromo");
+                    float discount = rs.getFloat("dispromo");
+                    String status = rs.getString("statuspromo");
+                    String staffID = rs.getString("staffS");
+                    String name = rs.getString("nameS");
+                    String password = "***";
+                    String roleID = rs.getString("roleS");
+                    String phone = rs.getString("phoneS");
+                    String dateOfBirth = rs.getString("dobS");
+                    String statusS = rs.getString("statusS");
+                    String deleteS = rs.getString("deleteS");
+                    listPromotion.add(new PromotionDTO(promotionID,
+                            new StaffDTO(staffID, name, password, roleID, phone, dateOfBirth, statusS, deleteS),
+                            dateStart, dateEnd, description, condition, discount, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return listPromotion;
+    }
 
     public List<PromotionDTO> loadPromotion() throws SQLException {
         List<PromotionDTO> listPromotion = new ArrayList<>();
@@ -126,10 +183,9 @@ public class PromotionDAO {
                 conn.close();
             }
         }
-
         return listPromotion;
     }
-
+    
     public List<PromotionDTO> searchPromotion(String search) throws SQLException {
         List<PromotionDTO> listPromotion = new ArrayList<>();
         Connection conn = null;
@@ -184,10 +240,9 @@ public class PromotionDAO {
                 conn.close();
             }
         }
-
         return listPromotion;
     }
-
+    
     public List<PromotionDTO> load9Promotion(int page) throws SQLException {
         List<PromotionDTO> listSearch = new ArrayList<>();
         Connection conn = null;
@@ -236,10 +291,9 @@ public class PromotionDAO {
                 conn.close();
             }
         }
-
         return listSearch;
     }
-
+    
     public List<PromotionDTO> search9Promotion(String search, int page) throws SQLException {
         List<PromotionDTO> listSearch = new ArrayList<>();
         Connection conn = null;
@@ -298,10 +352,9 @@ public class PromotionDAO {
                 conn.close();
             }
         }
-
         return listSearch;
     }
-
+    
     public PromotionDTO getPromotionById(String proID) throws SQLException {
         PromotionDTO promotion = new PromotionDTO();
         Connection conn = null;
@@ -347,10 +400,9 @@ public class PromotionDAO {
                 conn.close();
             }
         }
-
         return promotion;
     }
-
+    
     public boolean updatePromotion(PromotionDTO promo) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -380,7 +432,7 @@ public class PromotionDAO {
         }
         return check;
     }
-
+    
     public boolean createPromotion(PromotionDTO promo) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -399,7 +451,7 @@ public class PromotionDAO {
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
         } catch (Exception e) {
-
+            
         } finally {
             if (ptm != null) {
                 ptm.close();

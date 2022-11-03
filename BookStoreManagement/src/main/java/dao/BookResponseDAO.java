@@ -30,7 +30,7 @@ public class BookResponseDAO {
             + "LEFT JOIN tblStaff t ON rp.staffID = t.staffID)\n"
             + "LEFT JOIN tblBookRequest rq ON rp.requestID = rq.requestID)\n"
             + "LEFT JOIN tblStaff s ON rq.staffID = s.staffID)\n"
-            + "ORDER BY rp.[Delete] ASC";
+            + "ORDER BY rp.[Date] DESC, rp.responseID DESC, rp.[Delete] ASC";
     private static final String LOAD_9_RESPONSE = "SELECT rp.responseID, rp.requestID, rp.staffID, rp.[Date], rp.[Status], rp.[Delete],\n"
             + "t.Name, t.[Role], t.Phone, t.[Date-of-birth] AS 'dobT', t.[status] AS 'staffStatusT', t.[delete] AS 'staffDeleteT',\n"
             + "rq.staffID AS 'staffIDR', rq.[Date] AS 'rqDate', rq.[Status] AS 'rqStatus', rq.[Delete] AS 'rqDelete',\n"
@@ -39,7 +39,7 @@ public class BookResponseDAO {
             + "LEFT JOIN tblStaff t ON rp.staffID = t.staffID)\n"
             + "LEFT JOIN tblBookRequest rq ON rp.requestID = rq.requestID)\n"
             + "LEFT JOIN tblStaff s ON rq.staffID = s.staffID)\n"
-            + "ORDER BY rp.[Delete] ASC\n"
+            + "ORDER BY rp.[Date] DESC, rp.responseID DESC, rp.[Delete] ASC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String SEARCH_RESPONSE = "SELECT rp.responseID, rp.requestID, rp.staffID, rp.[Date], rp.[Status], rp.[Delete],\n"
             + "t.Name, t.[Role], t.Phone, t.[Date-of-birth] AS 'dobT', t.[status] AS 'staffStatusT', t.[delete] AS 'staffDeleteT',\n"
@@ -51,7 +51,7 @@ public class BookResponseDAO {
             + "LEFT JOIN tblStaff s ON rq.staffID = s.staffID)\n"
             + "WHERE rp.responseID LIKE ? OR rp.requestID LIKE ? OR rp.staffID LIKE ?\n"
             + "OR rq.staffID LIKE ? OR dbo.ufn_removeMark(t.Name) LIKE ? OR dbo.ufn_removeMark(s.Name) LIKE ?\n"
-            + "ORDER BY rp.[Delete] ASC";
+            + "ORDER BY rp.[Date] DESC, rp.responseID DESC, rp.[Delete] ASC";
     private static final String SEARCH_9_RESPONSE = "SELECT rp.responseID, rp.requestID, rp.staffID, rp.[Date], rp.[Status], rp.[Delete],\n"
             + "t.Name, t.[Role], t.Phone, t.[Date-of-birth] AS 'dobT', t.[status] AS 'staffStatusT', t.[delete] AS 'staffDeleteT',\n"
             + "rq.staffID AS 'staffIDR', rq.[Date] AS 'rqDate', rq.[Status] AS 'rqStatus', rq.[Delete] AS 'rqDelete',\n"
@@ -62,7 +62,7 @@ public class BookResponseDAO {
             + "LEFT JOIN tblStaff s ON rq.staffID = s.staffID)\n"
             + "WHERE rp.responseID LIKE ? OR rp.requestID LIKE ? OR rp.staffID LIKE ?\n"
             + "OR rq.staffID LIKE ? OR dbo.ufn_removeMark(t.Name) LIKE ? OR dbo.ufn_removeMark(s.Name) LIKE ?\n"
-            + "ORDER BY rp.[Delete] ASC\n"
+            + "ORDER BY rp.[Date] DESC, rp.responseID DESC, rp.[Delete] ASC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String GET_RESPONSE_BY_ID = "SELECT rp.responseID, rp.requestID, rp.staffID, rp.[Date], rp.[Status], rp.[Delete],\n"
             + "t.Name, t.[Role], t.Phone, t.[Date-of-birth] AS 'dobT', t.[status] AS 'staffStatusT', t.[delete] AS 'staffDeleteT',\n"

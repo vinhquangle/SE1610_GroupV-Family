@@ -23,11 +23,11 @@ public class BookRequestDAO {
 
     private static final String LOAD_REQUEST = "SELECT b.requestID, b.staffID, b.[Date], b.[Status], b.[Delete], s.Name, s.[Role], s.Phone, s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM tblBookRequest b LEFT JOIN tblStaff s ON b.staffID = s.staffID\n"
-            + "WHERE b.[Delete] LIKE ?\n"
+            + "WHERE b.[Status] LIKE ? AND b.[Delete] LIKE ?\n"
             + "ORDER BY b.[Date] DESC ";
     private static final String LOAD_9_REQUEST = "SELECT b.requestID, b.staffID, b.[Date], b.[Status], b.[Delete], s.Name, s.[Role], s.Phone, s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM tblBookRequest b LEFT JOIN tblStaff s ON b.staffID = s.staffID\n"
-            + "WHERE b.[Delete] LIKE ?\n"
+            + "WHERE b.[Status] LIKE ? AND b.[Delete] LIKE ?\n"
             + "ORDER BY b.[Date] DESC, b.[Status] DESC, b.requestID DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String GET_REQUEST = "SELECT b.requestID, b.staffID, b.[Date], b.[Status], b.[Delete], s.Name, s.[Role], s.Phone, s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
@@ -40,13 +40,13 @@ public class BookRequestDAO {
             + "s.[Password], s.Phone, s.[Role], s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM (tblBookRequest r LEFT JOIN tblStaff s ON r.staffID LIKE s.staffID)\n"
             + "WHERE (r.requestID LIKE ? OR s.Name LIKE ? OR r.[Date] LIKE ?\n"
-            + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ?\n"
+            + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ? AND r.[Delete] LIKE ?\n"
             + "ORDER BY r.[Date] DESC,r.[status] DESC, r.requestID DESC\n";
     private static final String SEARCH_9_REQUEST = "SELECT r.requestID, r.staffID, r.[Date], r.[Status], r.[Delete], s.Name AS 'sName',\n"
             + "s.[Password], s.Phone, s.[Role], s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM (tblBookRequest r LEFT JOIN tblStaff s ON r.staffID LIKE s.staffID)\n"
             + "WHERE (r.requestID LIKE ? OR s.Name LIKE ? OR r.[Date] LIKE ?\n"
-            + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ?\n"
+            + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ? AND r.[Delete] LIKE ?\n"
             + "ORDER BY r.[Date] DESC,r.[status] DESC, r.requestID DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String UPDATE_DELETE = "UPDATE [tblBookRequest] SET [Delete] = ?\n"
@@ -86,7 +86,7 @@ public class BookRequestDAO {
         return requestID;
     }
 
-    public List<BookRequestDTO> loadRequest(String st) throws SQLException {
+    public List<BookRequestDTO> loadRequest(String st, String del) throws SQLException {
         List<BookRequestDTO> listRequest = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -95,6 +95,7 @@ public class BookRequestDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(LOAD_REQUEST);
             ptm.setString(1, st);
+            ptm.setString(2, del);
             rs = ptm.executeQuery();
             while (rs.next()) {
                 String requestID = rs.getString("requestID");
@@ -127,7 +128,7 @@ public class BookRequestDAO {
         return listRequest;
     }
 
-    public List<BookRequestDTO> load9Request(String st, int page) throws SQLException {
+    public List<BookRequestDTO> load9Request(String st, String del, int page) throws SQLException {
         List<BookRequestDTO> listRequest = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -139,7 +140,8 @@ public class BookRequestDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareStatement(LOAD_9_REQUEST);
             ptm.setString(1, st);
-            ptm.setInt(2, (page - 1) * 9);
+            ptm.setString(2, del);
+            ptm.setInt(3, (page - 1) * 9);
             rs = ptm.executeQuery();
             while (rs.next()) {
                 String requestID = rs.getString("requestID");
@@ -214,7 +216,7 @@ public class BookRequestDAO {
     }
     //Ham nay dung de search request by id, ten nhan vien, ngay
 
-    public List<BookRequestDTO> searchRequest(String txtSearch, String st) throws SQLException {
+    public List<BookRequestDTO> searchRequest(String txtSearch, String st, String del) throws SQLException {
         List<BookRequestDTO> listRequest = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -228,6 +230,7 @@ public class BookRequestDAO {
                 ptm.setString(3, "%" + txtSearch + "%");
                 ptm.setString(4, "%" + txtSearch + "%");
                 ptm.setString(5, st);
+                ptm.setString(6, del);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String requestID = rs.getString("requestID");
@@ -262,7 +265,7 @@ public class BookRequestDAO {
     }
 
     //Ham nay dung de search 9 request by id, ten nhan vien, ngay
-    public List<BookRequestDTO> search9Request(String txtSearch, int page, String st) throws SQLException {
+    public List<BookRequestDTO> search9Request(String txtSearch, int page, String st, String del) throws SQLException {
         List<BookRequestDTO> listRequest = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -279,7 +282,8 @@ public class BookRequestDAO {
                 ptm.setString(3, "%" + txtSearch + "%");
                 ptm.setString(4, "%" + txtSearch + "%");
                 ptm.setString(5, st);
-                ptm.setInt(6, (page - 1) * 9);
+                ptm.setString(6, del);
+                ptm.setInt(7, (page - 1) * 9);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String requestID = rs.getString("requestID");

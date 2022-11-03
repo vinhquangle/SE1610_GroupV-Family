@@ -7,11 +7,14 @@ package controller.load;
 
 import dao.BookDAO;
 import dao.CategoryDAO;
+import dao.PromotionDAO;
 import dao.PublisherDAO;
 import dto.BookDTO;
 import dto.CategoryDTO;
+import dto.PromotionDTO;
 import dto.PublisherDTO;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,9 +43,20 @@ public class GetController extends HttpServlet {
             } catch (Exception e) {
                 index = 1;
             }
+            LocalDate localDate = LocalDate.now();
+            LocalDate dateEnd = LocalDate.now();
             BookDAO bookDao = new BookDAO();
             CategoryDAO cateDao = new CategoryDAO();
             PublisherDAO pubDao = new PublisherDAO();
+            PromotionDAO proDao = new PromotionDAO();
+            List<PromotionDTO> listPro = proDao.loadAvailablePromotion("1");
+            for (PromotionDTO promotionDTO : listPro) {
+                dateEnd = LocalDate.parse(promotionDTO.getDateEnd());
+                if(dateEnd.isBefore(localDate)){
+                    promotionDTO.setStatus("0");
+                    proDao.updatePromotion(promotionDTO);
+                }
+            }
             List<CategoryDTO> listCate = cateDao.getListCategory("1"); //Lấy tất cả thể loại
             List<PublisherDTO> listPub = pubDao.getListPublisher("1"); //Lấy tất cả NXB
             List<BookDTO> listBook = bookDao.getListBook(index, "1"); //Lấy thông tin sách cho phân trang số 1
@@ -50,6 +64,7 @@ public class GetController extends HttpServlet {
             url = SUCCESS;
             if (listBook.size() > 0) {
                 HttpSession session = request.getSession();
+                session.setAttribute("PROMOTION", proDao.loadAvailablePromotion("1"));
                 session.setAttribute("LIST_BOOK", listBook);
                 session.setAttribute("LIST_PUB", listPub);
                 session.setAttribute("LIST_CATE", listCate);

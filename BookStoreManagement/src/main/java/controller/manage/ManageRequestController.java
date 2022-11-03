@@ -64,7 +64,7 @@ public class ManageRequestController extends HttpServlet {
             HttpSession session = request.getSession();
             use = request.getParameter("use");
             isbn = request.getParameter("isbn");
-            indexCountR = requestDao.loadRequest("%%").size();
+            indexCountR = requestDao.loadRequest("%%", "%%").size();
             searchR = request.getParameter("searchRequest");
             cart = (Cart) session.getAttribute("CART1");
             staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
@@ -80,7 +80,7 @@ public class ManageRequestController extends HttpServlet {
             }
             if (searchR == null || searchR == "") {
                 searchR = "";
-                listRequest = requestDao.load9Request("%%", indexR);
+                listRequest = requestDao.load9Request("%%", "%%", indexR);
             } else {
                 //Chuyển chuỗi có dấu thành không dấu
                 request.setCharacterEncoding("UTF-8");
@@ -88,8 +88,8 @@ public class ManageRequestController extends HttpServlet {
                 Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
                 String txtSearch = pattern.matcher(temp).replaceAll("");
                 //Chuyển chuỗi có dấu thành không dấu
-                indexCountR = requestDao.searchRequest(txtSearch, "%%").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
-                listRequest = requestDao.search9Request(txtSearch, indexR, "%%");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
+                indexCountR = requestDao.searchRequest(txtSearch, "%%", "%%").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
+                listRequest = requestDao.search9Request(txtSearch, indexR, "%%", "%%");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
                 System.out.println(indexCountR);
             }
             search = request.getParameter("searchBook");
@@ -209,7 +209,7 @@ public class ManageRequestController extends HttpServlet {
             session.setAttribute("CART1", cart);
             if (searchR == null || searchR == "") {
                 searchR = "";
-                listRequest = requestDao.load9Request("%%", indexR);
+                listRequest = requestDao.load9Request("%%", "%%", indexR);
             } else {
                 //Chuyển chuỗi có dấu thành không dấu
                 request.setCharacterEncoding("UTF-8");
@@ -217,8 +217,8 @@ public class ManageRequestController extends HttpServlet {
                 Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
                 String txtSearch = pattern.matcher(temp).replaceAll("");
                 //Chuyển chuỗi có dấu thành không dấu
-                indexCountR = requestDao.searchRequest(txtSearch, "%%").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
-                listRequest = requestDao.search9Request(txtSearch, indexR, "%%");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
+                indexCountR = requestDao.searchRequest(txtSearch, "%%", "%%").size();//Lấy số lượng tìm kiếm tất cả sách thỏa yêu cầu
+                listRequest = requestDao.search9Request(txtSearch, indexR, "%%", "%%");//Tìm kiếm tất cả sách thỏa yêu cầu theo phân trang
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -347,22 +347,28 @@ public class ManageRequestController extends HttpServlet {
                     + "                            </div>\n"
                     + "                            <div class=\"line\"></div>\n"
                     + "                            <div style=\"height: 500px; overflow-y: scroll; overflow-x: hidden;\" class=\"modal-body p-0\">\n"
-                    + "                                <fieldset id=\"tab011\">\n"
-                    + "                                    <div style=\"width: 1138px; margin: auto\" class=\"row\">\n"
-                    + "                                        <div class=\"col-md-12\">\n"
-                    + "                                            <div style=\" background-color: #1e1e27; color: white; font-weight: bold; font-size: 12px; text-align: center;\" class=\"row\">\n"
-                    + "                                                <div class=\"col-md-1\"></div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\">ISBN</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Tiêu đề</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Thể loại</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Tác giả</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Nhà xuất bản</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\">Giá bán</div>\n"
-                    + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\"></div>\n"
-                    + "                                            </div>\n"
-                    + "                                            <div id=\"createContent\"></div>\n"
-                    + "                                        </div>\n"
-                    + "                                    </div>\n");
+                    + "                                <fieldset id=\"tab011\">\n");
+            if (listBook.size() <= 0) {
+                out.println("<div class=\"\">\n"
+                        + "                    <p style=\"margin-top:100px; font-size: 100px; text-align: center;\">Không tìm thấy!</p>\n"
+                        + "                </div>");
+            } else {
+                out.println("                                    <div style=\"width: 1138px; margin: auto\" class=\"row\">\n"
+                        + "                                        <div class=\"col-md-12\">\n"
+                        + "                                            <div style=\" background-color: #1e1e27; color: white; font-weight: bold; font-size: 12px; text-align: center;\" class=\"row\">\n"
+                        + "                                                <div class=\"col-md-1\"></div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\">ISBN</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Tiêu đề</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Thể loại</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Tác giả</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-2\">Nhà xuất bản</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\">Giá bán</div>\n"
+                        + "                                                <div style=\"border-left: 2px solid white;\" class=\"col-md-1\"></div>\n"
+                        + "                                            </div>\n"
+                        + "                                            <div id=\"createContent\"></div>\n"
+                        + "                                        </div>\n"
+                        + "                                    </div>\n");
+            }
             count = 0;
             for (BookDTO bookDTO : listBook) {
                 count--;
