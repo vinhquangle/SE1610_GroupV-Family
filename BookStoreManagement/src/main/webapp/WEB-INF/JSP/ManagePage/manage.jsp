@@ -524,8 +524,14 @@
                         } else {
                             var classIndex = indexR - 1;
                         }
-                        document.getElementsByClassName("index")[classIndex].classList.add("active");
-                        document.getElementById(indexR).classList.add("active");
+                        try {
+                            document.getElementById(indexR).classList.add("active");
+                        } catch (exception) {
+                        }
+                        try {
+                            document.getElementsByClassName("index")[classIndex].classList.add("active");
+                        } catch (exception) {
+                        }
                         if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
                             $('#exampleModalCenter').modal('show');
                         } else if (use === "add" || use === "addBook" || use === "searchAdd" || use === "editBook" || use === "removeBook") {
@@ -573,8 +579,16 @@
                         } else {
                             var classIndex = 0;
                         }
-                        document.getElementsByClassName("indexR")[classIndex].classList.add("active");
-                        document.getElementById(index).classList.add("active");
+                        try {
+                            document.getElementById(index).classList.add("active");
+                        } catch (exception) {
+
+                        }
+                        try {
+                            document.getElementsByClassName("indexR")[classIndex].classList.add("active");
+                        } catch (exception) {
+
+                        }
                         if (use === "load" || use === "remove" || use === "recover" || use === "edit") {
                             $('#exampleModalCenter').modal('show');
                         } else if (use === "add" || use === "search" || use === "create") {

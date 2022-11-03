@@ -138,12 +138,12 @@ public class ManagePromotionController extends HttpServlet {
                         modal = "Khôi phục thành công";
                     }
                 } else if (use.equals("add")) {
-                    String dateS = request.getParameter("dateS");
-                    String dateE = request.getParameter("dateE");
-                    String des = request.getParameter("des");
                     double condition = 0;
                     double percent = 0;
                     boolean check = true;
+                    String dateS = request.getParameter("dateS");
+                    String dateE = request.getParameter("dateE");
+                    String des = request.getParameter("des");
                     try {
                         condition = Double.parseDouble(request.getParameter("condition"));
                     } catch (Exception e) {

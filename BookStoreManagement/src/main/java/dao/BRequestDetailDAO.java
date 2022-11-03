@@ -44,6 +44,34 @@ public class BRequestDetailDAO {
             + "WHERE d.requestID LIKE ?";
     private static final String QUANTITY_CHECK = "SELECT Quantity FROM [tblBRequestDetail] WHERE ISBN LIKE ? AND requestID LIKE ?";
     private static final String UPDATE_STATUS = "UPDATE [tblBRequestDetail] SET [Status] = ? WHERE ISBN LIKE ? AND requestID LIKE ?";
+    private static final String CHECK_STATUS = "SELECT * FROM [tblBRequestDetail] WHERE [Status] LIKE ? AND requestID LIKE ?";
+
+    public boolean checkStatus(String st, String requestID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        boolean check = false;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareCall(CHECK_STATUS);
+            ptm.setString(1, st);
+            ptm.setString(2, requestID);
+            rs = ptm.executeQuery();
+             while (rs.next()) {
+                 check = true;
+             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                ptm.close();
+            }
+        }
+        return check;
+    }
 
     public boolean insertRequestDetail(int requestID, BookDTO book, String status, String delete) throws SQLException {
         Connection conn = null;
