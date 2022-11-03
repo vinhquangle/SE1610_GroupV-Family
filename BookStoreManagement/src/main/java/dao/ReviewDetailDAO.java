@@ -42,7 +42,7 @@ public class ReviewDetailDAO {
     private static final String ADD_REVIEW = "INSERT INTO [tblReviewDetail] (reviewID, customerID, [Description], [Rate], [Date], [Status])\n"
             + "VALUES (?,?,?,?,?,?)";
     private static final String UPDATE_REVIEW = "UPDATE tblReviewDetail\n"
-            + "SET Rate = ?, customerID = ?, [Description] = ?, [Date] = ?\n"
+            + "SET Rate = ?, customerID = ?, [Description] = ?, [Date] = ?, [Status] = ?\n"
             + "WHERE reviewDetailID LIKE ?";
     private static final String UPDATE_STATUS_REVIEW = "UPDATE tblReviewDetail\n"
             + "SET [Status] = ?\n"
@@ -243,6 +243,7 @@ public class ReviewDetailDAO {
                 ptm.setString(3, des);
                 ptm.setString(4, date);
                 ptm.setString(5, reviewDetailID);
+                ptm.setString(6, "1");
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
         } catch (Exception e) {

@@ -6,7 +6,9 @@
 package controller.add;
 
 import dao.BookDAO;
+import dao.CustomerDAO;
 import dto.BookDTO;
+import dto.CustomerDTO;
 import dto.StaffDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,6 +47,10 @@ public class CreateCartController extends HttpServlet {
         try {
             String action = request.getParameter("action");
             HttpSession session = request.getSession();
+            CustomerDAO cusDao = new CustomerDAO();
+            List<CustomerDTO> listCus = new ArrayList<>();
+            listCus = cusDao.getlistCustomer();
+            session.setAttribute("LIST_CUS", listCus);
             StaffDTO staff = new StaffDTO();
             staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
             if (staff == null) {
@@ -87,14 +93,10 @@ public class CreateCartController extends HttpServlet {
                     count--;
                     quantityCheck = book.getQuantity();
                     out.println("<div style=\"margin-top: 10px; margin-bottom: 5px; border: 1px solid #dedede;\" class=\"row\">\n"
-                            + "                                <div class=\"col-md-1\"><img style=\"width: 100px;\" src=\"" + book.getImg() + "\"></div>\n"
-                            + "                                <div style=\"font-size: 10px; font-weight: bold;\" class=\"col-md-1\">" + book.getIsbn() + "</div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + book.getName() + "</div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + book.getCategory().getName() + "</div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + book.getAuthorName() + "</div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + book.getPublisher().getName() + "</div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-1\">" + currencyVN.format(book.getPrice()) + "</div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-1\">\n"
+                            + "                                <div class=\"col-md-2\"><img style=\"width: 100px;\" src=\"" + book.getImg() + "\"></div>\n"
+                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-6\">" + book.getName() + "</div>\n"
+                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + currencyVN.format(book.getPrice()) + "</div>\n"
+                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">\n"
                             + "                                   <div style=\"margin-top: 10px;\" class=\"input-number\">\n"
                             + "                                           <input onkeypress=\"return isNumberKey(event)\" type=\"number\" name=\"quantity\" id=\""+ count +"\" value=\"1\">\n"
                             + "                                             <span class=\"qty-up\" onclick=\"add("+ count +")\">+</span>\n"

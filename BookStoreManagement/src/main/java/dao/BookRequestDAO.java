@@ -49,8 +49,9 @@ public class BookRequestDAO {
             + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ?\n"
             + "ORDER BY r.[Date] DESC,r.[status] DESC, r.requestID DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
-    private static final String UPDATE_STATUS = "UPDATE [tblBookRequest] SET [Delete] = ?\n"
+    private static final String UPDATE_DELETE = "UPDATE [tblBookRequest] SET [Delete] = ?\n"
             + "WHERE [requestID] = ?";
+    private static final String UPDATE_STATUS = "UPDATE [tblBookRequest] SET [Status] = ? WHERE requestID LIKE ?";
 
     public int insertRequest(String staffID, String status, String delete) throws SQLException {
         int requestID = 0;
@@ -319,9 +320,34 @@ public class BookRequestDAO {
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareCall(UPDATE_STATUS);
+                ptm = conn.prepareCall(UPDATE_DELETE);
                 ptm.setString(1, request.getDelete());
                 ptm.setString(2, request.getRequestID());
+                check = ptm.executeUpdate() > 0 ? true : false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updateStatus(String st, String requestID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareCall(UPDATE_STATUS);
+                ptm.setString(1, st);
+                ptm.setString(2, requestID);
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
         } catch (Exception e) {

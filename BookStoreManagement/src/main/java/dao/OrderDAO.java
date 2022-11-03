@@ -33,7 +33,8 @@ public class OrderDAO {
             + "LEFT JOIN tblStaff s ON o.staffID LIKE s.staffID)\n"
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
-            + "WHERE o.[status] LIKE ?";
+            + "WHERE o.[status] LIKE ?\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC";
     private static final String LOAD_ORDER_BY_DELIVERER = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.Subtotal, o.Discount AS 'orderDiscount', o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
@@ -44,7 +45,8 @@ public class OrderDAO {
             + "LEFT JOIN tblStaff s ON o.staffID LIKE s.staffID)\n"
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
-            + "WHERE o.[status] IS NULL AND o.staffID LIKE ? AND o.[Address] IS NOT NULL";
+            + "WHERE o.[status] IS NULL AND o.staffID LIKE ? AND o.[Address] IS NOT NULL\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC";
     private static final String LOAD_ORDER_BY_DELIVERER_9 = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.Subtotal, o.Discount AS 'orderDiscount', o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
@@ -56,7 +58,7 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.[status] IS NULL AND o.staffID LIKE ? AND o.[Address] IS NOT NULL\n"
-            + "ORDER BY o.[status] DESC\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String LOAD_ORDER_BY_STATUS_9 = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.Subtotal, o.Discount AS 'orderDiscount', o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
@@ -69,7 +71,7 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.[status] LIKE ?\n"
-            + "ORDER BY o.[status] DESC\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String LOAD_ORDER_BY_STATUS_NULL = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.Subtotal, o.Discount AS 'orderDiscount', o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
@@ -93,9 +95,9 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.[status] IS NULL\n"
-            + "ORDER BY o.[status] DESC\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
-    private static final String LOAD_ORDER_BY_CUS = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
+    private static final String LOAD_ORDER_BY_CUS = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.Subtotal, o.Discount AS 'orderDiscount', o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
             + "p.staffID AS 'staffProID', p.[Date-start] AS 'dateS', p.[Date-end] AS 'dateE', p.[Description] AS 'proDes', p.Condition, p.Discount, p.[status] AS 'proStatus',\n"
@@ -129,7 +131,8 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.status LIKE ? AND ( o.orderID LIKE ? OR o.customerID LIKE ? OR o.staffID LIKE ? OR c.Phone LIKE ?\n"
-            + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)";
+            + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC";
     private static final String SEARCH_ORDER_NULL = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.Subtotal, o.Discount AS 'orderDiscount', o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
@@ -141,7 +144,8 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.[status] IS NULL AND ( o.orderID LIKE ? OR o.customerID LIKE ? OR o.staffID LIKE ? OR c.Phone LIKE ?\n"
-            + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)";
+            + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC";
     private static final String SEARCH_ORDER_DELIVERER = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.Subtotal, o.Discount AS 'orderDiscount', o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
@@ -153,7 +157,8 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.[status] IS NULL AND o.staffID LIKE ? AND o.[Address] IS NOT NULL AND ( o.orderID LIKE ? OR o.customerID LIKE ? OR o.staffID LIKE ? OR c.Phone LIKE ?\n"
-            + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)";
+            + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC";
     private static final String SEARCH_ORDER_9 = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.Subtotal, o.Discount AS 'orderDiscount', o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
@@ -166,7 +171,7 @@ public class OrderDAO {
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.status LIKE ? AND ( o.orderID LIKE ? OR o.customerID LIKE ? OR o.staffID LIKE ? OR c.Phone LIKE ?\n"
             + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)\n"
-            + "ORDER BY o.[status] DESC\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String SEARCH_ORDER_DELIVERER_9 = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.Subtotal, o.Discount AS 'orderDiscount', o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
@@ -180,7 +185,7 @@ public class OrderDAO {
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.status IS NULL AND o.staffID LIKE ? AND o.[Address] IS NOT NULL AND ( o.orderID LIKE ? OR o.customerID LIKE ? OR o.staffID LIKE ? OR c.Phone LIKE ?\n"
             + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)\n"
-            + "ORDER BY o.[status] DESC\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String SEARCH_ORDER_NULL_9 = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.Subtotal, o.Discount AS 'orderDiscount', o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
@@ -194,7 +199,7 @@ public class OrderDAO {
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.status IS NULL AND ( o.orderID LIKE ? OR o.customerID LIKE ? OR o.staffID LIKE ? OR c.Phone LIKE ?\n"
             + "OR dbo.ufn_removeMark(c.Name) LIKE ? OR  dbo.ufn_removeMark(s.Name) LIKE ?)\n"
-            + "ORDER BY o.[status] DESC\n"
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String INSERT_ORDER_ONLINE_STORE = "INSERT INTO [tblOrder](customerID,staffID,promotionID,[Address],[Date],Subtotal,Discount,[Delivery-cost],Total,[Description],[Status],[Delete])\n"
             + "VALUES (?,NULL,?,NULL,?,?,?,?,?,?,NULL,?)\n"
@@ -203,9 +208,9 @@ public class OrderDAO {
             + "VALUES (?,NULL,?,?,?,?,?,?,?,?,NULL,?)\n"
             + "SELECT MAX(orderID) AS 'orderID' FROM tblOrder";
     private static final String INSERT_ORDER_OFFLINE = "INSERT INTO [tblOrder](customerID,staffID,promotionID,[Address],[Date],Subtotal,Discount,[Delivery-cost],Total,[Description],[Status],[Delete])\n"
-            + "VALUES (NULL,?,?,NULL,?,?,?,NULL,?,NULL,?,?)\n"
+            + "VALUES (?,?,?,NULL,?,?,?,NULL,?,NULL,?,?)\n"
             + "SELECT MAX(orderID) AS 'orderID' FROM tblOrder";
-    private static final String GET_BY_DATE = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
+    private static final String GET_BY_DATE = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Subtotal, o.Discount AS 'orderDiscount', o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
             + "p.staffID AS 'staffProID', p.[Date-start] AS 'dateS', p.[Date-end] AS 'dateE', p.[Description] AS 'proDes', p.Condition, p.Discount, p.[status] AS 'proStatus',\n"
@@ -216,7 +221,7 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.[Date] LIKE ?";
-    private static final String GET_BY_MONTH = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
+    private static final String GET_BY_MONTH = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Subtotal, o.Discount AS 'orderDiscount', o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
             + "p.staffID AS 'staffProID', p.[Date-start] AS 'dateS', p.[Date-end] AS 'dateE', p.[Description] AS 'proDes', p.Condition, p.Discount, p.[status] AS 'proStatus',\n"
@@ -227,7 +232,7 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE MONTH(o.[Date])  LIKE ? AND YEAR(o.[Date]) LIKE ?";
-    private static final String GET_BY_YEAR = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
+    private static final String GET_BY_YEAR = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.[Date], o.[Delivery-cost], o.Subtotal, o.Discount AS 'orderDiscount', o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"
             + "p.staffID AS 'staffProID', p.[Date-start] AS 'dateS', p.[Date-end] AS 'dateE', p.[Description] AS 'proDes', p.Condition, p.Discount, p.[status] AS 'proStatus',\n"
@@ -866,7 +871,7 @@ public class OrderDAO {
                 ptm.setString(7, "%" + txtsearch + "%");
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                        String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -945,7 +950,7 @@ public class OrderDAO {
                 ptm.setString(6, "%" + txtsearch + "%");
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                    String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1025,7 +1030,7 @@ public class OrderDAO {
                 ptm.setString(7, "%" + txtsearch + "%");
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                            String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1109,7 +1114,7 @@ public class OrderDAO {
                 ptm.setInt(8, (page - 1) * 9);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                    String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1192,7 +1197,7 @@ public class OrderDAO {
                 ptm.setInt(7, (page - 1) * 9);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                               String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1276,7 +1281,7 @@ public class OrderDAO {
                 ptm.setInt(8, (page - 1) * 9);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                    String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1415,7 +1420,7 @@ public class OrderDAO {
         return orderID;
     }
 
-    public int insertOrderOffline(String staffID, String promotionID, double subtotal, double discount, double total, String status) throws SQLException {
+    public int insertOrderOffline(String cusID, String staffID, String promotionID, double subtotal, double discount, double total, String status) throws SQLException {
         int orderID = 0;
         String date = java.time.LocalDate.now().toString();
         Connection conn = null;
@@ -1424,14 +1429,15 @@ public class OrderDAO {
         try {
             conn = DBUtils.getConnection();
             ptm = conn.prepareCall(INSERT_ORDER_OFFLINE);
-            ptm.setString(1, staffID);
-            ptm.setString(2, promotionID);
-            ptm.setString(3, date);
-            ptm.setDouble(4, subtotal);
-            ptm.setDouble(5, discount);
-            ptm.setDouble(6, total);
-            ptm.setString(7, status);
-            ptm.setString(8, "0");
+            ptm.setString(1, cusID);
+            ptm.setString(2, staffID);
+            ptm.setString(3, promotionID);
+            ptm.setString(4, date);
+            ptm.setDouble(5, subtotal);
+            ptm.setDouble(6, discount);
+            ptm.setDouble(7, total);
+            ptm.setString(8, status);
+            ptm.setString(9, "0");
             rs = ptm.executeQuery();
             while (rs.next()) {
                 orderID = rs.getInt("orderID");
@@ -1464,7 +1470,7 @@ public class OrderDAO {
                 ptm.setString(1, day);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                       String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1539,7 +1545,7 @@ public class OrderDAO {
                 ptm.setString(2, year);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                        String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");
@@ -1613,7 +1619,7 @@ public class OrderDAO {
                 ptm.setString(1, year);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                                        String orderID = rs.getString("orderID");
+                    String orderID = rs.getString("orderID");
                     String customerID = rs.getString("customerID");
                     String staffID = rs.getString("staffID");
                     String promotionID = rs.getString("promotionID");

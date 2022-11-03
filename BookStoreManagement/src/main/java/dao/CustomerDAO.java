@@ -26,6 +26,7 @@ public class CustomerDAO {
     private static final String CREATE = "INSERT INTO [tblCustomer](customerID,Name,[Password],Email,[Address],Phone,Point,[Status],[Delete])\n"
             + "VALUES (?,?,?,?,?,?,?,0,0)";
     private static final String CHECK_CUSTOMER_ID = "SELECT customerID FROM tblCustomer WHERE customerID LIKE ?";
+    private static final String CHECK_CUSTOMER_PHONE = "SELECT * FROM [tblCustomer] WHERE Phone LIKE ?";
     private static final String CHECK_CUSTOMER_EMAIL = "SELECT [Email] FROM tblCustomer WHERE [Email] LIKE ?";
     private static final String CUSTOMER = "SELECT customerID, password, name, email, [address], phone, point, [status], [delete] FROM tblCustomer WHERE [Email] LIKE ?";
     private static final String CHANGE_PASSWORD = "UPDATE tblCustomer SET [password] = ? WHERE customerID LIKE ?";
@@ -280,6 +281,37 @@ public class CustomerDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(CHECK_CUSTOMER_ID);
                 ptm.setString(1, customerID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean checkCustomerPhone(String phone) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_CUSTOMER_PHONE);
+                ptm.setString(1, phone);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     check = true;

@@ -65,17 +65,6 @@
         </script>
         <%
             }
-            String messi = (String) request.getAttribute("MESS");
-            if (messi != null) {
-        %>
-        <script>
-            window.addEventListener("load", function () {
-                alert(document.getElementById("messi").value);
-            }, );
-        </script>
-        <input type="hidden" id="messi" value="<%= messi%>">
-        <%
-            }
         %>
         <!-- Modal -->
         <div  class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -197,7 +186,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12 text-right">
                                                         <div class="logo_container">
-                                                            <a style="font-size: 44px;" href="GetController?">Phương<span>Nam</span></a>
+                                                            <a style="font-size: 44px;" href="GetController?">Phương<span style="color: #d10024;">Nam</span></a>
                                                         </div>
                                                         <nav class="navbar">
                                                             <!-- SEARCH BAR -->
@@ -229,7 +218,6 @@
                                                                         <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="cursor: pointer;">
                                                                             <i class="fa fa-shopping-cart fa-3x"></i>
                                                                             <span>Giỏ hàng</span>
-
                                                                             <%
                                                                                 if (session.getAttribute("SIZE") != null && (int) session.getAttribute("SIZE") > 0) {
                                                                                     int count = (int) session.getAttribute("SIZE");
@@ -306,9 +294,19 @@
                                                             %>
                                                             <a style="text-decoration: none;" href="CreateCartController?action=Create">
                                                                 <div style="text-align: center; margin-top: 20px; cursor: pointer; text-decoration: none;">
-                                                                    <i style="color: #1e1e27" class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
-                                                                    <p style="color: #1e1e27"><b>Tạo giỏ hàng</b></p>
-                                                                </div></a>
+                                                                    <i style="color: #1e1e27; position: relative;" class="fa fa-cart-plus fa-3x" aria-hidden="true">
+                                                                            <%
+                                                                                if (session.getAttribute("SIZE") != null && (int) session.getAttribute("SIZE") > 0) {
+                                                                                    int count = (int) session.getAttribute("SIZE");
+                                                                            %>
+                                                                            <div style="left: 45px; top: 0px; padding: 5px 8px 5px 8px; position: absolute; background-color: #d10040; color: white; font-size: 12px; border-radius: 50%;" class="qty"><%= count%></div>
+                                                                            <%
+                                                                                }
+                                                                            %>
+                                                                    </i>
+                                                                    <p style="color: #1e1e27"><b>Giỏ hàng</b></p>
+                                                                </div>
+                                                            </a>
                                                                 <%
                                                                     }
                                                                 %>

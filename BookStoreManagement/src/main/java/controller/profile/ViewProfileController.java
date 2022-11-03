@@ -76,6 +76,9 @@ public class ViewProfileController extends HttpServlet {
                 } else if (!phone.matches(new CustomerDTO().PHONE_FORMAT)) {
                     checkValidation = false;
                     cusError.setPhoneError("Số điện thoại không hợp lệ");
+                }else if(daoCus.checkCustomerPhone(phone)){
+                    checkValidation = false;
+                    cusError.setPhoneError("Số điện thoại đã được sử dụng");
                 }
                 if (address.length() > 500 || address.length() < 5) {
                     checkValidation = false;

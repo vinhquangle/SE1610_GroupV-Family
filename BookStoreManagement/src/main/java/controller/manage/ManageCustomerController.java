@@ -90,6 +90,11 @@ public class ManageCustomerController extends HttpServlet {
                 if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
                     modal = "Chỉnh sửa thông tin thất bại(Email không hợp lệ)";
                     throw new Exception();
+                } else if (!cus.getEmail().equals(email)) {
+                    if (cusDao.checkCustomerEmail(email)) {
+                        modal = "Chỉnh sửa thông tin thất bại(Email đã được sử dụng)";
+                        throw new Exception();
+                    }
                 }
                 if (phone.isBlank() || phone.isEmpty()) {
                     modal = "Chỉnh sửa thông tin thất bại(Số điện thoại không được để trống)";
@@ -97,6 +102,11 @@ public class ManageCustomerController extends HttpServlet {
                 } else if (!phone.matches(new CustomerDTO().PHONE_FORMAT)) {
                     modal = "Chỉnh sửa thông tin thất bại(Số điện thoại không hợp lệ)";
                     throw new Exception();
+                } else if (!cus.getPhone().equals(phone)) {
+                    if (cusDao.checkCustomerPhone(phone)) {
+                        modal = "Chỉnh sửa thông tin thất bại(Số điện thoại đã được sử dụng)";
+                        throw new Exception();
+                    }
                 }
                 if (addr.length() > 500 || addr.length() < 5) {
                     modal = "Chỉnh sửa thông tin thất bại(Địa chỉ phải trong khoảng [5,500] ký tự)";
@@ -175,10 +185,16 @@ public class ManageCustomerController extends HttpServlet {
                 if (email.isBlank() || email.isEmpty()) {
                     checkValidation = false;
                     cusError.setEmailError("Email không được bỏ trống");
+                } else if (cusDao.checkCustomerEmail(email)) {
+                    checkValidation = false;
+                    cusError.setEmailError("Email đã được sử dụng");
                 }
                 if (!phone.matches(new CustomerDTO().PHONE_FORMAT)) {
                     checkValidation = false;
                     cusError.setPhoneError("Số điện thoại không hợp lệ");
+                } else if (cusDao.checkCustomerPhone(phone)) {
+                    cusError.setPhoneError("Số điện thoại đã được sử dụng");
+                    checkValidation = false;
                 }
                 if (addr.length() > 500 || addr.length() < 5) {
                     checkValidation = false;

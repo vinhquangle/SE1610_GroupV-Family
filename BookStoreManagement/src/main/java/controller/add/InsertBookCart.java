@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +28,14 @@ public class InsertBookCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        int quantity = 0;
+        double totalS = 0;
+        boolean flag = false;
+        Cart cart = new Cart();
+        BookDAO dao = new BookDAO();
         String mess = new String();
         String isbn = new String();
-        Cart cart = new Cart();
         BookDTO bookCheck = new BookDTO();
-        BookDAO dao = new BookDAO();
-        double totalS = 0;
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         try {
@@ -40,59 +43,58 @@ public class InsertBookCart extends HttpServlet {
             int quantityCheck = Integer.parseInt(request.getParameter("quantityCheck"));
             String use = request.getParameter("use");
             isbn = request.getParameter("isbn");
-            int quantity = 0;
             BookDTO book = dao.loadBook(isbn, "1");
             if (session != null) {
                 cart = (Cart) session.getAttribute("CART");
-                try {
-                    quantity = Integer.parseInt(request.getParameter("quantity"));
-                } catch (Exception e) {
-                    mess = "<div class=\"row\">\n"
-                            + "                         <div class=\"col-md-3\">\n"
-                            + "                                <div class=\"product-preview\">\n"
-                            + "                                    <img src=\"" + book.getImg() + "\"/>\n"
-                            + "                                </div>\n"
-                            + "                            </div>\n"
-                            + "                         <div class=\"col-md-9\">\n"
-                            + "                             <p style=\"color: red;\"><b>Thêm \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
-                            + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
-                            + "                                </div>\n"
-                            + "                            </div>";
-                    throw new Exception();
-                }
-                if (quantity < 1) {
-                    mess = "<div class=\"row\">\n"
-                            + "                         <div class=\"col-md-3\">\n"
-                            + "                                <div class=\"product-preview\">\n"
-                            + "                                    <img src=\"" + book.getImg() + "\"/>\n"
-                            + "                                </div>\n"
-                            + "                            </div>\n"
-                            + "                         <div class=\"col-md-9\">\n"
-                            + "                             <p style=\"color: red;\"><b>Thêm \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
-                            + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
-                            + "                                </div>\n"
-                            + "                            </div>";
-                    throw new Exception();
-                }
-                if (quantity > quantityCheck) {
-                    mess = "<div class=\"row\">\n"
-                            + "                         <div class=\"col-md-3\">\n"
-                            + "                                <div class=\"product-preview\">\n"
-                            + "                                    <img src=\"" + book.getImg() + "\"/>\n"
-                            + "                                </div>\n"
-                            + "                            </div>\n"
-                            + "                         <div class=\"col-md-9\">\n"
-                            + "                             <p style=\"color: red;\"><b>Thêm \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
-                            + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
-                            + "                                </div>\n"
-                            + "                            </div>";
-                    throw new Exception();
-                }
                 if (isbn.equals("F5")) {
                     throw new Exception();
                 }
                 if (use != null) {
                     if (use.equals("Add")) {
+                        try {
+                            quantity = Integer.parseInt(request.getParameter("quantity"));
+                        } catch (Exception e) {
+                            mess = "<div class=\"row\">\n"
+                                    + "                         <div class=\"col-md-3\">\n"
+                                    + "                                <div class=\"product-preview\">\n"
+                                    + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>\n"
+                                    + "                         <div class=\"col-md-9\">\n"
+                                    + "                             <p style=\"color: red;\"><b>Thêm \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
+                                    + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>";
+                            throw new Exception();
+                        }
+                        if (quantity < 1) {
+                            mess = "<div class=\"row\">\n"
+                                    + "                         <div class=\"col-md-3\">\n"
+                                    + "                                <div class=\"product-preview\">\n"
+                                    + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>\n"
+                                    + "                         <div class=\"col-md-9\">\n"
+                                    + "                             <p style=\"color: red;\"><b>Thêm \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
+                                    + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>";
+                            throw new Exception();
+                        }
+                        if (quantity > quantityCheck) {
+                            mess = "<div class=\"row\">\n"
+                                    + "                         <div class=\"col-md-3\">\n"
+                                    + "                                <div class=\"product-preview\">\n"
+                                    + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>\n"
+                                    + "                         <div class=\"col-md-9\">\n"
+                                    + "                             <p style=\"color: red;\"><b>Thêm \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
+                                    + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>";
+                            throw new Exception();
+                        }
                         if (cart == null) {
                             cart = new Cart();//Khởi tạo giỏ hàng
                         } else if (cart.getCart().containsKey(isbn)) {
@@ -117,6 +119,8 @@ public class InsertBookCart extends HttpServlet {
                         book.setQuantity(quantity);//Thay đổi số lượng sản phẩm
                         cart.add(book);//Thêm vào giỏ hàng
                         session.setAttribute("CART", cart);
+                         Map<String, BookDTO> listSize = cart.getCart();
+                         session.setAttribute("SIZE", listSize.size());
                         mess = "<div class=\"row\">"
                                 + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
                                 + "                             <p style=\"color: green;\"><b>Thêm vào giỏ hàng thành công</b></p>\n"
@@ -161,8 +165,41 @@ public class InsertBookCart extends HttpServlet {
                                     + "                            </div>";
                             cart.remove(isbn);//Xóa sản phẩm khỏi giỏ hàng theo ISBN
                             session.setAttribute("CART", cart);
+                            Map<String, BookDTO> listSize = cart.getCart();
+                            session.setAttribute("SIZE", listSize.size());
                         }
                     } else if (use.equals("Edit")) {
+                        try {
+                            quantity = Integer.parseInt(request.getParameter("quantity"));
+                        } catch (Exception e) {
+                            mess = "<div class=\"row\">\n"
+                                    + "                         <div class=\"col-md-3\">\n"
+                                    + "                                <div class=\"product-preview\">\n"
+                                    + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>\n"
+                                    + "                         <div class=\"col-md-9\">\n"
+                                    + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
+                                    + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>";
+                            throw new Exception();
+                        }
+                        if (quantity < 1) {
+                            mess = "<div class=\"row\">\n"
+                                    + "                         <div class=\"col-md-3\">\n"
+                                    + "                                <div class=\"product-preview\">\n"
+                                    + "                                    <img src=\"" + book.getImg() + "\"/>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>\n"
+                                    + "                         <div class=\"col-md-9\">\n"
+                                    + "                             <p style=\"color: red;\"><b>Thay đổi \"" + book.getName() + "\" - số lượng " + quantity + "  vào giỏ hàng thất bại</b></p>\n"
+                                    + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu phải là số dương lớn hơn 0)</b></p>\n"
+                                    + "                                </div>\n"
+                                    + "                            </div>";
+                            flag = true;
+                            throw new Exception();
+                        }
                         if (quantity > quantityCheck) {
                             mess = " <div class=\"row\">\n"
                                     + "                         <div class=\"col-md-3\">\n"
@@ -175,6 +212,7 @@ public class InsertBookCart extends HttpServlet {
                                     + "                             <p style=\"color: red;\"><b>(Số lượng yêu cầu không có sẳn - Hiện tại còn " + quantityCheck + " sản phẩm)</b></p>\n"
                                     + "                                </div>\n"
                                     + "                            </div>";
+                            flag = true;
                             throw new Exception();
                         }
                         if (cart != null) {
@@ -234,26 +272,33 @@ public class InsertBookCart extends HttpServlet {
                         + "        </div>\n"
                         + "        <!-- Modal -->         \n");
             }
-            char alphabet = 'A';
-            if (cart.getCart().size() > 0) {
-                for (BookDTO book : cart.getCart().values()) {
-                    try {
-                        bookCheck = dao.loadBook(book.getIsbn(), "1");
-                        totalS += book.getPrice() * book.getQuantity();
-                        out.println("                     <div class=\"order-col\">\n"
-                                + "                       <div style=\"width: 600px;\"><input id=\"" + alphabet + "\" type=\"number\" style=\"width:40px\" value=\"" + book.getQuantity() + "\">x " + book.getName() + "</div>\n"
-                                + "                         <div style=\"width: 100px;\"></div>\n"
-                                + "                        <div style=\"width: 150px;\">" + currencyVN.format(book.getPrice() * book.getQuantity()) + "</div>\n"
-                                + "                         <div>\n"
-                                + "                             <button type=\"button\" style=\"margin-right: 20px; border: none;\" onclick=\"loadAdd(document.getElementById('" + alphabet + "').value," + book.getIsbn() + "," + bookCheck.getQuantity() + ",'Edit')\" title=\"Chỉnh sửa\" class=\"fa-solid fa-pen-to-square\"></button>\n"
-                                + "                             <button type=\"button\" onclick=\"loadAdd('1'," + book.getIsbn() + ",'1','Remove')\" title=\"Xóa\" style=\"border: none;\" class=\"fa-solid fa-trash-can\"></button></div>\n"
-                                + "                          </div>\n");
-                        alphabet++;
-                    } catch (Exception e) {
+            if (cart != null) {
+                char alphabet = 'A';
+                if (cart.getCart().size() > 0) {
+                    for (BookDTO book : cart.getCart().values()) {
+                        quantity = book.getQuantity();
+                        if (book.getIsbn().equals(isbn) && flag) {
+                            System.out.println("1");
+                            quantity = Integer.parseInt(request.getParameter("quantity"));
+                        }
+                        try {
+                            bookCheck = dao.loadBook(book.getIsbn(), "1");
+                            totalS += book.getPrice() * book.getQuantity();
+                            out.println("                     <div class=\"order-col\">\n"
+                                    + "                        <button type=\"button\" style=\"margin-right: 20px; border: none;\" onclick=\"loadAdd(document.getElementById('" + alphabet + "').value," + book.getIsbn() + "," + bookCheck.getQuantity() + ",'Edit')\" title=\"Chỉnh sửa\" class=\"fa-solid fa-pen-to-square\"></button>\n"
+                                    + "                       <div style=\"width: 600px;\"><input id=\"" + alphabet + "\" type=\"number\" style=\"width:50px\" value=\"" + quantity + "\">x " + book.getName() + "</div>\n"
+                                    + "                         <div style=\"width: 100px;\"></div>\n"
+                                    + "                        <div style=\"width: 150px;\">" + currencyVN.format(book.getPrice() * book.getQuantity()) + "</div>\n"
+                                    + "                         <div>\n"
+                                    + "                             <button type=\"button\" onclick=\"loadAdd('1'," + book.getIsbn() + ",'1','Remove')\" title=\"Xóa\" style=\"border: none;\" class=\"fa-solid fa-trash-can\"></button></div>\n"
+                                    + "                          </div>\n");
+                            alphabet++;
+                        } catch (Exception e) {
+                        }
                     }
                 }
+                out.println("                     <input id=\"totalS\" hidden=\"\" value=\"" + currencyVN.format(totalS) + "\">");
             }
-            out.println("                     <input id=\"totalS\" hidden=\"\" value=\"" + currencyVN.format(totalS) + "\">");
         }
     }
 

@@ -21,6 +21,7 @@ controller\search\FilterPriceController.class
 logingoogle\GooglePojo.class
 dao\PublisherDAO.class
 email\JavaMailUtil$1.class
+controller\add\AddCustomerCartController.class
 dto\PublisherErrorDTO.class
 controller\search\FilterCategoryController.class
 dao\OrderDetailDAO.class
