@@ -152,6 +152,10 @@
         <servlet-name>ManageResponseController</servlet-name>
         <servlet-class>controller.manage.ManageResponseController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddCustomerCartController</servlet-name>
+        <servlet-class>controller.add.AddCustomerCartController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetController</servlet-name>
         <url-pattern>/GetController</url-pattern>
@@ -303,6 +307,10 @@
     <servlet-mapping>
         <servlet-name>ManageResponseController</servlet-name>
         <url-pattern>/ManageResponseController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddCustomerCartController</servlet-name>
+        <url-pattern>/AddCustomerCartController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -38,7 +38,7 @@ public class LoadController extends HttpServlet {
             String isbn = request.getParameter("isbn");
             List<BookDTO> listBook = bookDao.getAllBook("1");//Lấy tất cả sách trong database
             BookDTO book = bookDao.loadBook(isbn, "1"); //Lấy thông tin sách theo ISBN
-            List<ReviewDetailDTO> listReviewDetail = reviewDetailDao.loadReview("1", book.getReview().getReviewID());//Lấy tất cả đánh giá sách
+            List<ReviewDetailDTO> listReviewDetail = reviewDetailDao.loadReview("%%", book.getReview().getReviewID());//Lấy tất cả đánh giá sách
             List<BookDTO> sameCate = new ArrayList<>();
             int count = 0;
             for (BookDTO bookDTO : listBook) {

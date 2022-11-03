@@ -85,7 +85,7 @@
                 String controllerAdd = (String) request.getAttribute("CONTROLLER");
                 String index = (String) request.getParameter("index");
                 if (index == null) {
-                    index = "";
+                    index = "1";
                 }
                 Locale localeVN = new Locale("vi", "VN");
                 NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
@@ -107,8 +107,9 @@
                                 <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                                 <a style="cursor: pointer; color: black; font-weight: bold;" onclick="this.parentNode.submit();"><%= list.get(i).getName()%></a>
                             </form>
-                        </h3>
+                        </h3>                                
                         <h4 class="product-price"><%= price%></h4>                                    
+                        <h8>Hiện còn: <%= list.get(i).getQuantity()%></h8>                                    
                         <div class="product-btns">
                             <form style="display: inline-block;" method="GET" action="LoadController">
                                 <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
@@ -126,6 +127,12 @@
                             <input name="controller" value="<%= controllerAdd%>" type="hidden">
                             <input name="index" value="<%= index%>" type="hidden">
                             <button type="submit" value="Home" name="action" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</button>
+                            <input style="display: none" name="searchBook" value="<%= search%>">
+                            <input style="display: none" name="cateID" value="<%= cateN%>">
+                            <input style="display: none" name="pubID" value="<%= pubN%>">
+                            <input style="display: none" name="max" value="<%= min%>">
+                            <input style="display: none" name="min" value="<%= max%>">
+                            <input style="display: none" name="mess" value="<%= me%>">
                         </form>
                     </div>
                 </div>

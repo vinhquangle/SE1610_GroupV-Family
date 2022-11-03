@@ -126,6 +126,10 @@ public class RegisterController extends HttpServlet {
                     cusError.setPhoneError("Số điện thoại không được để trống!");
                 }
             }
+            if (daoCus.checkCustomerPhone(phone)) {
+                cusError.setPhoneError("Số điện thoại đã được sử dụng!");
+                checkValidation = false;
+            }
             if (address.length() > 200) {
                 cusError.setAddressError("Địa chỉ quá dài (bé hơn 200 kí tự)!");
                 checkValidation = false;

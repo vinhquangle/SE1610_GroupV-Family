@@ -7,6 +7,8 @@ package controller.add;
 
 import cart.Cart;
 import dao.BookDAO;
+import dao.CategoryDAO;
+import dao.PublisherDAO;
 import dto.BookDTO;
 import java.io.IOException;
 import java.util.Map;
@@ -44,6 +46,22 @@ public class AddBookCartController extends HttpServlet {
             }
             HttpSession session = request.getSession();
             String isbn = request.getParameter("isbn");
+            String cateN = request.getParameter("cateID");
+            String pubN = request.getParameter("pubID");
+            String max = request.getParameter("max");
+            String min = request.getParameter("min");
+            String mes = request.getParameter("mess");
+            CategoryDAO cateDao = new CategoryDAO();
+            PublisherDAO pubDao = new PublisherDAO();
+            if (cateN != "") {
+                request.setAttribute("CATEGORY", cateDao.getCategory(cateN));//Lấy thông tin thể loại
+            } else if (pubN != "") {
+                request.setAttribute("PUBLISHER", pubDao.getPublisher(pubN));//Lấy thông tin nhà xuất bản
+            } else if (max != null && min != null) {
+                request.setAttribute("MAX", max);
+                request.setAttribute("MIN", min);
+                request.setAttribute("MESS", mes);
+            }
             int quantity = 0;
             BookDAO dao = new BookDAO();
             BookDTO book = dao.loadBook(isbn, "1");//Lấy chi tiết sản phẩm theo ISBN

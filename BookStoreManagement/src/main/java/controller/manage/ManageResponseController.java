@@ -83,7 +83,7 @@ public class ManageResponseController extends HttpServlet {
             try {
                 indexR = Integer.parseInt(request.getParameter("indexR"));
             } catch (Exception e) {
-                index = 1;
+                indexR = 1;
             }
             if (searchR == null || searchR == "") {
                 searchR = "";
@@ -185,23 +185,34 @@ public class ManageResponseController extends HttpServlet {
                         }
                     }
                 } else if (use.equals("create")) {
+                    boolean flag = true;
                     requestId = request.getParameter("requestID");
+                    listDetail = detailDao.loadDetailByRequest(requestId);
+                    listResponse1 = responseDAO.loadResponseByRequest(requestId, "1");
                     if (cart == null || cart.getCart().size() <= 0) {
                         modal = "Tạo thất bại(Danh sách đang trống)";
                         throw new Exception();
                     } else if (cart.getCart().size() > 0) {
                         int responseId = responseDAO.insertResponse(requestId, staff.getStaffID(), "1", "0");
                         for (BookDTO bookK : cart.getCart().values()) {
-                            detailRSDao.insertResponseDetail(responseId, bookK, "1", "0");
+                            if (bookK.getQuantity() > 0) {
+                                int quantityPass = 0;
+                                detailRSDao.insertResponseDetail(responseId, bookK, "1", "0");
+                                for (BookResponseDTO bookResponseDTO : listResponse1) {
+                                    quantityPass += responseDetailDao.quantityCheck(bookK.getIsbn(), bookResponseDTO.getResponseID());
+                                }
+                                if (quantityPass >= detailDao.quantityCheck(bookK.getIsbn(), requestId)) {
+                                    detailDao.updateStatus("1", bookK.getIsbn(), requestId);
+                                }
+                            }
+                        }
+                        if (flag) {
+                            requestDao.updateStatus("1", requestId);
                         }
                     }
                     success = "Done";
-                    requestId = request.getParameter("requestID");
-                    requestBook = requestDao.getRequestById(requestId);
-                    listResponse1 = responseDAO.loadResponseByRequest(requestId, "1");
-                    listDetail = detailDao.loadDetailByRequest(requestId);
                     cart.removeAll();
-                }else if (use.equals("search")){
+                } else if (use.equals("search")) {
                     cart.removeAll();
                 }
             }
@@ -337,7 +348,7 @@ public class ManageResponseController extends HttpServlet {
                             + "                            <div style=\"text-align: center;\" class=\"col-md-2\">\n"
                             + "                                <span style=\"color: #d10024; font-weight: bold\">" + quantityPass + "</span>\n"
                             + "                            </div>\n");
-                    if (quantityNo > 0) {
+                    if (quantityNo > 0 && !detailDTO.getStatus().equals("1")) {
                         out.println("                          <div style=\"text-align: center;\" class=\"col-md-2\">\n"
                                 + "                                <input class=\"" + alphabet + "\" type=\"number\" style=\"color: #d10024; font-weight: bold; width: 50px;\" value=\"" + quantityCart + "\"> / <span style=\"color: #d10024; font-weight: bold\">" + quantityNo + "</span></br>\n"
                                 + "                                <button data-bs-dismiss=\"modal\" onclick=\"loadResponse('ManageResponseController','" + index + "','" + search + "','save','','" + indexR + "','','" + requestBook.getRequestID() + "','" + detailDTO.getIsbn().getIsbn() + "',document.getElementsByClassName(\'" + alphabet + "\')[1].value,document.getElementsByClassName(\'" + alphabet + "\')[0].value,'" + quantityNo + "')\" style=\"margin-top: 5px; color: white; border: 1px solid white; background-color: green; width: 60px;\" type=\"button\">Lưu</button>\n"
@@ -356,9 +367,11 @@ public class ManageResponseController extends HttpServlet {
                     + "                     </div>\n"
                     + "                    <div class=\"modal-footer\">\n"
                     + "                        <button style=\"display: none;\" type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>\n"
-                    + "                        <button onclick=\"loadResponse('ManageResponseController','" + index + "','" + search + "','search','','',document.getElementById(\'searchRequest\').value)\" type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Trở về</button>\n"
-                    + "                        <button data-bs-dismiss=\"modal\" type=\"button\" onclick=\"loadResponse('ManageResponseController','" + index + "','" + search + "','create','','" + indexR + "','','" + requestBook.getRequestID() + "')\" class=\"btn btn-primary\">Tạo nhập hàng</button>\n"
-                    + "                    </div>\n"
+                    + "                        <button onclick=\"loadResponse('ManageResponseController','" + index + "','" + search + "','search','','',document.getElementById(\'searchRequest\').value)\" type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Trở về</button>\n");
+            if (requestBook.getStatus().equals("0") && requestBook.getDelete().equals("0")) {
+                out.println("                        <button data-bs-dismiss=\"modal\" type=\"button\" onclick=\"loadResponse('ManageResponseController','" + index + "','" + search + "','create','','" + indexR + "','','" + requestBook.getRequestID() + "')\" class=\"btn btn-primary\">Tạo nhập hàng</button>\n");
+            }
+            out.println("                    </div>\n"
                     + "                </div>\n"
                     + "            </div>\n"
                     + "        </div>\n"

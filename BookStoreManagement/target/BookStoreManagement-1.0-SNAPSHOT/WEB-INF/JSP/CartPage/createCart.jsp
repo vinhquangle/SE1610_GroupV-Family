@@ -20,9 +20,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <%@include file="../HeaderFooterPage/header.jsp" %>
+        <%@include file="headerCart.jsp" %>
         <%            Locale localeVN = new Locale("vi", "VN");
             NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+            List<CustomerDTO> listCus = (List<CustomerDTO>) session.getAttribute("LIST_CUS");
         %>
         <script>
             window.onload = function () {
@@ -34,7 +35,7 @@
             };
         </script>
         <div style="margin-top: 180px; margin-left: 10px; margin-right: 10px;" class="row">
-            <div class="col-md-9">
+            <div class="col-md-6">
                 <div style="margin-bottom: 30px; margin-top: 30px; text-align: center;" class="row">
                     <div class="col-md-12">
                         <form id="search-form" action="#" method="POST">
@@ -46,20 +47,16 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div style="background-color: #1e1e27; color: white; font-weight: bold; font-size: 15px; border-radius: 10px;" class="row">
-                            <div class="col-md-1"></div>
-                            <div style="border-left: 2px solid white;" class="col-md-1">ISBN</div>
-                            <div style="border-left: 2px solid white;" class="col-md-2">Tiêu đề</div>
-                            <div style="border-left: 2px solid white;" class="col-md-2">Thể loại</div>
-                            <div style="border-left: 2px solid white;" class="col-md-2">Tác giả</div>
-                            <div style="border-left: 2px solid white;" class="col-md-2">Nhà xuất bản</div>
-                            <div style="border-left: 2px solid white;" class="col-md-1">Giá bán</div>
-                            <div style="border-left: 2px solid white;" class="col-md-1"></div>
+                            <div class="col-md-2"></div>
+                            <div style="border-left: 2px solid white;" class="col-md-6">Tiêu đề</div>
+                            <div style="border-left: 2px solid white;" class="col-md-2">Giá bán</div>
+                            <div style="border-left: 2px solid white;" class="col-md-2"></div>
                         </div>
                         <div id="createContent"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="row">
                     <div style="border: 1px solid #dedede; height: 100%; margin-left: 10px; margin-top: 100px;" class="col-md-12">
                         <div class="section-title text-center">
@@ -87,7 +84,25 @@
                                 <div><strong class="order-total"><input id="total" readonly="" style="border: none; width: 100%" value="<%= currencyVN.format(0)%>"></strong></div>
                             </div>
                             <form action="CheckoutController" method="GET">
-                                <button name="action" value="Store" style="color: white; cursor: pointer; width: 100%;" class="primary-btn order-submit">Thanh toán</button>
+                                <div class="order-col">
+                                    <div style="width: 100%; text-align: center; position: relative;"><strong>Số điện thoại: <input name="phone" value="" id="myInput" onkeyup="searchPhone(document.getElementById('myInput').value)"><i onclick="clean()" class="fa fa-pencil-square-o" style="cursor: pointer; margin-left: 10px; font-size: 20px;"></i></strong><br>
+                                        <ul id="myUL">
+                                            <%
+                                                for (CustomerDTO customer : listCus) {
+                                            %>
+                                            <li>
+                                                <a onclick="loadCus('<%= customer.getCustomerID()%>', '<%= customer.getPhone()%>')" href="#"><%= customer.getPhone()%><br><%= customer.getName()%></a>
+                                            </li>
+                                            <%
+                                                }
+                                            %>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="order-col">
+                                    <div id="cusContent" style="width: 100%; text-align: center; position: relative;"></div>
+                                </div>
+                                <button id="checkout" name="action" value="Store" style="color: white; cursor: pointer; width: 100%;" disabled="" class="primary-btn order-submit">Thanh toán</button>
                             </form>
                         </div>
                     </div>
@@ -95,6 +110,64 @@
             </div>
         </div>
         <script>
+            if (document.getElementById("myInput").blur() === true) {
+                 document.getElementById("myUL").style.display = "none";
+            }
+            function clean() {
+                document.getElementById("cusContent").innerHTML = "";
+                document.getElementById("myInput").focus();
+                document.getElementById("myInput").readOnly = false;
+                document.getElementById("myInput").style.border = "1px solid #cccccc";
+                document.getElementById("checkout").setAttribute("disabled", "");
+            }
+            function searchPhone(phone) {
+                var input, filter, ul, li, a, i, txtValue;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("myUL");
+                ul.style.display = "inline-block";
+                li = ul.getElementsByTagName("li");
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName("a")[0];
+                    txtValue = a.textContent || a.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+                var phoneno = /^[0-9]{9,11}$/;
+                if ((phone.match(phoneno))) {
+                    document.getElementById("checkout").removeAttribute("disabled");
+                } else {
+                    document.getElementById("checkout").setAttribute("disabled", "");
+                }
+            }
+            function loadCus(cusID, phone) {
+                document.getElementById("cusContent").innerHTML = "";
+                $.ajax({
+                    url: "/BookStoreManagement/AddCustomerCartController",
+                    type: "post", //send it through get method
+                    data: {
+                        cusID: cusID
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("cusContent");
+                        row.innerHTML += data;
+                        document.getElementById("myUL").style.display = "none";
+                        document.getElementById("myInput").value = phone;
+                        document.getElementById("myInput").readOnly = true;
+                        document.getElementById("myInput").style.border = "none";
+                        document.getElementById("nameCus").readOnly = true;
+                        document.getElementById("nameCus").style.border = "none";
+                        document.getElementById("checkout").removeAttribute("disabled");
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                }
+                );
+            }
             function loadCreate(searchBook, index) {
                 document.getElementById("createContent").innerHTML = "";
                 if (index === "") {
@@ -165,19 +238,16 @@
             .pagination {
                 display: inline-block;
             }
-
             .pagination a {
                 color: black;
                 float: left;
                 padding: 8px 16px;
                 text-decoration: none;
             }
-
             .pagination a.active {
                 background-color: #15161d;
                 color: white;
             }
-
             .pagination a:hover:not(.active) {
                 background-color: #ddd;
             }
@@ -185,6 +255,46 @@
             input::-webkit-inner-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
+            }
+            #nameCus{
+                border-radius: 10px;
+                border: 1px solid #cccccc;
+                padding: 2px;
+                color: #d10024;
+            }
+            #myInput{
+                border-radius: 10px;
+                border: 1px solid #cccccc;
+                padding: 2px;
+                color: #d10024;
+            }
+            #myUL {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                display: none;
+                position: absolute;
+                width: 45%;
+                margin: auto;
+                left: 32.5%;
+                z-index: 5;
+            }
+            #myUL li a {
+                border: 1px solid #ddd;
+                margin-top: -1px; /* Prevent double borders */
+                background-color: #1d1d26;
+                padding: 12px;
+                text-decoration: none;
+                font-size: 18px;
+                color: white;
+                display: block;
+            }
+            #myUL li a:hover:not(.header) {
+                background-color: #eee;
+                color: #1d1d26;
+            }
+            #checkout:disabled{
+                background-color: #c1c1c1;
             }
         </style>
     </body>

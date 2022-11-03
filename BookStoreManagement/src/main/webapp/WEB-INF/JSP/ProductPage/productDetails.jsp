@@ -443,8 +443,12 @@
                                                             if (review.getDescription() == null) {
                                                                 review.setDescription("");
                                                             }
+                                                            String des = request.getParameter("review");
+                                                            if (des == null || des == "") {
+                                                                des = review.getDescription();
+                                                            }
                                                     %>
-                                                    <textarea id="review" readonly="" name="review" class="input" placeholder="Phần phê bình"><%= review.getDescription()%></textarea>
+                                                    <textarea id="review" readonly="" name="review" class="input" placeholder="Phần phê bình"><%= des%></textarea>
                                                     <div class="input-rating">
                                                         <span>Đánh giá: </span>
                                                         <div id="starsed" class="stars">

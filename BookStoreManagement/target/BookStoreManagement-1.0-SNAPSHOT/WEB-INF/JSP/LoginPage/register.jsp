@@ -266,10 +266,10 @@
                    text-align: center;
                    " id="error"><%=error%></p>
                 <div style="border-radius: 30px; background-color: white; height: 100px; width: 500px;" class="container mt-3">
-                    <button class="bt btn btn-block mybtn btn-primary tx-tfm" type="submit" name="action">Create Account</button>
-                    <button onclick="resetInput()" class="bt btn btn-block mybtn btn-primary tx-tfm">Reset</button>
+                    <button class="bt btn btn-block mybtn btn-primary tx-tfm" type="submit" name="action">Tạo tài khoản</button>
+                    <button onclick="resetInput()" class="bt btn btn-block mybtn btn-primary tx-tfm">Làm mới</button>
                 </div>
-                <p style="border-radius: 30px; background-color: white; display: block; width: 150px;  font-size: 15px; margin-top: 20px; margin-left: auto; margin-right: auto; text-align: center"><a style="text-decoration: none;" href="GetController?">RETURN HOME</p></form>          
+                <p style="border-radius: 30px; background-color: white; display: block; width: 150px;  font-size: 15px; margin-top: 20px; margin-left: auto; margin-right: auto; text-align: center"><a style="text-decoration: none;" href="GetController?">Trở về trang chủ</p></form>          
         </div>
     </body>
 </html>

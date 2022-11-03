@@ -48,6 +48,7 @@ public class BResponseDetailDAO {
             + "WHERE rpD.responseID LIKE ?";
     private static final String INSERT_RESPONSE_DETAIL = "INSERT INTO [tblBResponseDetail](responseID,ISBN,publisherID,categoryID,Name,[Author-name],Quantity,Price,[Status],[Delete])\n"
             + "VALUES (?,?,?,?,?,?,?,?,?,?)";
+    private static final String QUANTITY_CHECK = "SELECT Quantity FROM [tblBResponseDetail] WHERE ISBN LIKE ? AND responseID LIKE ?";
 
     public boolean insertResponseDetail(int responseID, BookDTO book, String status, String delete) throws SQLException {
         Connection conn = null;
@@ -162,5 +163,37 @@ public class BResponseDetailDAO {
             }
         }
         return list;
+    }
+    
+    public int quantityCheck(String isbn, String responseID) throws SQLException{
+        int quantity = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(QUANTITY_CHECK);
+                ptm.setString(1, isbn);
+                ptm.setString(2, responseID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                   quantity = rs.getInt("Quantity");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return quantity;
     }
 }

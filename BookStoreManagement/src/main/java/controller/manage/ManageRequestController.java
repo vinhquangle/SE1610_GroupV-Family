@@ -176,9 +176,9 @@ public class ManageRequestController extends HttpServlet {
                         modal = "Tạo thất bại(Danh sách đang trống)";
                         throw new Exception();
                     } else if (cart.getCart().size() > 0) {
-                        int requestID = requestDao.insertRequest(staff.getStaffID(), "1", "0");
+                        int requestID = requestDao.insertRequest(staff.getStaffID(), "0", "0");
                         for (BookDTO bookK : cart.getCart().values()) {
-                            detailDao.insertRequestDetail(requestID, bookK, "1", "0");
+                            detailDao.insertRequestDetail(requestID, bookK, "0", "0");
                         }
                         modal = "Tạo yêu cầu nhập thành công";
                         success = "Done";
@@ -497,7 +497,7 @@ public class ManageRequestController extends HttpServlet {
                 if (status.equals("1")) {
                     out.println("                                  <td><input readonly=\"\" style=\"width: 200px; color: green; border: none;\" value=\"Hoàn thành\"/></td>\n");
                 } else {
-                    out.println("                                    <td>/i><input readonly=\"\" style=\"width: 200px; color: red; border: none;\" value=\"Chưa hoàn thành\"/></td>\n");
+                    out.println("                                    <td><input readonly=\"\" style=\"width: 200px; color: red; border: none;\" value=\"Chưa hoàn thành\"/></td>\n");
                 }
                 delete = listRequest.get(i).getDelete();
                 if (delete.equals("0")) {

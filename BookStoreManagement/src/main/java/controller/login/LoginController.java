@@ -28,6 +28,7 @@ public class LoginController extends HttpServlet {
     private static final String ERROR = "WEB-INF/JSP/LoginPage/login.jsp";
     private static final String SUCCESS = "GetController";
     private static final String ADMIN = "LoadManageController?action=manage";
+    private static final String STAFF = "CreateCartController?action=Create";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -115,7 +116,7 @@ public class LoginController extends HttpServlet {
                             loginStaff.setStatus("1");
                             session.setAttribute("LOGIN_STAFF", loginStaff);
                             if (loginStaff.getRole().equals("Staff")) {
-                                url = SUCCESS;
+                                url = STAFF;
                             } else if (loginStaff.getRole().equals("Admin") || loginStaff.getRole().equals("Deliverer")) {
                                 url = ADMIN;    
                             }

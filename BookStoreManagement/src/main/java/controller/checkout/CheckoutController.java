@@ -5,14 +5,18 @@
  */
 package controller.checkout;
 
+import aes.MyAES;
 import cart.Cart;
 import dao.BookDAO;
+import dao.CustomerDAO;
 import dao.OrderDAO;
 import dao.OrderDetailDAO;
 import dto.BookDTO;
 import dto.CustomerDTO;
 import dto.StaffDTO;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +50,7 @@ public class CheckoutController extends HttpServlet {
             String method = request.getParameter("method");
             BookDAO bookDao = new BookDAO();
             OrderDAO orderDao = new OrderDAO();
+            CustomerDAO cusDao = new CustomerDAO();
             OrderDetailDAO detailDao = new OrderDetailDAO();
             double total = 0;
             Cart cart = (Cart) session.getAttribute("CART");
@@ -160,29 +165,77 @@ public class CheckoutController extends HttpServlet {
                             }
                             total += book.getQuantity() * book.getPrice();
                         }
-                        orderID = orderDao.insertOrderOffline(staff.getStaffID(), "1", total, 0.0, total, "1");
-                        if (orderID > 0) {
-                            total = 0;
-                            for (BookDTO book : cart.getCart().values()) {
-                                if (bookDao.updateQuantity(book.getIsbn(), book.getQuantity())) {
-                                    total = book.getQuantity() * book.getPrice();
-                                    detailDao.insertOrderDetail(orderID, book, total, "1");
+                        String phone = request.getParameter("phone");
+                        String cusID = request.getParameter("cusID");
+                        if (cusID != null) {
+                            orderID = orderDao.insertOrderOffline(cusID, staff.getStaffID(), "1", total, 0.0, total, "1");
+                            if (orderID > 0) {
+                                total = 0;
+                                for (BookDTO book : cart.getCart().values()) {
+                                    if (bookDao.updateQuantity(book.getIsbn(), book.getQuantity())) {
+                                        total = book.getQuantity() * book.getPrice();
+                                        detailDao.insertOrderDetail(orderID, book, total, "1");
+                                    }
                                 }
+                                session.setAttribute("SIZE", 0);
+                                cart.removeAll();
+                                session.setAttribute("CART", cart);
+                                url = CREATE_CART;
+                                request.setAttribute("MODAL", "<div class=\"row\">\n"
+                                        + "                         <div class=\"col-md-12\">\n"
+                                        + "                                <div class=\"product-preview\">\n"
+                                        + "                                    <img src=\"IMG/cart.png\"/>\n"
+                                        + "                                </div>\n"
+                                        + "                            </div>\n"
+                                        + "                         <div class=\"col-md-12\">\n"
+                                        + "                             <p style=\"color: green; margin-top: 20px; text-align: center;\"><b>Thanh toán thành công</b></p>\n"
+                                        + "                                </div>\n"
+                                        + "                            </div>");
                             }
-                            session.setAttribute("SIZE", 0);
-                            cart.removeAll();
-                            session.setAttribute("CART", cart);
+                        } else if (cusDao.checkCustomerPhone(phone)) {
                             url = CREATE_CART;
                             request.setAttribute("MODAL", "<div class=\"row\">\n"
                                     + "                         <div class=\"col-md-12\">\n"
                                     + "                                <div class=\"product-preview\">\n"
-                                    + "                                    <img src=\"IMG/cart.png\"/>\n"
+                                    + "                                    <img src=\"https://bengo.vn/static/version1650994791/frontend/MageBig/martfury_layout01/vi_VN/images/empty-cart.svg\"/>\n"
                                     + "                                </div>\n"
                                     + "                            </div>\n"
                                     + "                         <div class=\"col-md-12\">\n"
-                                    + "                             <p style=\"color: green; margin-top: 20px; text-align: center;\"><b>Thanh toán thành công</b></p>\n"
+                                    + "                             <p style=\"color: red; margin-top: 20px; text-align: center;\"><b>Thanh toán thất bại(Số điện thoại đã được sử dụng)</b></p>\n"
                                     + "                                </div>\n"
                                     + "                            </div>");
+                        } else {
+                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+                            LocalDateTime now = LocalDateTime.now();
+                            MyAES myCipher = new MyAES("1", MyAES.AES_192);//Cài đặt khóa cho AES
+                            String AES_ecryptedStr = myCipher.AES_encrypt(phone);//Mã hóa AES
+                            CustomerDTO customer = new CustomerDTO(dtf.format(now), phone, AES_ecryptedStr, "", "", phone, 0, "0", "0");
+                            if (cusDao.createAccount(customer)) {
+                                orderID = orderDao.insertOrderOffline(customer.getCustomerID(), staff.getStaffID(), "1", total, 0.0, total, "1");
+                                if (orderID > 0) {
+                                    total = 0;
+                                    for (BookDTO book : cart.getCart().values()) {
+                                        if (bookDao.updateQuantity(book.getIsbn(), book.getQuantity())) {
+                                            total = book.getQuantity() * book.getPrice();
+                                            detailDao.insertOrderDetail(orderID, book, total, "1");
+                                        }
+                                    }
+                                    session.setAttribute("SIZE", 0);
+                                    cart.removeAll();
+                                    session.setAttribute("CART", cart);
+                                    url = CREATE_CART;
+                                    request.setAttribute("MODAL", "<div class=\"row\">\n"
+                                            + "                         <div class=\"col-md-12\">\n"
+                                            + "                                <div class=\"product-preview\">\n"
+                                            + "                                    <img src=\"IMG/cart.png\"/>\n"
+                                            + "                                </div>\n"
+                                            + "                            </div>\n"
+                                            + "                         <div class=\"col-md-12\">\n"
+                                            + "                             <p style=\"color: green; margin-top: 20px; text-align: center;\"><b>Thanh toán thành công</b></p>\n"
+                                            + "                                </div>\n"
+                                            + "                            </div>");
+                                }
+                            }
                         }
                     } else {
                         url = CREATE_CART;
