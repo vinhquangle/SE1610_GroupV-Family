@@ -37,6 +37,7 @@ public class AddBookCartController extends HttpServlet {
         String url = CART;
         String controller = new String();
         try {
+            request.setCharacterEncoding("UTF-8");
             String action = request.getParameter("action");
             controller = request.getParameter("controller");
             int quantityCheck = Integer.parseInt(request.getParameter("quantityCheck"));

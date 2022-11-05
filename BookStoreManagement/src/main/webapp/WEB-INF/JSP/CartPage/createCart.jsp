@@ -48,7 +48,8 @@
                     <div class="col-md-12">
                         <div style="background-color: #1e1e27; color: white; font-weight: bold; font-size: 15px; border-radius: 10px;" class="row">
                             <div class="col-md-2"></div>
-                            <div style="border-left: 2px solid white;" class="col-md-6">Tiêu đề</div>
+                            <div style="border-left: 2px solid white;" class="col-md-4">Tiêu đề</div>
+                            <div style="border-left: 2px solid white;" class="col-md-2">Hiện còn</div>
                             <div style="border-left: 2px solid white;" class="col-md-2">Giá bán</div>
                             <div style="border-left: 2px solid white;" class="col-md-2"></div>
                         </div>
@@ -83,7 +84,7 @@
                                 <div><strong>Tổng thành tiền</strong></div>
                                 <div><strong class="order-total"><input id="total" readonly="" style="border: none; width: 100%" value="<%= currencyVN.format(0)%>"></strong></div>
                             </div>
-                            <form action="CheckoutController" method="GET">
+                            <form action="CheckoutController" method="POST">
                                 <div class="order-col">
                                     <div style="width: 100%; text-align: center; position: relative;"><strong>Số điện thoại: <input name="phone" value="" id="myInput" onkeyup="searchPhone(document.getElementById('myInput').value)"><i onclick="clean()" class="fa fa-pencil-square-o" style="cursor: pointer; margin-left: 10px; font-size: 20px;"></i></strong><br>
                                         <ul id="myUL">

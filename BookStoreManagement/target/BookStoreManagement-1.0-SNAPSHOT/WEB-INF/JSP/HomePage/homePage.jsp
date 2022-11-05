@@ -21,7 +21,17 @@
         <link type="text/css" rel="stylesheet" href="CSS/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="STYLES/bootstrap4/bootstrap.min.css" />
     </head>
-
+    <script>
+        window.addEventListener('load', () => {
+            const query = window.location.search;
+            const urlParams = new URLSearchParams(query);
+            var product = urlParams.get('index');
+            if (product === null) {
+                product = "1";
+            }
+            document.getElementById(product).classList.add("active");
+        });
+    </script>
     <body>
         <%@include file="../HeaderFooterPage/header.jsp" %>
         <div style="margin-top: 180px; background-color: white;" id="breadcrumb" class="section" >
@@ -142,17 +152,6 @@
                             }
                         %>
                     </div>
-                    <script>
-                        window.addEventListener('load', () => {
-                            const query = window.location.search;
-                            const urlParams = new URLSearchParams(query);
-                            var product = urlParams.get('index');
-                            if (product === null) {
-                                product = "1";
-                            }
-                            document.getElementById(product).classList.add("active");
-                        });
-                    </script>
                     <style>
                         .pagination {
                             display: inline-block;

@@ -14,7 +14,9 @@ import dao.OrderDAO;
 import dao.OrderDetailDAO;
 import dto.BookDTO;
 import dto.CustomerDTO;
+import dto.PromotionDTO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,10 +39,12 @@ public class ExcutePaymentController extends HttpServlet {
         String url = ERROR;
         try {
             HttpSession session = request.getSession();
+            double total = 0;
+            double discount = 0;
             BookDAO bookDao = new BookDAO();
+            String promotion = new String();
             OrderDAO orderDao = new OrderDAO();
             OrderDetailDAO detailDao = new OrderDetailDAO();
-            double total = 0;
             String paymentID = request.getParameter("paymentId");
             String payerID = request.getParameter("PayerID");
             PaymentServices paymentServices = new PaymentServices();
@@ -50,7 +54,7 @@ public class ExcutePaymentController extends HttpServlet {
             request.setAttribute("payer", payerInfo);
             request.setAttribute("transaction", transaction);
             String ship = (String) session.getAttribute("SHIP");
-            String promotion = (String) session.getAttribute("PROMOTION");
+            List<PromotionDTO> listPro = (List<PromotionDTO>) session.getAttribute("PROMOTION");
             String des = (String) session.getAttribute("DES");
             CustomerDTO cus = (CustomerDTO) session.getAttribute("LOGIN_CUS");
             Cart cart = (Cart) session.getAttribute("CART");
@@ -61,13 +65,19 @@ public class ExcutePaymentController extends HttpServlet {
                 }
                 total += book.getQuantity() * book.getPrice();
             }
+            for (PromotionDTO promotionDTO : listPro) {
+                if (promotionDTO.getCondition() <= total && promotionDTO.getDiscount() >= discount) {
+                    discount = promotionDTO.getDiscount();
+                    promotion = promotionDTO.getPromotionID();
+                }
+            }
             int orderID = 0;
             if (ship.equals("YES")) {
                 String address = (String) session.getAttribute("SHIPING");
                 double feeShip = Double.parseDouble((String) session.getAttribute("FEE_SHIP"));
-                orderID = orderDao.insertOrderOnlineShip(cus.getCustomerID(), promotion, address, total, 0.0, feeShip, total + feeShip, des);
+                orderID = orderDao.insertOrderOnlineShip(cus.getCustomerID(), promotion, address, total, discount, feeShip, (total * (1 - discount) + feeShip), des);
             } else if (ship.equals("NO")) {
-                orderID = orderDao.insertOrderOnlineStore(cus.getCustomerID(), promotion, total, 0.0, 0, total, des);
+                orderID = orderDao.insertOrderOnlineStore(cus.getCustomerID(), promotion, total, discount, 0, (total * (1 - discount)), des);
             }
             total = 0;
             for (BookDTO book : cart.getCart().values()) {
