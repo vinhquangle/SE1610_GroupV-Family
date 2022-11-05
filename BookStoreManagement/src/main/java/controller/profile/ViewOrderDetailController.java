@@ -61,9 +61,9 @@ public class ViewOrderDetailController extends HttpServlet {
             out.println(" <div class=\"row\">\n"
                     + "                            <div class=\"col-md-6\">\n"
                     + "                                <div>Khuyến mãi</div>\n"
-                    + "                                <textarea rows=\"2\" style=\"width: 100%;  font-weight: bold;\" readonly=\"\" placeholder=\"Nội dung khuyến mãi\">" + order.getPromotion().getDescription() + "</textarea>\n"
+                    + "                                <textarea rows=\"2\" style=\"width: 100%;  font-weight: bold; border: none; \" readonly=\"\" placeholder=\"Nội dung khuyến mãi\">" + order.getPromotion().getDescription() + "</textarea>\n"
                     + "                                <div>Địa chỉ nhận hàng</div>\n"
-                    + "                                <textarea rows=\"2\" style=\"width: 100%;  font-weight: bold;\" readonly=\"\" placeholder=\"Địa điểm nhận hàng\">" + order.getAddress() + "</textarea>\n"
+                    + "                                <textarea rows=\"2\" style=\"width: 100%;  font-weight: bold; border: none; \" readonly=\"\" placeholder=\"Địa điểm nhận hàng\">" + order.getAddress() + "</textarea>\n"
                     + "                            </div>\n"
                     + "                            <div class=\"col-md-6\">\n"
                     + "                                <div style=\"text-align: center;\">Tình trạng</div>\n");

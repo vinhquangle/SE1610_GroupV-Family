@@ -207,6 +207,9 @@
                         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
                         if (!listOrder.isEmpty()) {
                             for (OrderDTO orderDTO : listOrder) {
+                                if(orderDTO.getDescription()==null){
+                                    orderDTO.setDescription("");
+                                }
                     %>
                     <div style="padding-bottom: 30px; padding-top: 30px; color: black; border-radius: 100px; text-align: center; border: 1px solid #15161d; margin-top: 5px; font-size: 20px; font-weight: bold" class="row">
                         <div class="col-md-1"><%= orderDTO.getOrderID()%></div>

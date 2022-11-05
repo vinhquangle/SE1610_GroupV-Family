@@ -14,10 +14,12 @@ import dao.OrderDAO;
 import dao.OrderDetailDAO;
 import dto.BookDTO;
 import dto.CustomerDTO;
+import dto.PromotionDTO;
 import dto.StaffDTO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +46,9 @@ public class CheckoutController extends HttpServlet {
         String url = ERROR;
         String emptyCart = "";
         try {
+            double total = 0;
+            double discount = 0;
+            String promotion = new String();
             HttpSession session = request.getSession();
             String action = request.getParameter("action");
             String payment = request.getParameter("payment");
@@ -52,10 +57,10 @@ public class CheckoutController extends HttpServlet {
             OrderDAO orderDao = new OrderDAO();
             CustomerDAO cusDao = new CustomerDAO();
             OrderDetailDAO detailDao = new OrderDetailDAO();
-            double total = 0;
             Cart cart = (Cart) session.getAttribute("CART");
             CustomerDTO cus = (CustomerDTO) session.getAttribute("LOGIN_CUS");
             StaffDTO staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
+            List<PromotionDTO> listPro = (List<PromotionDTO>) session.getAttribute("PROMOTION");
             if (cus == null && staff == null) {
                 url = FAIL;
                 request.setAttribute("MODAL", "<div class=\"row\">\n"
@@ -77,11 +82,9 @@ public class CheckoutController extends HttpServlet {
                         session.setAttribute("SHIP", "YES");
                         session.setAttribute("SHIPING", request.getParameter("address"));
                         session.setAttribute("DES", request.getParameter("des"));
-                        session.setAttribute("PROMOTION", "1");
                     } else if (method.equals("store")) {
                         session.setAttribute("SHIP", "NO");
                         session.setAttribute("DES", request.getParameter("des"));
-                        session.setAttribute("PROMOTION", "1");
                     }
                     url = PAYPAL;
                 } else if (payment.equals("cash")) {
@@ -106,15 +109,21 @@ public class CheckoutController extends HttpServlet {
                     String des = request.getParameter("des");
                     int orderID = 0;
                     double feeShip = 0;
+                    for (PromotionDTO promotionDTO : listPro) {
+                        if (promotionDTO.getCondition() <= total && promotionDTO.getDiscount() >= discount) {
+                            discount = promotionDTO.getDiscount();
+                            promotion = promotionDTO.getPromotionID();
+                        }
+                    }
                     if (method.equals("ship")) {
-                        if (total < 350000) {
+                        if (total < 360000) {
                             feeShip = 24000;
-                        } else if (total >= 350000) {
+                        } else if (total >= 360000) {
                             feeShip = 0;
                         }
-                        orderID = orderDao.insertOrderOnlineShip(cus.getCustomerID(), "1", address, total, 0.0, feeShip, total + feeShip, des);
+                        orderID = orderDao.insertOrderOnlineShip(cus.getCustomerID(), promotion, address, total, discount, feeShip, (total * (1 - discount) + feeShip), des);
                     } else if (method.equals("store")) {
-                        orderID = orderDao.insertOrderOnlineStore(cus.getCustomerID(), "1", total, 0.0, 0, total, des);
+                        orderID = orderDao.insertOrderOnlineStore(cus.getCustomerID(), promotion, total, discount, 0, (total * (1 - discount)), des);
                     }
                     total = 0;
                     for (BookDTO book : cart.getCart().values()) {
@@ -165,10 +174,16 @@ public class CheckoutController extends HttpServlet {
                             }
                             total += book.getQuantity() * book.getPrice();
                         }
+                        for (PromotionDTO promotionDTO : listPro) {
+                            if (promotionDTO.getCondition() <= total && promotionDTO.getDiscount() >= discount) {
+                                discount = promotionDTO.getDiscount();
+                                promotion = promotionDTO.getPromotionID();
+                            }
+                        }
                         String phone = request.getParameter("phone");
                         String cusID = request.getParameter("cusID");
                         if (cusID != null) {
-                            orderID = orderDao.insertOrderOffline(cusID, staff.getStaffID(), "1", total, 0.0, total, "1");
+                            orderID = orderDao.insertOrderOffline(cusID, staff.getStaffID(), promotion, total, discount, (total * (1 - discount)), "1");
                             if (orderID > 0) {
                                 total = 0;
                                 for (BookDTO book : cart.getCart().values()) {
@@ -211,7 +226,7 @@ public class CheckoutController extends HttpServlet {
                             String AES_ecryptedStr = myCipher.AES_encrypt(phone);//Mã hóa AES
                             CustomerDTO customer = new CustomerDTO(dtf.format(now), phone, AES_ecryptedStr, "", "", phone, 0, "0", "0");
                             if (cusDao.createAccount(customer)) {
-                                orderID = orderDao.insertOrderOffline(customer.getCustomerID(), staff.getStaffID(), "1", total, 0.0, total, "1");
+                                orderID = orderDao.insertOrderOffline(customer.getCustomerID(), staff.getStaffID(), promotion, total, discount, (total * (1 - discount)), "1");
                                 if (orderID > 0) {
                                     total = 0;
                                     for (BookDTO book : cart.getCart().values()) {
@@ -271,6 +286,9 @@ public class CheckoutController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (url == null) {
+                url = ERROR;
+            }
             request.getRequestDispatcher(url).forward(request, response);
         }
     }

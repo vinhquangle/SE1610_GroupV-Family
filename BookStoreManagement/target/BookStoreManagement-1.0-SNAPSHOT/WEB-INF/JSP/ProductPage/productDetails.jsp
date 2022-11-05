@@ -174,7 +174,7 @@
 
                             </script>
                             <div  class="add-to-cart" style="margin-top: 10px">  
-                                <form action="AddBookCartController" method="GET" style="display: inline-block">
+                                <form action="AddBookCartController" method="POST" style="display: inline-block">
                                     <input name="quantity" id="quantity" type="hidden" value="1">
                                     <input name="isbn" value="<%= book.getIsbn()%>" type="hidden">
                                     <input name="quantityCheck" value="<%= book.getQuantity()%>" type="hidden">
@@ -592,7 +592,7 @@
                                 </div></form>
                         </div>
                         <div class="add-to-cart">
-                            <form style="display: inline-block;" method="GET" action="AddBookCartController">
+                            <form style="display: inline-block;" method="POST" action="AddBookCartController">
                                 <input type="hidden" name="isbn" value="<%= bookDTO.getIsbn()%>" /> 
                                 <input name="quantity" id="quantity" type="hidden" value="1">
                                 <input name="quantityCheck" value="<%= bookDTO.getQuantity()%>" type="hidden">

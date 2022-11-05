@@ -94,7 +94,8 @@ public class CreateCartController extends HttpServlet {
                     quantityCheck = book.getQuantity();
                     out.println("<div style=\"margin-top: 10px; margin-bottom: 5px; border: 1px solid #dedede;\" class=\"row\">\n"
                             + "                                <div class=\"col-md-2\"><img style=\"width: 100px;\" src=\"" + book.getImg() + "\"></div>\n"
-                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-6\">" + book.getName() + "</div>\n"
+                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-4\">" + book.getName() + "</div>\n"
+                            + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + book.getQuantity() + "</div>\n"
                             + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + currencyVN.format(book.getPrice()) + "</div>\n"
                             + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">\n"
                             + "                                   <div style=\"margin-top: 10px;\" class=\"input-number\">\n"

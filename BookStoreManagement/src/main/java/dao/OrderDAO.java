@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import utilities.DBUtils;
@@ -1344,6 +1345,7 @@ public class OrderDAO {
     }
 
     public int insertOrderOnlineShip(String customerID, String promotionID, String address, double subtotal, double discount, double deliCost, double total, String description) throws SQLException {
+        System.out.println(total);
         int orderID = 0;
         String date = java.time.LocalDate.now().toString();
         Connection conn = null;
@@ -1353,7 +1355,11 @@ public class OrderDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareCall(INSERT_ORDER_ONLINE_SHIP);
             ptm.setString(1, customerID);
-            ptm.setString(2, promotionID);
+            if (promotionID.equals("")) {
+                ptm.setNull(2, Types.NULL);
+            } else {
+                ptm.setString(2, promotionID);
+            }
             ptm.setString(3, address);
             ptm.setString(4, date);
             ptm.setDouble(5, subtotal);
@@ -1392,7 +1398,11 @@ public class OrderDAO {
             conn = DBUtils.getConnection();
             ptm = conn.prepareCall(INSERT_ORDER_ONLINE_STORE);
             ptm.setString(1, customerID);
-            ptm.setString(2, promotionID);
+            if (promotionID.equals("")) {
+                ptm.setNull(2, Types.NULL);
+            } else {
+                ptm.setString(2, promotionID);
+            }
             ptm.setString(3, date);
             ptm.setDouble(4, subtotal);
             ptm.setDouble(5, discount);
@@ -1431,7 +1441,11 @@ public class OrderDAO {
             ptm = conn.prepareCall(INSERT_ORDER_OFFLINE);
             ptm.setString(1, cusID);
             ptm.setString(2, staffID);
-            ptm.setString(3, promotionID);
+            if (promotionID.equals("")) {
+                ptm.setNull(3, Types.NULL);
+            } else {
+                ptm.setString(3, promotionID);
+            }
             ptm.setString(4, date);
             ptm.setDouble(5, subtotal);
             ptm.setDouble(6, discount);

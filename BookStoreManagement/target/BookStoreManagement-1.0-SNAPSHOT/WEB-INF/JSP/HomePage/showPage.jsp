@@ -82,7 +82,6 @@
                 } catch (Exception e) {
                 }
                 String show = "";
-                String controllerAdd = (String) request.getAttribute("CONTROLLER");
                 String index = (String) request.getParameter("index");
                 if (index == null) {
                     index = "1";
@@ -120,12 +119,11 @@
                         </div>
                     </div>
                     <div class="add-to-cart">
-                        <form style="display: inline-block;" method="GET" action="AddBookCartController">
+                        <form style="display: inline-block;" method="POST" action="AddBookCartController?index=<%= index %>">
                             <input name="quantity" id="quantity" type="hidden" value="1">
                             <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                             <input name="quantityCheck" value="<%= list.get(i).getQuantity()%>" type="hidden">
-                            <input name="controller" value="<%= controllerAdd%>" type="hidden">
-                            <input name="index" value="<%= index%>" type="hidden">
+                            <input name="controller" value="<%= controller%>" type="hidden">
                             <button type="submit" value="Home" name="action" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</button>
                             <input style="display: none" name="searchBook" value="<%= search%>">
                             <input style="display: none" name="cateID" value="<%= cateN%>">
