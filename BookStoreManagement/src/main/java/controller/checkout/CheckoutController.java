@@ -16,6 +16,7 @@ import dto.BookDTO;
 import dto.CustomerDTO;
 import dto.PromotionDTO;
 import dto.StaffDTO;
+import email.JavaMailUtil;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -149,6 +150,7 @@ public class CheckoutController extends HttpServlet {
                             detailDao.insertOrderDetail(orderID, book, total, "1");
                         }
                     }
+                    JavaMailUtil.sendMail(cus.getEmail(), 0, "Checkout", cart, orderID, feeShip, discount);
                     request.setAttribute("MODAL", "<div class=\"row\">\n"
                             + "                         <div class=\"col-md-12\">\n"
                             + "                                <div class=\"product-preview\">\n"
@@ -194,6 +196,7 @@ public class CheckoutController extends HttpServlet {
                         String phone = request.getParameter("phone");
                         String cusID = request.getParameter("cusID");
                         if (cusID != null) {
+                            cus = cusDao.loadCustomer(cusID);
                             orderID = orderDao.insertOrderOffline(cusID, staff.getStaffID(), "", total, 0.0, total, "1");
                             if (orderID > 0) {
                                 total = 0;
@@ -203,6 +206,7 @@ public class CheckoutController extends HttpServlet {
                                         detailDao.insertOrderDetail(orderID, book, total, "1");
                                     }
                                 }
+                                JavaMailUtil.sendMail(cus.getEmail(), 0, "Checkout", cart, orderID, 0, 0);
                                 session.setAttribute("SIZE", 0);
                                 cart.removeAll();
                                 session.setAttribute("CART", cart);
