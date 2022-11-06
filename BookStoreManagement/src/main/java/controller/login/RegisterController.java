@@ -5,6 +5,7 @@
 package controller.login;
 
 import aes.MyAES;
+import cart.Cart;
 import dao.CustomerDAO;
 import dao.StaffDAO;
 import dto.CustomerDTO;
@@ -171,7 +172,7 @@ public class RegisterController extends HttpServlet {
                 session.setAttribute("CUS", cus);
                 request.setAttribute("MODAL", "Mã xác minh đã được gửi qua địa chỉ Email của bạn");
                 int codeVerify1 = rand.ints(1000, 9999).findFirst().getAsInt();//Tạo mã xác minh cho email
-                JavaMailUtil.sendMail(email, codeVerify1, "Verify");//Gữi mã xác minh email
+                JavaMailUtil.sendMail(email, codeVerify1, "Verify", new Cart(), 0, 0, 0);//Gữi mã xác minh email
                 session.setAttribute("CODE", String.valueOf(codeVerify1));
             } else {
                 request.setAttribute("CUSTOMER_ERROR", cusError);

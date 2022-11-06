@@ -15,6 +15,7 @@ import dao.OrderDetailDAO;
 import dto.BookDTO;
 import dto.CustomerDTO;
 import dto.PromotionDTO;
+import email.JavaMailUtil;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -52,6 +53,7 @@ public class ExcutePaymentController extends HttpServlet {
             PayerInfo payerInfo = payment.getPayer().getPayerInfo();
             Transaction transaction = payment.getTransactions().get(0);
             request.setAttribute("payer", payerInfo);
+            double feeShip = 0;
             request.setAttribute("transaction", transaction);
             String ship = (String) session.getAttribute("SHIP");
             List<PromotionDTO> listPro = (List<PromotionDTO>) session.getAttribute("PROMOTION");
@@ -75,7 +77,7 @@ public class ExcutePaymentController extends HttpServlet {
             int orderID = 0;
             if (ship.equals("YES")) {
                 String address = (String) session.getAttribute("SHIPING");
-                double feeShip = Double.parseDouble((String) session.getAttribute("FEE_SHIP"));
+                feeShip = Double.parseDouble((String) session.getAttribute("FEE_SHIP"));
                 orderID = orderDao.insertOrderOnlineShip(cus.getCustomerID(), promotion, address, total, discount, feeShip, (total * (1 - discount) + feeShip), des);
             } else if (ship.equals("NO")) {
                 orderID = orderDao.insertOrderOnlineStore(cus.getCustomerID(), promotion, total, discount, 0, (total * (1 - discount)), des);
@@ -87,6 +89,7 @@ public class ExcutePaymentController extends HttpServlet {
                     detailDao.insertOrderDetail(orderID, book, total, "1");
                 }
             }
+            JavaMailUtil.sendMail(cus.getEmail(), 0, "Checkout", cart, orderID, feeShip, discount);
             session.setAttribute("SIZE", 0);
             cart.removeAll();
             session.setAttribute("CART", cart);

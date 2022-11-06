@@ -5,6 +5,7 @@
 package controller.login;
 
 import aes.MyAES;
+import cart.Cart;
 import dao.CustomerDAO;
 import dao.StaffDAO;
 import dto.CustomerDTO;
@@ -61,7 +62,7 @@ public class LoginController extends HttpServlet {
                             + "                         <input style=\"text-align: center;\" type=\"hidden\" name=\"action\" value=\"Send\">\n"
                             + "                         <p style=\"text-align: center; color: green; margin-top: 10px;\"><b>Gửi qua Email thành công!</b></p>\n"
                             + "                     </form>";
-                    JavaMailUtil.sendMail(email, 0, action);//Gửi thông tin qua email
+                    JavaMailUtil.sendMail(email, 0, action, new Cart(), 0, 0, 0);//Gửi thông tin qua email
                 } else {
                     modal = "<form style=\"text-align: center;\" action=\"LoginController\" method=\"POST\">\n"
                             + "                         <p><b>Nhập Email đăng kí tài khoản để nhận được thông tin tài khoản/mật khẩu qua email!</b></p>\n"

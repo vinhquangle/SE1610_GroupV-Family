@@ -54,6 +54,9 @@ public class ViewOrderDetailController extends HttpServlet {
             if (order.getAddress() == null) {
                 order.setAddress("Nhận hàng tại nhà sách Phương Nam");
             }
+            if(order.getDescription() == null){
+                order.setDescription("");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
