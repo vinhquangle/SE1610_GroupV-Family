@@ -12,11 +12,13 @@ import dao.BookDAO;
 import dao.CustomerDAO;
 import dao.OrderDAO;
 import dao.OrderDetailDAO;
+import dao.PromotionDAO;
 import dto.BookDTO;
 import dto.CustomerDTO;
 import dto.PromotionDTO;
 import dto.StaffDTO;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -60,7 +62,19 @@ public class CheckoutController extends HttpServlet {
             Cart cart = (Cart) session.getAttribute("CART");
             CustomerDTO cus = (CustomerDTO) session.getAttribute("LOGIN_CUS");
             StaffDTO staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
-            List<PromotionDTO> listPro = (List<PromotionDTO>) session.getAttribute("PROMOTION");
+            LocalDate localDate = LocalDate.now();
+            LocalDate dateEnd = LocalDate.now();
+            PromotionDAO proDao = new PromotionDAO();
+            List<PromotionDTO> listPro = proDao.loadAvailablePromotion("1");
+            for (PromotionDTO promotionDTO : listPro) {
+                dateEnd = LocalDate.parse(promotionDTO.getDateEnd());
+                if (dateEnd.isBefore(localDate)) {
+                    promotionDTO.setStatus("0");
+                    proDao.updatePromotion(promotionDTO);
+                }
+            }
+            listPro = proDao.loadAvailablePromotion("1");
+            session.setAttribute("PROMOTION", proDao.loadAvailablePromotion("1"));
             if (cus == null && staff == null) {
                 url = FAIL;
                 request.setAttribute("MODAL", "<div class=\"row\">\n"
@@ -79,10 +93,12 @@ public class CheckoutController extends HttpServlet {
             if (action.equals("Order") && cus != null) {
                 if (payment.equals("paypal")) {
                     if (method.equals("ship")) {
+                        session.setAttribute("PROMOTION", listPro);
                         session.setAttribute("SHIP", "YES");
                         session.setAttribute("SHIPING", request.getParameter("address"));
                         session.setAttribute("DES", request.getParameter("des"));
                     } else if (method.equals("store")) {
+                        session.setAttribute("PROMOTION", listPro);
                         session.setAttribute("SHIP", "NO");
                         session.setAttribute("DES", request.getParameter("des"));
                     }
@@ -115,6 +131,7 @@ public class CheckoutController extends HttpServlet {
                             promotion = promotionDTO.getPromotionID();
                         }
                     }
+                    discount = Double.parseDouble(String.format("%.2f", discount));
                     if (method.equals("ship")) {
                         if (total < 360000) {
                             feeShip = 24000;
@@ -174,16 +191,10 @@ public class CheckoutController extends HttpServlet {
                             }
                             total += book.getQuantity() * book.getPrice();
                         }
-                        for (PromotionDTO promotionDTO : listPro) {
-                            if (promotionDTO.getCondition() <= total && promotionDTO.getDiscount() >= discount) {
-                                discount = promotionDTO.getDiscount();
-                                promotion = promotionDTO.getPromotionID();
-                            }
-                        }
                         String phone = request.getParameter("phone");
                         String cusID = request.getParameter("cusID");
                         if (cusID != null) {
-                            orderID = orderDao.insertOrderOffline(cusID, staff.getStaffID(), promotion, total, discount, (total * (1 - discount)), "1");
+                            orderID = orderDao.insertOrderOffline(cusID, staff.getStaffID(), "", total, 0.0, total, "1");
                             if (orderID > 0) {
                                 total = 0;
                                 for (BookDTO book : cart.getCart().values()) {
@@ -226,7 +237,7 @@ public class CheckoutController extends HttpServlet {
                             String AES_ecryptedStr = myCipher.AES_encrypt(phone);//Mã hóa AES
                             CustomerDTO customer = new CustomerDTO(dtf.format(now), phone, AES_ecryptedStr, "", "", phone, 0, "0", "0");
                             if (cusDao.createAccount(customer)) {
-                                orderID = orderDao.insertOrderOffline(customer.getCustomerID(), staff.getStaffID(), promotion, total, discount, (total * (1 - discount)), "1");
+                                orderID = orderDao.insertOrderOffline(customer.getCustomerID(), staff.getStaffID(), "", total, 0.0, total, "1");
                                 if (orderID > 0) {
                                     total = 0;
                                     for (BookDTO book : cart.getCart().values()) {
@@ -284,11 +295,8 @@ public class CheckoutController extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log("Error at CheckoutController: " + e.toString());
         } finally {
-            if (url == null) {
-                url = ERROR;
-            }
             request.getRequestDispatcher(url).forward(request, response);
         }
     }

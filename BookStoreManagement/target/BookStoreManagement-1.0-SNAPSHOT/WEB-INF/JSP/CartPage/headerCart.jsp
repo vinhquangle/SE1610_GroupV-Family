@@ -200,7 +200,7 @@
                                                                     <div class="dropdown">
                                                                         <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="cursor: pointer;">
                                                                             <i class="fa fa-shopping-cart fa-3x"></i>
-                                                                            <span>Giỏ hàng</span>
+                                                                            <span>Hóa đơn</span>
 
                                                                             <%
                                                                                 if (session.getAttribute("SIZE") != null && (int) session.getAttribute("SIZE") > 0) {
@@ -279,7 +279,7 @@
                                                             <a style="text-decoration: none;" href="CreateCartController?action=Create">
                                                                 <div style="text-align: center; margin-top: 20px; cursor: pointer; text-decoration: none;">
                                                                     <i style="color: #1e1e27" class="fa fa-cart-plus fa-3x" aria-hidden="true"></i>
-                                                                    <p style="color: #1e1e27"><b>Giỏ hàng</b></p>
+                                                                    <p style="color: #1e1e27"><b>Hóa đơn</b></p>
                                                                 </div>
                                                             </a>
                                                             <%

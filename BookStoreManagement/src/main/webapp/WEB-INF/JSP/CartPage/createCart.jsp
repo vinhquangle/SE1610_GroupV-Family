@@ -112,7 +112,7 @@
         </div>
         <script>
             if (document.getElementById("myInput").blur() === true) {
-                 document.getElementById("myUL").style.display = "none";
+                document.getElementById("myUL").style.display = "none";
             }
             function clean() {
                 document.getElementById("cusContent").innerHTML = "";
@@ -206,7 +206,11 @@
                     success: function (data) {
                         var row = document.getElementById("cartContent");
                         row.innerHTML += data;
-                        var total = document.getElementById("totalS").value;
+                        try {
+                            var total = document.getElementById("totalS").value;
+                        } catch (exception) {
+                            var total = 0;
+                        }
                         document.getElementById("total").value = total;
                         $('#eModal').modal('show');
                     },

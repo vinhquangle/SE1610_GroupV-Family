@@ -94,7 +94,7 @@
             <div class="col-md-4 col-xs-6 gg <%= show%>">
                 <div class="product">
                     <div class="product-img">
-                        <form style="display: inline-block;" method="GET" action="LoadController">
+                        <form style="display: inline-block; width: 100%" method="GET" action="LoadController">
                             <input type="hidden" name="isbn" value="<%=list.get(i).getIsbn()%>" /> 
                             <a class="product-img" style="cursor: pointer;" onclick="this.parentNode.submit();"><img src="<%= list.get(i).getImg()%>" alt=""></a>
                         </form>

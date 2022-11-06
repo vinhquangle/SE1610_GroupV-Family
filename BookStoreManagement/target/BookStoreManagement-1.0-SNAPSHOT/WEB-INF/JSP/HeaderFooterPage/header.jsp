@@ -304,7 +304,7 @@
                                                                                 }
                                                                             %>
                                                                     </i>
-                                                                    <p style="color: #1e1e27"><b>Giỏ hàng</b></p>
+                                                                    <p style="color: #1e1e27"><b>Hóa đơn</b></p>
                                                                 </div>
                                                             </a>
                                                                 <%

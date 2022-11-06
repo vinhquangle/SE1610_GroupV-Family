@@ -6,14 +6,21 @@
 package controller.add;
 
 import dao.BookDAO;
+import dao.CategoryDAO;
 import dao.CustomerDAO;
+import dao.PromotionDAO;
+import dao.PublisherDAO;
 import dto.BookDTO;
+import dto.CategoryDTO;
 import dto.CustomerDTO;
+import dto.PromotionDTO;
+import dto.PublisherDTO;
 import dto.StaffDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.Normalizer;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,11 +55,18 @@ public class CreateCartController extends HttpServlet {
             String action = request.getParameter("action");
             HttpSession session = request.getSession();
             CustomerDAO cusDao = new CustomerDAO();
+            CategoryDAO cateDao = new CategoryDAO();
+            PublisherDAO pubDao = new PublisherDAO();
+            LocalDate localDate = LocalDate.now();
+            LocalDate dateEnd = LocalDate.now();
+            PromotionDAO proDao = new PromotionDAO();
             List<CustomerDTO> listCus = new ArrayList<>();
             listCus = cusDao.getlistCustomer();
-            session.setAttribute("LIST_CUS", listCus);
             StaffDTO staff = new StaffDTO();
             staff = (StaffDTO) session.getAttribute("LOGIN_STAFF");
+            List<CategoryDTO> listCate = cateDao.getListCategory("1"); //Lấy tất cả thể loại
+            List<PublisherDTO> listPub = pubDao.getListPublisher("1"); //Lấy tất cả NXB
+            session.setAttribute("LIST_CUS", listCus);
             if (staff == null) {
                 url = FAIL;
             } else {
@@ -60,6 +74,17 @@ public class CreateCartController extends HttpServlet {
             }
             if (action != null) {
                 if (action.equals("Create")) {
+                    List<PromotionDTO> listPro = proDao.loadAvailablePromotion("1");
+                    for (PromotionDTO promotionDTO : listPro) {
+                        dateEnd = LocalDate.parse(promotionDTO.getDateEnd());
+                        if (dateEnd.isBefore(localDate)) {
+                            promotionDTO.setStatus("0");
+                            proDao.updatePromotion(promotionDTO);
+                        }
+                    }
+                    session.setAttribute("LIST_PUB", listPub);
+                    session.setAttribute("LIST_CATE", listCate);
+                    session.setAttribute("PROMOTION", proDao.loadAvailablePromotion("1"));
                     request.getRequestDispatcher(url).forward(request, response);
                 }
             }
@@ -88,7 +113,7 @@ public class CreateCartController extends HttpServlet {
             PrintWriter out = response.getWriter();
             if (list.size() > 0) {
                 int count = 0;
-                int quantityCheck =0;
+                int quantityCheck = 0;
                 for (BookDTO book : list) {
                     count--;
                     quantityCheck = book.getQuantity();
@@ -99,11 +124,11 @@ public class CreateCartController extends HttpServlet {
                             + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">" + currencyVN.format(book.getPrice()) + "</div>\n"
                             + "                                <div style=\"font-weight: bold;\" class=\"col-md-2\">\n"
                             + "                                   <div style=\"margin-top: 10px;\" class=\"input-number\">\n"
-                            + "                                           <input onkeypress=\"return isNumberKey(event)\" type=\"number\" name=\"quantity\" id=\""+ count +"\" value=\"1\">\n"
-                            + "                                             <span class=\"qty-up\" onclick=\"add("+ count +")\">+</span>\n"
-                            + "                                              <span class=\"qty-down\" onclick=\"subtract("+ count +")\">-</span>\n"
+                            + "                                           <input onkeypress=\"return isNumberKey(event)\" type=\"number\" name=\"quantity\" id=\"" + count + "\" value=\"1\">\n"
+                            + "                                             <span class=\"qty-up\" onclick=\"add(" + count + ")\">+</span>\n"
+                            + "                                              <span class=\"qty-down\" onclick=\"subtract(" + count + ")\">-</span>\n"
                             + "                                             </div>\n"
-                            + "                                     <button onclick=\"loadAdd(document.getElementById('"+ count +"').value,'"+ book.getIsbn() +"','"+ quantityCheck +"','Add')\" type=\"button\" style=\" margin-top: 1px; color: white; background-color: #009933; width: 50px; text-align: center;\">Thêm</button>"
+                            + "                                     <button onclick=\"loadAdd(document.getElementById('" + count + "').value,'" + book.getIsbn() + "','" + quantityCheck + "','Add')\" type=\"button\" style=\" margin-top: 1px; color: white; background-color: #009933; width: 50px; text-align: center;\">Thêm</button>"
                             + "                                 </div>\n"
                             + "                            </div>");
                 }

@@ -43,6 +43,7 @@ public class GetController extends HttpServlet {
             } catch (Exception e) {
                 index = 1;
             }
+            HttpSession session = request.getSession();
             LocalDate localDate = LocalDate.now();
             LocalDate dateEnd = LocalDate.now();
             BookDAO bookDao = new BookDAO();
@@ -52,7 +53,7 @@ public class GetController extends HttpServlet {
             List<PromotionDTO> listPro = proDao.loadAvailablePromotion("1");
             for (PromotionDTO promotionDTO : listPro) {
                 dateEnd = LocalDate.parse(promotionDTO.getDateEnd());
-                if(dateEnd.isBefore(localDate)){
+                if (dateEnd.isBefore(localDate)) {
                     promotionDTO.setStatus("0");
                     proDao.updatePromotion(promotionDTO);
                 }
@@ -63,7 +64,6 @@ public class GetController extends HttpServlet {
             int count = bookDao.countBook("1");//Đếm tổng số lượng sản phẩm trong database
             url = SUCCESS;
             if (listBook.size() > 0) {
-                HttpSession session = request.getSession();
                 session.setAttribute("PROMOTION", proDao.loadAvailablePromotion("1"));
                 session.setAttribute("LIST_BOOK", listBook);
                 session.setAttribute("LIST_PUB", listPub);
@@ -72,6 +72,7 @@ public class GetController extends HttpServlet {
                 session.setAttribute("LIST_BOOK_SORT", bookDao.getAllBook("1"));
                 request.setAttribute("CONTROLLER", "GetController?");
             }
+
         } catch (Exception e) {
             log("ERROR AT GETCONTROLLER : " + e.toString());
         } finally {
