@@ -33,7 +33,7 @@ public class AddCustomerCartController extends HttpServlet {
             customer = cusDao.loadCustomer(cusID);
             session.setAttribute("CUSTOMER", customer);
         } catch (Exception e) {
-            e.printStackTrace();
+            log("Error at AddCustomerCartController: " + e.toString());
         } finally {
             PrintWriter out = response.getWriter();
             out.println("<strong>Tên khách hàng: <input value=\"" + customer.getName() + "\" id=\"nameCus\" \"></strong>\n"

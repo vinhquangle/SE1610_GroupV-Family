@@ -201,7 +201,7 @@ public class ManageOrderController extends HttpServlet {
                     + "                                <div><b>Tổng phụ</b></div>\n"
                     + "                                <input readonly=\"\" style=\"border: none; text-align: center\" placeholder=\"Trống\" value=\"" + currencyVN.format(order.getSubtotal()) + "\">\n"
                     + "                                <div><b>Phần trăm khuyến mãi</b></div>\n"
-                    + "                                <input readonly=\"\" style=\"border: none; text-align: center\" placeholder=\"Trống\" value=\"" + order.getDiscount() + "%\">\n"
+                    + "                                <input readonly=\"\" style=\"border: none; text-align: center\" placeholder=\"Trống\" value=\"" + order.getDiscount()*100 + "%\">\n"
                     + "                                <div><b>Phí vận chuyển</b></div>\n"
                     + "                                <input readonly=\"\" style=\"border: none; text-align: center\" placeholder=\"Trống\" value=\"" + currencyVN.format(order.getDeliveryCost()) + "\">\n"
                     + "                            </div>\n"

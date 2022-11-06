@@ -109,7 +109,7 @@ public class OrderDAO {
             + "LEFT JOIN tblPromotion p ON o.promotionID LIKE p.promotionID)\n"
             + "LEFT JOIN tblStaff t ON p.staffID LIKE t.staffID)\n"
             + "WHERE o.customerID LIKE ?\n"
-            + "ORDER BY o.[status] ASC\n";
+            + "ORDER BY o.[Date] DESC, o.orderID DESC, o.[status] ASC\n";
     private static final String LOAD_ORDER_BY_ORDER_ID = "SELECT o.orderID, o.customerID, o.staffID, o.promotionID, o.[Address], o.Subtotal, o.Discount AS 'orderDiscount', o.[Date], o.[Delivery-cost], o.Total, o.[Description] AS 'orderDes', o.[status], o.[delete],\n"
             + "c.Name AS 'cusName', c.Email, c.[Address] AS 'cusAddr', c.Phone, c.Point, c.[status] AS 'cusStatus', c.[delete] AS 'cusDelete',\n"
             + "s.Name AS 'staffName', s.[Role], s.Phone AS 'staffPhone', s.[Date-of-birth] AS 'dob', s.[status] AS 'staffStatus', s.[delete] AS 'staffDelete',\n"

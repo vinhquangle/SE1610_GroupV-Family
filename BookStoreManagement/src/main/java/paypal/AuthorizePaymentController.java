@@ -7,6 +7,7 @@ package paypal;
 
 import cart.Cart;
 import dto.BookDTO;
+import dto.PromotionDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +32,14 @@ public class AuthorizePaymentController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             List<BookDTO> listBook = new ArrayList<BookDTO>();
+            List<PromotionDTO> listPro = (List<PromotionDTO>) session.getAttribute("PROMOTION");
             String ship = (String) session.getAttribute("SHIP");
             Cart cart = (Cart) session.getAttribute("CART");
             for (BookDTO book : cart.getCart().values()) {
                 listBook.add(book);
             }
             PaymentServices paymentServices = new PaymentServices();
-            String approvalLink = paymentServices.authorizePayment(listBook, ship);
+            String approvalLink = paymentServices.authorizePayment(listBook, ship, listPro);
             response.sendRedirect(approvalLink);
         } catch (Exception ex) {
             Logger.getLogger(AuthorizePaymentController.class.getName()).log(Level.SEVERE, null, ex);

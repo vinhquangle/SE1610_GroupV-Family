@@ -119,8 +119,8 @@ public class InsertBookCart extends HttpServlet {
                         book.setQuantity(quantity);//Thay đổi số lượng sản phẩm
                         cart.add(book);//Thêm vào giỏ hàng
                         session.setAttribute("CART", cart);
-                         Map<String, BookDTO> listSize = cart.getCart();
-                         session.setAttribute("SIZE", listSize.size());
+                        Map<String, BookDTO> listSize = cart.getCart();
+                        session.setAttribute("SIZE", listSize.size());
                         mess = "<div class=\"row\">"
                                 + "                         <div style=\"text-align: center\" class=\"col-md-12\">\n"
                                 + "                             <p style=\"color: green;\"><b>Thêm vào giỏ hàng thành công</b></p>\n"

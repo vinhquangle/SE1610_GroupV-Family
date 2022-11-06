@@ -28,7 +28,7 @@ public class BookRequestDAO {
     private static final String LOAD_9_REQUEST = "SELECT b.requestID, b.staffID, b.[Date], b.[Status], b.[Delete], s.Name, s.[Role], s.Phone, s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM tblBookRequest b LEFT JOIN tblStaff s ON b.staffID = s.staffID\n"
             + "WHERE b.[Status] LIKE ? AND b.[Delete] LIKE ?\n"
-            + "ORDER BY b.[Date] DESC, b.[Status] DESC, b.requestID DESC\n"
+            + "ORDER BY b.[Status] ASC, b.[Date] DESC, b.requestID DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String GET_REQUEST = "SELECT b.requestID, b.staffID, b.[Date], b.[Status], b.[Delete], s.Name, s.[Role], s.Phone, s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM tblBookRequest b LEFT JOIN tblStaff s ON b.staffID = s.staffID\n"
@@ -41,13 +41,13 @@ public class BookRequestDAO {
             + "FROM (tblBookRequest r LEFT JOIN tblStaff s ON r.staffID LIKE s.staffID)\n"
             + "WHERE (r.requestID LIKE ? OR s.Name LIKE ? OR r.[Date] LIKE ?\n"
             + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ? AND r.[Delete] LIKE ?\n"
-            + "ORDER BY r.[Date] DESC,r.[status] DESC, r.requestID DESC\n";
+            + "ORDER BY r.[status] ASC, r.[Date] DESC, r.requestID DESC\n";
     private static final String SEARCH_9_REQUEST = "SELECT r.requestID, r.staffID, r.[Date], r.[Status], r.[Delete], s.Name AS 'sName',\n"
             + "s.[Password], s.Phone, s.[Role], s.[Date-of-birth], s.[Status] AS 'sStatus', s.[Delete] AS 'sDelete'\n"
             + "FROM (tblBookRequest r LEFT JOIN tblStaff s ON r.staffID LIKE s.staffID)\n"
             + "WHERE (r.requestID LIKE ? OR s.Name LIKE ? OR r.[Date] LIKE ?\n"
             + "OR dbo.ufn_removeMark(s.Name) LIKE ?) AND r.[Status] LIKE ? AND r.[Delete] LIKE ?\n"
-            + "ORDER BY r.[Date] DESC,r.[status] DESC, r.requestID DESC\n"
+            + "ORDER BY r.[status] ASC, r.[Date] DESC, r.requestID DESC\n"
             + "OFFSET ? ROW FETCH NEXT 9 ROWS ONLY";
     private static final String UPDATE_DELETE = "UPDATE [tblBookRequest] SET [Delete] = ?\n"
             + "WHERE [requestID] = ?";

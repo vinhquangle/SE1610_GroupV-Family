@@ -4,6 +4,8 @@
     Author     : PC
 --%>
 
+<%@page import="dto.PromotionDTO"%>
+<%@page import="java.util.List"%>
 <%@page import="dto.BookDTO"%>
 <%@page import="cart.Cart"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -23,7 +25,7 @@
         <%
             String paymentId = (String) request.getAttribute("paymentId");
             String PayerID = (String) request.getAttribute("PayerID");
-            double feeShip = Double.parseDouble((String)session.getAttribute("FEE_SHIP"));
+            double feeShip = Double.parseDouble((String) session.getAttribute("FEE_SHIP"));
             int day = java.time.LocalDate.now().getDayOfMonth();
             int month = java.time.LocalDate.now().getMonthValue();
             int year = java.time.LocalDate.now().getYear();
@@ -68,10 +70,22 @@
                             <tbody>
                                 <%
                                     double totalS = 0;
+                                    double discount = 0;
+                                    double total = 0;
                                     for (BookDTO book : cart.getCart().values()) {
-                                        double price = (double) Math.round((book.getPrice() / 24000) * 100) / 100.0;
-                                        double total = price * book.getQuantity();
-                                        totalS+=total;
+                                        total += book.getPrice() * book.getQuantity();
+                                    }
+                                    List<PromotionDTO> listPro = (List<PromotionDTO>) session.getAttribute("PROMOTION");
+                                    for (PromotionDTO promotionDTO : listPro) {
+                                        if (promotionDTO.getCondition() <= total && promotionDTO.getDiscount() >= discount) {
+                                            discount = promotionDTO.getDiscount();
+                                        }
+                                    }
+                                    discount = Double.parseDouble(String.format("%.2f", discount));
+                                    for (BookDTO book : cart.getCart().values()) {
+                                        double price = (double) Math.round((book.getPrice() * (1 - discount) / 24000) * 100) / 100.0;
+                                        total = price * book.getQuantity();
+                                        totalS += total;
                                 %>
                                 <tr>
                                     <td class="col-md-3"><img style="width: 150px;" src="<%= book.getImg()%>"></td>
@@ -82,6 +96,7 @@
                                 </tr>
                                 <%
                                     }
+                                    totalS = Double.parseDouble(String.format("%.2f", totalS));
                                 %>
                                 <tr>
                                     <td></td>
@@ -92,15 +107,17 @@
                                             <strong>Tổng phụ: </strong>
                                         </p>
                                         <p>
+                                            <strong></strong>
                                             <strong>Phí vận chuyển: </strong>
                                         </p></td>
                                     <td class="text-center">
                                         <p>
-                                            <strong>$<%= totalS %></strong>
+                                            <strong>$<%= totalS%></strong>
                                         </p>
                                         <p>
-                                            <strong>$<%= feeShip %></strong>
-                                        </p></td>
+                                            <strong>$<%= feeShip%></strong>
+                                        </p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td></td>

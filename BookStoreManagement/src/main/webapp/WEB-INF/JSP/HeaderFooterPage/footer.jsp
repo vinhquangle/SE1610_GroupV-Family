@@ -78,7 +78,7 @@
                             <div class="footer">
                                 <h3 class="footer-title">Dịch vụ</h3>
                                 <ul class="footer-links">
-                                    <li><a href="#">Tài khoản</a></li>
+                                    <li><a href="ViewProfileController?action=Profile">Tài khoản</a></li>
                                     <li><a href="#">Giỏ hàng</a></li>
                                     <li><a href="#">Về chúng tôi</a></li>
                                     <li><a href="#">Liên hệ</a></li>

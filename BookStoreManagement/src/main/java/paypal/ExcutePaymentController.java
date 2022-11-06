@@ -71,6 +71,7 @@ public class ExcutePaymentController extends HttpServlet {
                     promotion = promotionDTO.getPromotionID();
                 }
             }
+            discount = Double.parseDouble(String.format("%.2f", discount));
             int orderID = 0;
             if (ship.equals("YES")) {
                 String address = (String) session.getAttribute("SHIPING");

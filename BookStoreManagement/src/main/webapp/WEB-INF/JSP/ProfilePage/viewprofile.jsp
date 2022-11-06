@@ -44,13 +44,6 @@
             }
         </style>
         <!-- jQuery Plugins -->
-        <script src="JS/jquery.min.js"></script>
-        <script src="JS/bootstrap.min.js"></script>
-        <script src="JS/slick.min.js"></script>
-        <script src="JS/nouislider.min.js"></script>
-        <script src="JS/jquery.zoom.min.js"></script>
-        <script src="JS/main.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <script>
